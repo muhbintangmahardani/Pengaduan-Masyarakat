@@ -1,48 +1,21 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import type { UserRole } from "@/types";
+"use client";
 
-export const dynamic = "force-dynamic";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-export default async function HomePage() {
-  const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-  const supabaseAnonKey =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+export default function HomePage() {
+  const router = useRouter();
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    redirect("/login");
-  }
+  useEffect(() => {
+    router.replace("/login");
+  }, [router]);
 
-  let destination = "/login";
-
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (user) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
-
-      const role: UserRole = profile?.role || "citizen";
-      if (role === "admin") {
-        destination = "/dashboard/admin";
-      } else if (role === "officer") {
-        destination = "/dashboard/petugas/ringkasan";
-      } else {
-        destination = "/dashboard/warga";
-      }
-    }
-  } catch (err) {
-    console.error("Home page auth check error:", err);
-    destination = "/login";
-  }
-
-  // Pengalihan bersih di luar blok try-catch agar Next.js runtime tidak menganggap NEXT_REDIRECT sebagai kegagalan render
-  redirect(destination);
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-8 h-8 border-3 border-[#0c3b37] border-t-transparent rounded-full animate-spin" />
+        <p className="text-xs text-slate-500 font-medium">Memuat layanan jalanbaik...</p>
+      </div>
+    </div>
+  );
 }

@@ -17,6 +17,10 @@ export default function GlobalError({
     console.error("Application error captured by boundary:", error);
   }, [error]);
 
+  if (error.message === "NEXT_REDIRECT" || error.digest?.startsWith("NEXT_REDIRECT")) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
       <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 sm:p-8 text-center space-y-5">

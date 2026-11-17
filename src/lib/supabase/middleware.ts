@@ -51,6 +51,36 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
+  // 0. Redirect halaman utama ("/") langsung di level middleware (mencegah error render Server Component di root)
+  if (pathname === "/") {
+    const url = request.nextUrl.clone();
+    if (!user) {
+      url.pathname = "/login";
+      return NextResponse.redirect(url);
+    }
+
+    const userRoleCookieKey = `jb_role_${user.id}`;
+    let userRole = request.cookies.get(userRoleCookieKey)?.value as UserRole | undefined;
+
+    if (!userRole) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+      userRole = (profile?.role as UserRole) || "citizen";
+    }
+
+    if (userRole === "admin") {
+      url.pathname = "/dashboard/admin";
+    } else if (userRole === "officer") {
+      url.pathname = "/dashboard/petugas/ringkasan";
+    } else {
+      url.pathname = "/dashboard/warga";
+    }
+    return NextResponse.redirect(url);
+  }
+
   // 1. Lindungi rute Dashboard dengan otentikasi & RBAC
   if (pathname.startsWith("/dashboard")) {
     if (!user) {
