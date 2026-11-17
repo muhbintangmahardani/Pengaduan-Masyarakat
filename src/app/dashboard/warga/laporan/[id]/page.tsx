@@ -75,18 +75,14 @@ export default async function WargaLaporanDetailPage({
       {/* 1. Header Navigasi & Aksi */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
+          <div className="flex items-center gap-2 mb-1">
             <Link
               href="/dashboard/warga/laporan"
-              className="inline-flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-300 hover:text-[#0c3b37] dark:hover:text-emerald-400 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-[#0c3b37] dark:hover:text-emerald-400 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              Kembali ke Laporan Saya
+              Kembali
             </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400 select-none shrink-0" />
-            <span className="font-mono font-bold text-[#0c3b37] dark:text-emerald-400">
-              {complaint.ticket_number}
-            </span>
           </div>
 
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">

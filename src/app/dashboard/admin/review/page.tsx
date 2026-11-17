@@ -89,17 +89,6 @@ export default async function AdminReviewPage({
       {/* Header Info */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div className="space-y-1">
-          {/* Breadcrumb Matching Mockup 5 */}
-          <div className="text-xs text-slate-400 font-medium flex items-center gap-1.5 mb-1">
-            <Link href="/dashboard/admin/review" className="hover:text-[#0c3b37] transition-colors">
-              Hasil perbaikan
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400 select-none shrink-0" />
-            <span className="text-slate-700 dark:text-slate-300 font-semibold font-mono">
-              {current.ticket_number}
-            </span>
-          </div>
-
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
             Tinjau Hasil Perbaikan Lapangan
           </h1>
