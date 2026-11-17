@@ -26,7 +26,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       variant="ghost"
       size="icon"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className={`relative w-9 h-9 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer ${className}`}
+      className={`relative w-9 h-9 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer border border-transparent hover:border-slate-200 dark:hover:border-slate-800 ${className}`}
       title={isDark ? "Beralih ke Mode Terang" : "Beralih ke Mode Malam"}
       aria-label="Toggle tema gelap / terang"
     >

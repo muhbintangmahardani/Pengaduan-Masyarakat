@@ -79,10 +79,10 @@ export default function LoginPage() {
       <div className="w-full max-w-4xl bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-[520px]">
         {/* Kolom Kiri: 50% Showcase Visual Jalan Raya Kota (Gambar Terlihat Jelas & Menawan) */}
         <div className="relative bg-[#0c3b37] text-white p-7 sm:p-9 md:p-10 flex flex-col justify-between overflow-hidden min-h-[260px] md:min-h-full">
-          {/* Foto Nyata Infrastruktur Jalan Raya Terlihat Jelas */}
+          {/* Foto Nyata Infrastruktur Pekerjaan Pengaspalan & Rekonstruksi Jalan */}
           <Image
-            src="https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&w=1200&q=85"
-            alt="Infrastruktur Jalan Raya Kota"
+            src="https://images.unsplash.com/photo-1590496793929-36417d3117de?auto=format&fit=crop&w=1200&q=85"
+            alt="Pekerjaan Pengaspalan dan Rekonstruksi Jalan Raya"
             fill
             className="object-cover opacity-85 transition-opacity"
             priority

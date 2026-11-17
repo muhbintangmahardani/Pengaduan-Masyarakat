@@ -195,6 +195,14 @@ export function NotificationBell({
         ? String(record.assigned_officer_id).toLowerCase()
         : "";
 
+      // Verifikasi kepemilikan laporan warga:
+      // Cocokkan user_id, atau jika user_id tidak dikirim di payload parsial postgres_changes,
+      // cocokkan dengan laporan yang sudah ada di antrean lokal warga
+      const isCitizenReport =
+        userRole === "citizen" &&
+        (recordUserId === currentUserId ||
+          (!recordUserId && notifications.some((n) => n.rawId === record.id)));
+
       let shouldNotify = false;
       let notifTitle = "Pembaruan Laporan";
       let notifMsg = `Laporan ${record.ticket_number || ""} telah diperbarui di sistem.`;
@@ -225,7 +233,7 @@ export function NotificationBell({
           notifTitle = "🛠️ Tugas Lapangan Baru!";
           notifMsg = `Admin menugaskan Anda menangani perbaikan "${record.title || "Jalan"}" (${record.ticket_number}). Buka tugas untuk navigasi GPS.`;
           href = `/dashboard/petugas?ticket=${record.ticket_number}`;
-        } else if (userRole === "citizen" && recordUserId === currentUserId) {
+        } else if (isCitizenReport) {
           shouldNotify = true;
           notifTitle = "🚗 Laporan Sedang Dikerjakan";
           notifMsg = `Laporan Anda (${record.ticket_number}) telah diverifikasi dinas dan tim lapangan sedang menangani di lokasi.`;
@@ -242,7 +250,7 @@ export function NotificationBell({
           notifTitle = "🔍 Hasil Pekerjaan Siap Ditinjau!";
           notifMsg = `Petugas telah menyelesaikan perbaikan ${record.ticket_number} dan mengunggah foto bukti. Silakan konfirmasi hasil.`;
           href = `/dashboard/admin/review?ticket=${record.ticket_number}`;
-        } else if (userRole === "citizen" && recordUserId === currentUserId) {
+        } else if (isCitizenReport) {
           shouldNotify = true;
           notifTitle = "📋 Perbaikan Tahap Tinjauan";
           notifMsg = `Petugas telah menyelesaikan pekerjaan pada ${record.ticket_number}. Admin sedang memeriksa bukti hasil.`;
@@ -254,7 +262,7 @@ export function NotificationBell({
       // ALUR 4: ADMIN MENYETUJUI LAPORAN -> NOTIFIKASI KE WARGA & PETUGAS
       // =========================================================================
       else if (record.status === "resolved" || actionType === "RESOLVED") {
-        if (userRole === "citizen" && recordUserId === currentUserId) {
+        if (isCitizenReport) {
           shouldNotify = true;
           notifTitle = "🎉 Jalan Selesai Diperbaiki!";
           notifMsg = `Kabar baik! Laporan Anda (${record.ticket_number}) telah tuntas diperbaiki dan disetujui dinas. Terima kasih!`;
@@ -427,21 +435,21 @@ export function NotificationBell({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="relative p-2 rounded-full text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none cursor-pointer group"
+          className="relative w-9 h-9 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none cursor-pointer group border border-transparent hover:border-slate-200 dark:hover:border-slate-800"
           aria-label="Notifikasi Real-time"
         >
           {/* Ikon Lonceng: Menyala Merah Terang Saat Ada Notifikasi Baru */}
           <Bell
-            className={`w-5 h-5 transition-transform ${
+            className={`w-4 h-4 transition-transform ${
               unreadCount > 0
                 ? "text-red-600 dark:text-red-400 animate-bounce"
                 : "group-hover:scale-105"
             }`}
           />
 
-          {/* Badge Merah Menyala Berdenyut dengan Radar Ping */}
+          {/* Badge / Titik Indikator Merah Menyala Berdenyut */}
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-5 min-w-[20px] px-1.5 items-center justify-center rounded-full bg-red-600 text-[10px] font-black text-white ring-2 ring-white dark:ring-slate-900 shadow-lg select-none z-10">
+            <span className="absolute -top-1 -right-1 flex h-4.5 min-w-[18px] px-1 items-center justify-center rounded-full bg-red-600 text-[9px] font-black text-white ring-2 ring-white dark:ring-slate-900 shadow-md select-none z-10 animate-in zoom-in-75 duration-200">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
               <span className="relative z-10 font-bold leading-none">
                 {unreadCount > 9 ? "9+" : unreadCount}
