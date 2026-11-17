@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -13,8 +13,6 @@ import {
   LogOut,
   X,
   User,
-  ChevronRight,
-  CornerDownRight,
 } from "lucide-react";
 import { logoutAction } from "@/actions/auth";
 import { JalanBaikLogo } from "@/components/common/JalanBaikLogo";
@@ -24,6 +22,7 @@ interface NavItem {
   label: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
+  matchSubpaths?: boolean;
 }
 
 interface AppSidebarProps {
@@ -46,16 +45,6 @@ export function AppSidebar({
   onCloseMobile,
 }: AppSidebarProps) {
   const pathname = usePathname();
-  const [ticketQuery, setTicketQuery] = useState<string | null>(null);
-
-  // Ambil tiket dari query string browser secara aman (tanpa memicu de-opt Suspense Next.js)
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const t = params.get("ticket");
-      setTicketQuery(t || null);
-    }
-  }, [pathname]);
 
   const getRoleHeader = () => {
     if (role === "admin") return "RUANG ADMIN";
@@ -68,8 +57,18 @@ export function AppSidebar({
       return [
         { label: "Ringkasan", href: "/dashboard/admin/ringkasan", icon: LayoutGrid },
         { label: "Laporan masuk", href: "/dashboard/admin", icon: Inbox },
-        { label: "Penugasan", href: "/dashboard/admin/penugasan", icon: Share2 },
-        { label: "Hasil perbaikan", href: "/dashboard/admin/review", icon: CheckCircle2 },
+        {
+          label: "Penugasan",
+          href: "/dashboard/admin/penugasan",
+          icon: Share2,
+          matchSubpaths: true,
+        },
+        {
+          label: "Hasil perbaikan",
+          href: "/dashboard/admin/review",
+          icon: CheckCircle2,
+          matchSubpaths: true,
+        },
       ];
     }
 
@@ -77,100 +76,29 @@ export function AppSidebar({
       return [
         { label: "Ringkasan", href: "/dashboard/petugas/ringkasan", icon: LayoutGrid },
         { label: "Tugas saya", href: "/dashboard/petugas", icon: Share2 },
-        { label: "Riwayat tugas", href: "/dashboard/petugas/riwayat", icon: FileText },
+        {
+          label: "Riwayat tugas",
+          href: "/dashboard/petugas/riwayat",
+          icon: FileText,
+          matchSubpaths: true,
+        },
       ];
     }
 
     // Citizen (Masyarakat)
     return [
       { label: "Dashboard", href: "/dashboard/warga", icon: LayoutGrid },
-      { label: "Laporan saya", href: "/dashboard/warga/laporan", icon: FileText },
+      {
+        label: "Laporan saya",
+        href: "/dashboard/warga/laporan",
+        icon: FileText,
+        matchSubpaths: true,
+      },
       { label: "Buat laporan", href: "/dashboard/warga/buat", icon: PlusSquare },
     ];
   };
 
   const navItems = getNavItems();
-
-  // Evaluasi cerdas untuk mendeteksi konteks detail tugas dan menghasilkan label breadcrumb sidebar
-  const getDetailInfo = () => {
-    // 1. Admin: Detail Penugasan (/dashboard/admin/penugasan/[id])
-    if (pathname.startsWith("/dashboard/admin/penugasan/")) {
-      const rawId = pathname.replace("/dashboard/admin/penugasan/", "").split("/")[0];
-      const detailLabel = rawId
-        ? rawId.startsWith("JB-")
-          ? rawId
-          : `Detail #${rawId.slice(0, 8)}`
-        : "Detail Penugasan";
-
-      return {
-        parentHref: "/dashboard/admin/penugasan",
-        parentLabel: "Penugasan",
-        detailLabel,
-      };
-    }
-
-    // 2. Admin: Hasil Perbaikan / Tinjauan Lapangan (/dashboard/admin/review)
-    if (pathname === "/dashboard/admin/review" || pathname.startsWith("/dashboard/admin/review/")) {
-      const subId = pathname.replace("/dashboard/admin/review", "").replace(/^\//, "").split("/")[0];
-      const activeTicket = ticketQuery || subId;
-      const detailLabel = activeTicket
-        ? activeTicket.startsWith("JB-")
-          ? activeTicket
-          : `Tiket ${activeTicket}`
-        : "Tinjau Hasil";
-
-      return {
-        parentHref: "/dashboard/admin/review",
-        parentLabel: "Hasil perbaikan",
-        detailLabel,
-      };
-    }
-
-    // 3. Petugas: Detail Riwayat Tugas (/dashboard/petugas/riwayat/[id])
-    if (pathname.startsWith("/dashboard/petugas/riwayat/")) {
-      const rawId = pathname.replace("/dashboard/petugas/riwayat/", "").split("/")[0];
-      const detailLabel = rawId
-        ? rawId.startsWith("JB-")
-          ? rawId
-          : `Tugas #${rawId.slice(0, 8)}`
-        : "Detail Tugas Selesai";
-
-      return {
-        parentHref: "/dashboard/petugas/riwayat",
-        parentLabel: "Riwayat tugas",
-        detailLabel,
-      };
-    }
-
-    // 4. Petugas: Tugas Lapangan Aktif dengan Nomor Tiket
-    if (pathname === "/dashboard/petugas" && ticketQuery) {
-      return {
-        parentHref: "/dashboard/petugas",
-        parentLabel: "Tugas saya",
-        detailLabel: ticketQuery,
-      };
-    }
-
-    // 5. Warga: Detail Laporan (/dashboard/warga/laporan/[id])
-    if (pathname.startsWith("/dashboard/warga/laporan/")) {
-      const rawId = pathname.replace("/dashboard/warga/laporan/", "").split("/")[0];
-      const detailLabel = rawId
-        ? rawId.startsWith("JB-")
-          ? rawId
-          : `Laporan #${rawId.slice(0, 8)}`
-        : "Detail Laporan";
-
-      return {
-        parentHref: "/dashboard/warga/laporan",
-        parentLabel: "Laporan saya",
-        detailLabel,
-      };
-    }
-
-    return null;
-  };
-
-  const detailInfo = getDetailInfo();
 
   return (
     <aside
@@ -210,7 +138,7 @@ export function AppSidebar({
         </div>
       </div>
 
-      {/* 2. Navigation Items dengan Breadcrumb Detail Tugas */}
+      {/* 2. Navigation Items */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
         <div>
           {!isCollapsed && (
@@ -219,61 +147,34 @@ export function AppSidebar({
             </div>
           )}
 
-          {/* Breadcrumb Mini Badge di Atas Daftar Navigasi Saat Membuka Detail Tugas */}
-          {!isCollapsed && detailInfo && (
-            <div className="mx-2 mb-3.5 px-3 py-2 rounded-xl bg-[#e8f5f1]/90 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-800/60 flex items-center gap-1.5 text-[11px] animate-in fade-in duration-200 shadow-2xs">
-              <span className="font-medium text-slate-600 dark:text-slate-400 truncate">
-                {detailInfo.parentLabel}
-              </span>
-              <ChevronRight className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span className="font-bold text-[#0c3b37] dark:text-emerald-300 truncate">
-                {detailInfo.detailLabel}
-              </span>
-            </div>
-          )}
-
           <nav className="space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isExactActive = pathname === item.href;
-              const isDetailActive = detailInfo?.parentHref === item.href;
-              const isActive = isExactActive || isDetailActive;
+              const isSubActive =
+                Boolean(item.matchSubpaths) && pathname.startsWith(item.href + "/");
+              const isActive = isExactActive || isSubActive;
 
               return (
-                <div key={item.label} className="space-y-1">
-                  <Link
-                    href={item.href}
-                    prefetch={true}
-                    onClick={() => onCloseMobile?.()}
-                    title={isCollapsed ? item.label : undefined}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all active:scale-95 duration-150 ${
-                      isActive
-                        ? "bg-[#e8f5f1] dark:bg-emerald-950/50 text-[#0c3b37] dark:text-emerald-300 shadow-xs font-bold"
-                        : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100"
-                    } ${isCollapsed ? "justify-center px-0" : ""}`}
-                  >
-                    <Icon
-                      className={`w-4 h-4 flex-shrink-0 transition-transform group-hover:scale-110 ${
-                        isActive ? "text-[#0c3b37] dark:text-emerald-400" : "text-slate-400"
-                      }`}
-                    />
-                    {!isCollapsed && <span className="flex-1 truncate">{item.label}</span>}
-                    {!isCollapsed && isDetailActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                    )}
-                  </Link>
-
-                  {/* Cabang Hierarki Breadcrumb Bersarang di Bawah Menu Induk */}
-                  {isDetailActive && !isCollapsed && (
-                    <div className="ml-5 pl-3 border-l-2 border-[#0c3b37]/25 dark:border-emerald-500/30 my-1 py-0.5 space-y-1 animate-in fade-in slide-in-from-top-1 duration-200">
-                      <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-[#e8f5f1] dark:bg-emerald-950/60 text-[#0c3b37] dark:text-emerald-300">
-                        <CornerDownRight className="w-3 h-3 text-[#0c3b37] dark:text-emerald-400 shrink-0" />
-                        <span className="truncate">{detailInfo.detailLabel}</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 ml-auto animate-pulse" />
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  prefetch={true}
+                  onClick={() => onCloseMobile?.()}
+                  title={isCollapsed ? item.label : undefined}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all active:scale-95 duration-150 ${
+                    isActive
+                      ? "bg-[#e8f5f1] dark:bg-emerald-950/50 text-[#0c3b37] dark:text-emerald-300 shadow-xs font-bold"
+                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100"
+                  } ${isCollapsed ? "justify-center px-0" : ""}`}
+                >
+                  <Icon
+                    className={`w-4 h-4 flex-shrink-0 transition-transform group-hover:scale-110 ${
+                      isActive ? "text-[#0c3b37] dark:text-emerald-400" : "text-slate-400"
+                    }`}
+                  />
+                  {!isCollapsed && <span className="truncate">{item.label}</span>}
+                </Link>
               );
             })}
           </nav>

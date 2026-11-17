@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -14,6 +14,14 @@ import {
 import { logoutAction } from "@/actions/auth";
 import { NotificationBell } from "./NotificationBell";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -34,6 +42,11 @@ interface AppHeaderProps {
   onOpenMobileMenu?: () => void;
 }
 
+interface BreadcrumbStep {
+  label: string;
+  href?: string;
+}
+
 export function AppHeader({
   subtitle,
   userId,
@@ -45,6 +58,16 @@ export function AppHeader({
   onOpenMobileMenu,
 }: AppHeaderProps) {
   const pathname = usePathname();
+  const [ticketQuery, setTicketQuery] = useState<string | null>(null);
+
+  // Ambil tiket dari query string browser (misal ?ticket=JB-2026-4158)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const t = params.get("ticket");
+      setTicketQuery(t || null);
+    }
+  }, [pathname]);
 
   const roleLabelMap: Record<UserRole, string> = {
     citizen: "Masyarakat",
@@ -52,39 +75,92 @@ export function AppHeader({
     admin: "Administrator",
   };
 
-  // Menentukan Judul Halaman Sederhana & Bersih (Tanpa Breadcrumb Berulang)
-  const getPageTitle = (): string => {
-    if (pathname === "/dashboard/profile") return "Profil Saya";
-    if (pathname.startsWith("/dashboard/notifikasi")) return "Notifikasi";
+  // Menghasilkan hierarki breadcrumb yang sejajar horizontal di topbar
+  const getBreadcrumbs = (): BreadcrumbStep[] => {
+    // 1. Profil & Notifikasi
+    if (pathname === "/dashboard/profile") {
+      return [{ label: "Profil Saya" }];
+    }
+    if (pathname.startsWith("/dashboard/notifikasi")) {
+      return [{ label: "Notifikasi" }];
+    }
 
-    // Ruang Masyarakat
-    if (pathname === "/dashboard/warga") return "Dashboard";
-    if (pathname === "/dashboard/warga/buat") return "Buat Laporan Baru";
-    if (pathname.startsWith("/dashboard/warga/laporan/")) return "Detail Laporan";
-    if (pathname === "/dashboard/warga/laporan") return "Laporan Saya";
+    // 2. Ruang Masyarakat (Citizen)
+    if (pathname === "/dashboard/warga") {
+      return [{ label: "Dashboard" }];
+    }
+    if (pathname === "/dashboard/warga/buat") {
+      return [
+        { label: "Laporan Saya", href: "/dashboard/warga/laporan" },
+        { label: "Buat Laporan" },
+      ];
+    }
+    if (pathname.startsWith("/dashboard/warga/laporan/")) {
+      return [
+        { label: "Laporan Saya", href: "/dashboard/warga/laporan" },
+        { label: "Detail Laporan" },
+      ];
+    }
+    if (pathname === "/dashboard/warga/laporan") {
+      return [{ label: "Laporan Saya" }];
+    }
 
-    // Ruang Admin
-    if (pathname === "/dashboard/admin") return "Laporan Masuk & Penugasan";
-    if (pathname === "/dashboard/admin/ringkasan") return "Ringkasan Eksekutif";
-    if (pathname.startsWith("/dashboard/admin/penugasan/")) return "Detail Penugasan";
-    if (pathname === "/dashboard/admin/penugasan") return "Monitoring Penugasan";
-    if (pathname.startsWith("/dashboard/admin/review")) return "Tinjau Hasil Perbaikan";
+    // 3. Ruang Admin
+    if (pathname === "/dashboard/admin/ringkasan") {
+      return [{ label: "Ringkasan" }];
+    }
+    if (pathname === "/dashboard/admin") {
+      return [{ label: "Laporan Masuk" }];
+    }
+    if (pathname.startsWith("/dashboard/admin/penugasan/")) {
+      return [
+        { label: "Penugasan", href: "/dashboard/admin/penugasan" },
+        { label: "Detail Penugasan" },
+      ];
+    }
+    if (pathname === "/dashboard/admin/penugasan") {
+      return [{ label: "Penugasan" }];
+    }
+    if (pathname.startsWith("/dashboard/admin/review")) {
+      const detailLabel = ticketQuery ? `Detail Laporan (${ticketQuery})` : "Detail Laporan";
+      return [
+        { label: "Hasil Perbaikan", href: "/dashboard/admin/review" },
+        { label: detailLabel },
+      ];
+    }
 
-    // Ruang Petugas
-    if (pathname === "/dashboard/petugas/ringkasan") return "Ringkasan Kerja";
-    if (pathname.startsWith("/dashboard/petugas/riwayat/")) return "Detail Riwayat Tugas";
-    if (pathname === "/dashboard/petugas/riwayat") return "Riwayat Pekerjaan";
-    if (pathname === "/dashboard/petugas") return "Tugas Lapangan";
+    // 4. Ruang Petugas Lapangan (Officer)
+    if (pathname === "/dashboard/petugas/ringkasan") {
+      return [{ label: "Ringkasan" }];
+    }
+    if (pathname.startsWith("/dashboard/petugas/riwayat/")) {
+      return [
+        { label: "Riwayat Tugas", href: "/dashboard/petugas/riwayat" },
+        { label: "Detail Laporan" },
+      ];
+    }
+    if (pathname === "/dashboard/petugas/riwayat") {
+      return [{ label: "Riwayat Tugas" }];
+    }
+    if (pathname === "/dashboard/petugas") {
+      if (ticketQuery) {
+        return [
+          { label: "Tugas Saya", href: "/dashboard/petugas" },
+          { label: `Detail Tugas (${ticketQuery})` },
+        ];
+      }
+      return [{ label: "Tugas Saya" }];
+    }
 
-    return "Dashboard";
+    return [{ label: "Dashboard" }];
   };
 
-  const pageTitle = getPageTitle();
+  const breadcrumbs = getBreadcrumbs();
 
   return (
     <header className="h-16 border-b border-border bg-background/95 backdrop-blur-sm px-4 sm:px-6 lg:px-8 flex items-center justify-between flex-shrink-0 sticky top-0 z-30">
-      {/* KIRI: Tombol Sidebar Trigger (PanelLeft) + Judul Menu Aktif */}
-      <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
+      {/* KIRI: Tombol Toggle Sidebar + Breadcrumb Navigasi Sejajar Horisontal */}
+      <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1 mr-3">
         <button
           type="button"
           onClick={() => {
@@ -103,12 +179,39 @@ export function AppHeader({
 
         <div className="h-4 w-px bg-border shrink-0" />
 
-        <span className="font-bold text-xs sm:text-sm text-foreground tracking-tight truncate">
-          {pageTitle}
-        </span>
+        {/* Shadcn Breadcrumb Sejajar dengan Lonceng Notifikasi */}
+        <Breadcrumb className="min-w-0">
+          <BreadcrumbList className="text-xs sm:text-sm font-medium flex-nowrap overflow-hidden">
+            {breadcrumbs.map((step, index) => {
+              const isLast = index === breadcrumbs.length - 1;
+
+              return (
+                <React.Fragment key={step.label}>
+                  <BreadcrumbItem className="truncate">
+                    {isLast || !step.href ? (
+                      <BreadcrumbPage className="truncate font-semibold text-foreground">
+                        {step.label}
+                      </BreadcrumbPage>
+                    ) : (
+                      <BreadcrumbLink asChild>
+                        <Link
+                          href={step.href}
+                          className="text-muted-foreground hover:text-foreground transition-colors truncate"
+                        >
+                          {step.label}
+                        </Link>
+                      </BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+                  {!isLast && <BreadcrumbSeparator className="shrink-0" />}
+                </React.Fragment>
+              );
+            })}
+          </BreadcrumbList>
+        </Breadcrumb>
       </div>
 
-      {/* KANAN: Mode Malam, Lonceng Notifikasi Real-time & Avatar Profil */}
+      {/* KANAN: Mode Malam, Lonceng Notifikasi Real-time & Avatar Profil (Sejajar dengan Breadcrumb) */}
       <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
         <ThemeToggle />
         <NotificationBell userId={userId} userRole={userRole} />
