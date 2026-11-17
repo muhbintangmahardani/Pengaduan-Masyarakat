@@ -5,6 +5,8 @@ const nextConfig = {
     serverActions: {
       allowedOrigins: [
         'localhost:3000',
+        '*.vercel.app',
+        'pengaduan-masyarakat-rho.vercel.app',
         '*.ngrok-free.app',
         '*.ngrok.app',
         '*.ngrok.io',
