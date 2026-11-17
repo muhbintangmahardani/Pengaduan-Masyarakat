@@ -1,15 +1,51 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { ArrowRight, Eye, EyeOff, Loader2, Clock } from "lucide-react";
 import { loginAction } from "@/actions/auth";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { JalanBaikLogo } from "@/components/common/JalanBaikLogo";
+
+function SessionMessage() {
+  const searchParams = useSearchParams();
+  const reason = searchParams.get("reason");
+
+  if (reason === "idle_timeout") {
+    return (
+      <div className="mb-4 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-2.5 animate-in fade-in duration-300">
+        <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+        <div className="space-y-0.5">
+          <div className="font-bold text-amber-800 dark:text-amber-300">Sesi Berakhir Otomatis</div>
+          <div className="text-[11px] text-amber-700 dark:text-amber-400 leading-relaxed">
+            Akun Anda telah dikeluarkan secara otomatis karena tidak ada aktivitas selama 15 menit demi keamanan data. Silakan masuk kembali.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (reason === "session_expired") {
+    return (
+      <div className="mb-4 p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs flex items-start gap-2.5 animate-in fade-in duration-300">
+        <Clock className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+        <div className="space-y-0.5">
+          <div className="font-bold">Sesi Kedaluwarsa</div>
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+            Masa aktif sesi telah berakhir. Silakan masuk kembali ke akun Anda.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -88,6 +124,11 @@ export default function LoginPage() {
                 Silakan masuk ke dashboard internal dan layanan jalan.
               </p>
             </div>
+
+            {/* Pesan Sesi Kedaluwarsa / Auto-Logout */}
+            <Suspense fallback={null}>
+              <SessionMessage />
+            </Suspense>
 
             {/* Form Input Login Langsung (Tanpa Tab Role) */}
             <form onSubmit={handleSubmit} className="space-y-4">

@@ -354,10 +354,10 @@ export function NotificationBell({
       }
     });
 
-    // Polling aktif setiap 4 detik sebagai pengaman jika perangkat mobile sempat tertidur
+    // Polling aktif senyap berkala sebagai pengaman jika perangkat mobile sempat tertidur
     const pollTimer = setInterval(() => {
       fetchRoleNotifications();
-    }, 4000);
+    }, 20000);
 
     return () => {
       unsubscribeSync();
@@ -394,40 +394,28 @@ export function NotificationBell({
     switch (status) {
       case "pending":
         return (
-          <Badge
-            variant="outline"
-            className="bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-700 text-[9px] font-bold"
-          >
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-700">
             Verifikasi
-          </Badge>
+          </span>
         );
       case "in_progress":
       case "verified":
         return (
-          <Badge
-            variant="outline"
-            className="bg-sky-100 text-sky-800 border-sky-300 dark:bg-sky-950 dark:text-sky-300 dark:border-sky-700 text-[9px] font-bold"
-          >
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-300 dark:bg-sky-950/80 dark:text-sky-300 dark:border-sky-700">
             Pengerjaan
-          </Badge>
+          </span>
         );
       case "under_review":
         return (
-          <Badge
-            variant="outline"
-            className="bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-950 dark:text-orange-300 dark:border-orange-700 text-[9px] font-bold"
-          >
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-orange-100 text-orange-800 border border-orange-300 dark:bg-orange-950/80 dark:text-orange-300 dark:border-orange-700">
             Tinjauan
-          </Badge>
+          </span>
         );
       case "resolved":
         return (
-          <Badge
-            variant="outline"
-            className="bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-700 text-[9px] font-bold"
-          >
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-700">
             Selesai
-          </Badge>
+          </span>
         );
       default:
         return null;

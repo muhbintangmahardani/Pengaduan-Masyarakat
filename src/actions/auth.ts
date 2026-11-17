@@ -1,8 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import type { UserRole } from "@/types";
 
 export async function loginAction(formData: FormData) {
   const email = formData.get("email") as string;
@@ -34,9 +36,29 @@ export async function loginAction(formData: FormData) {
       .eq("id", user.id)
       .single();
 
+    const role = (profile?.role as UserRole) || "citizen";
+    const cookieStore = await cookies();
+
+    // Cache role aman terikat ID pengguna
+    cookieStore.set(`jb_role_${user.id}`, role, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    // Catat waktu aktivitas awal login
+    cookieStore.set("jb_last_activity", Date.now().toString(), {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    // Hapus cookie usang jalanbaik-role jika ada
+    cookieStore.delete("jalanbaik-role");
+
     revalidatePath("/", "layout");
 
-    const role = profile?.role || "citizen";
     if (role === "admin") redirect("/dashboard/admin");
     if (role === "officer") redirect("/dashboard/petugas/ringkasan");
     redirect("/dashboard/warga");
@@ -59,7 +81,7 @@ export async function registerAction(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data: authData, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -75,12 +97,39 @@ export async function registerAction(formData: FormData) {
     return { success: false, message: error.message };
   }
 
+  if (authData.user) {
+    const cookieStore = await cookies();
+    cookieStore.set(`jb_role_${authData.user.id}`, "citizen", {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+    cookieStore.set("jb_last_activity", Date.now().toString(), {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+    });
+    cookieStore.delete("jalanbaik-role");
+  }
+
   revalidatePath("/", "layout");
   redirect("/dashboard/warga");
 }
 
 export async function logoutAction() {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const cookieStore = await cookies();
+  if (user) {
+    cookieStore.delete(`jb_role_${user.id}`);
+  }
+  cookieStore.delete("jalanbaik-role");
+  cookieStore.delete("jb_last_activity");
+
   await supabase.auth.signOut();
   revalidatePath("/", "layout");
   redirect("/login");

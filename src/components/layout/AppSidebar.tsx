@@ -11,7 +11,6 @@ import {
   Share2,
   Inbox,
   LogOut,
-  ChevronLeft,
   X,
   User,
 } from "lucide-react";

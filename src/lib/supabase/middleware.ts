@@ -49,12 +49,84 @@ export async function updateSession(request: NextRequest) {
       return res;
     }
 
-    // Optimasi: Gunakan cookie cache jalanbaik-role / metadata untuk menghindari query DB lambat di middleware
-    let userRole = request.cookies.get("jalanbaik-role")?.value as UserRole | undefined;
+    // Inactivity Session Timeout Server-Side Check (30 menit tanpa aktivitas)
+    const lastActivity = request.cookies.get("jb_last_activity")?.value;
+    const now = Date.now();
+    const MAX_INACTIVITY_MS = 30 * 60 * 1000; // 30 menit
 
-    if (!userRole && user.user_metadata?.role) {
-      userRole = user.user_metadata.role as UserRole;
+    if (lastActivity) {
+      const lastTime = parseInt(lastActivity, 10);
+      if (!isNaN(lastTime) && now - lastTime > MAX_INACTIVITY_MS) {
+        // Sesi telah kedaluwarsa karena tidak ada aktivitas
+        await supabase.auth.signOut();
+        const url = request.nextUrl.clone();
+        url.pathname = "/login";
+        url.searchParams.set("reason", "idle_timeout");
+        const res = NextResponse.redirect(url);
+        res.cookies.delete("jb_last_activity");
+        res.cookies.delete(`jb_role_${user.id}`);
+        res.cookies.delete("jalanbaik-role");
+        return res;
+      }
     }
+
+    // Perbarui timestamp aktivitas server pada response cookie
+    response.cookies.set("jb_last_activity", now.toString(), {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    // Hapus cookie usang unkeyed jika masih tersimpan di peramban
+    if (request.cookies.has("jalanbaik-role")) {
+      response.cookies.delete("jalanbaik-role");
+    }
+
+    // Role Resolution Aman: Gunakan cookie terikat ID pengguna (jb_role_{user.id})
+    // Jika tidak ada di cookie, ambil LANGSUNG dari tabel profiles (database single source of truth)
+    const userRoleCookieKey = `jb_role_${user.id}`;
+    let userRole = request.cookies.get(userRoleCookieKey)?.value as UserRole | undefined;
+
+    if (!userRole) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+      userRole = (profile?.role as UserRole) || "citizen";
+
+      response.cookies.set(userRoleCookieKey, userRole, {
+        path: "/",
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+
+    // RBAC: Rute Admin (/dashboard/admin)
+    if (pathname.startsWith("/dashboard/admin")) {
+      if (userRole !== "admin") {
+        const redirectUrl = request.nextUrl.clone();
+        redirectUrl.pathname =
+          userRole === "officer" ? "/dashboard/petugas/ringkasan" : "/dashboard/warga";
+        return NextResponse.redirect(redirectUrl);
+      }
+    }
+
+    // RBAC: Rute Petugas (/dashboard/petugas)
+    if (pathname.startsWith("/dashboard/petugas")) {
+      if (userRole !== "officer" && userRole !== "admin") {
+        const redirectUrl = request.nextUrl.clone();
+        redirectUrl.pathname = "/dashboard/warga";
+        return NextResponse.redirect(redirectUrl);
+      }
+    }
+  }
+
+  // 2. Redirect jika pengguna yang sudah login mencoba mengakses /login atau /register
+  if (user && (pathname === "/login" || pathname === "/register")) {
+    const userRoleCookieKey = `jb_role_${user.id}`;
+    let userRole = request.cookies.get(userRoleCookieKey)?.value as UserRole | undefined;
 
     if (!userRole) {
       const { data: profile } = await supabase
@@ -65,50 +137,11 @@ export async function updateSession(request: NextRequest) {
       userRole = (profile?.role as UserRole) || "citizen";
     }
 
-    if (userRole && request.cookies.get("jalanbaik-role")?.value !== userRole) {
-      response.cookies.set("jalanbaik-role", userRole, {
-        path: "/",
-        httpOnly: true,
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7,
-      });
-    }
-
-    // RBAC: Rute Admin (/dashboard/admin)
-    if (pathname.startsWith("/dashboard/admin") && userRole !== "admin") {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname =
-        userRole === "officer" ? "/dashboard/petugas" : "/dashboard/warga";
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    // RBAC: Rute Petugas (/dashboard/petugas)
-    if (
-      pathname.startsWith("/dashboard/petugas") &&
-      userRole !== "officer" &&
-      userRole !== "admin"
-    ) {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = "/dashboard/warga";
-      return NextResponse.redirect(redirectUrl);
-    }
-  }
-
-  // 2. Redirect jika pengguna yang sudah login mencoba mengakses /login atau /register
-  if (user && (pathname === "/login" || pathname === "/register")) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-
-    const userRole: UserRole = profile?.role || "citizen";
     const redirectUrl = request.nextUrl.clone();
-
     if (userRole === "admin") {
       redirectUrl.pathname = "/dashboard/admin";
     } else if (userRole === "officer") {
-      redirectUrl.pathname = "/dashboard/petugas";
+      redirectUrl.pathname = "/dashboard/petugas/ringkasan";
     } else {
       redirectUrl.pathname = "/dashboard/warga";
     }

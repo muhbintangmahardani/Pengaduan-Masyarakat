@@ -96,12 +96,11 @@ export function CitizenComplaintsList({
             <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
               Laporan Saya
             </h2>
-            <Badge
-              variant="outline"
-              className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100/80 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/80 shadow-xs"
+            <span
+              className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-700 shadow-xs"
             >
               {complaints.length} Total
-            </Badge>
+            </span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
             Klik laporan untuk membuka halaman detail progres penanganan.

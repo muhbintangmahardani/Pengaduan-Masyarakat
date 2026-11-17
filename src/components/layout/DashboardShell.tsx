@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AppSidebar } from "./AppSidebar";
 import { AppHeader } from "./AppHeader";
+import { AutoLogoutTimer } from "@/components/common/AutoLogoutTimer";
 import type { UserRole } from "@/types";
 
 interface DashboardShellProps {
@@ -29,6 +30,9 @@ export function DashboardShell({
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#f8faf9] dark:bg-slate-950 text-slate-800 dark:text-slate-100 relative">
+      {/* Sesi Auto-Logout Pengaman Inaktivitas */}
+      <AutoLogoutTimer />
+
       {/* Backdrop Gelap untuk Mobile & iPad saat Drawer Terbuka */}
       {isMobileMenuOpen && (
         <div
