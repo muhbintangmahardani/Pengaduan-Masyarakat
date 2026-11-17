@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -140,13 +140,29 @@ export function OfficerWorkSubmission({
     }
   };
 
-  const currentTimeFormatted = new Intl.DateTimeFormat("id-ID", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date());
+  const [currentTimeFormatted, setCurrentTimeFormatted] = useState<string>("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const formatted = new Intl.DateTimeFormat("id-ID", {
+        timeZone: "Asia/Jakarta",
+        weekday: "long",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      }).format(now);
+      setCurrentTimeFormatted(formatted);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Card className="rounded-2xl p-5 sm:p-7 space-y-6 shadow-xs border-slate-200/80 dark:border-slate-800">
@@ -297,7 +313,7 @@ export function OfficerWorkSubmission({
         </div>
 
         <div className="text-[11px] text-slate-400">
-          Waktu input • {currentTimeFormatted} WIB
+          Waktu input realtime • {currentTimeFormatted || "Memuat waktu..."} WIB
         </div>
 
         {/* Footer Note & Button */}

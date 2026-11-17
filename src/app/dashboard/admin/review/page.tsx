@@ -117,8 +117,7 @@ export default async function AdminReviewPage({
           <p className="text-[11px] text-blue-700/80 dark:text-blue-400 mt-0.5">
             {current.completed_at
               ? `Dikirim ${formatDateTimeWithHours(current.completed_at)}`
-              : "Menunggu persetujuan admin"}{" "}
-            • Tim Jalan 02
+              : "Menunggu persetujuan admin"}
           </p>
         </div>
 

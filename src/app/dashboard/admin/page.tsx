@@ -5,6 +5,7 @@ import { AdminIncomingReports } from "@/components/admin/AdminIncomingReports";
 import { Card } from "@/components/ui/card";
 import { Clock, TrendingUp, FileCheck } from "lucide-react";
 import { ExportButton } from "@/components/common/ExportButton";
+import { formatCurrentDateWIB } from "@/lib/utils";
 import type { Complaint, Profile } from "@/types";
 
 export const metadata: Metadata = {
@@ -41,12 +42,7 @@ export default async function AdminDashboardPage() {
     (c) => c.status === "under_review"
   ).length;
 
-  const todayFormatted = new Intl.DateTimeFormat("id-ID", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date());
+  const todayFormatted = formatCurrentDateWIB();
 
   return (
     <div className="space-y-6">

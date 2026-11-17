@@ -6,11 +6,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDateTime(dateString: string): string {
+/**
+ * Format tanggal standar Indonesia dalam zona waktu Asia/Jakarta (WIB)
+ * Contoh: "18 Nov 2026"
+ */
+export function formatDateTime(dateString: string | null | undefined): string {
+  if (!dateString) return "-";
   try {
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
     return new Intl.DateTimeFormat("id-ID", {
-      day: "2-digit",
+      timeZone: "Asia/Jakarta",
+      day: "numeric",
       month: "short",
       year: "numeric",
     }).format(date);
@@ -19,17 +26,61 @@ export function formatDateTime(dateString: string): string {
   }
 }
 
-export function formatDateTimeWithHours(dateString: string): string {
+/**
+ * Format tanggal lengkap beserta nama hari dan jam dalam zona waktu Asia/Jakarta (WIB) secara real-time
+ * Contoh: "Rabu, 18 Nov 2026, 03.43 WIB"
+ */
+export function formatDateTimeWithHours(dateString: string | null | undefined): string {
+  if (!dateString) return "-";
   try {
     const date = new Date(dateString);
-    const dateFormatted = new Intl.DateTimeFormat("id-ID", {
-      day: "2-digit",
+    if (isNaN(date.getTime())) return dateString;
+    const formatter = new Intl.DateTimeFormat("id-ID", {
+      timeZone: "Asia/Jakarta",
+      weekday: "long",
+      day: "numeric",
       month: "short",
       year: "numeric",
-    }).format(date);
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    return `${dateFormatted}, ${hours}.${minutes} WIB`;
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    return `${formatter.format(date)} WIB`;
+  } catch {
+    return dateString;
+  }
+}
+
+/**
+ * Format tanggal hari ini dalam format lengkap berbahasa Indonesia (WIB)
+ * Contoh: "Rabu, 18 November 2026"
+ */
+export function formatCurrentDateWIB(): string {
+  return new Intl.DateTimeFormat("id-ID", {
+    timeZone: "Asia/Jakarta",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date());
+}
+
+/**
+ * Format jam dan menit saja dalam zona waktu Asia/Jakarta (WIB)
+ * Contoh: "03.43 WIB"
+ */
+export function formatTimeWIB(dateString: string | null | undefined): string {
+  if (!dateString) return "-";
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    const formatter = new Intl.DateTimeFormat("id-ID", {
+      timeZone: "Asia/Jakarta",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    return `${formatter.format(date)} WIB`;
   } catch {
     return dateString;
   }
@@ -59,10 +110,11 @@ export function formatStatusLabel(status: ComplaintStatus): string {
   return map[status] || status;
 }
 
-export function formatFileSize(bytes: number): string {
-  if (bytes === 0) return "0 Bytes";
-  const k = 1024;
-  const sizes = ["Bytes", "KB", "MB", "GB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+export function formatPriorityLabel(priority: "low" | "medium" | "high"): string {
+  const map: Record<"low" | "medium" | "high", string> = {
+    low: "Rendah",
+    medium: "Sedang",
+    high: "Tinggi (Darurat)",
+  };
+  return map[priority] || priority;
 }

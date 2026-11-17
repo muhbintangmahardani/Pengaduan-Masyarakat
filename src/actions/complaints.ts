@@ -520,6 +520,7 @@ export async function getComplaintStatsAction(): Promise<{
     const currentMonth = now.getMonth();
 
     const monthName = new Intl.DateTimeFormat("id-ID", {
+      timeZone: "Asia/Jakarta",
       month: "long",
       year: "numeric",
     }).format(now);
