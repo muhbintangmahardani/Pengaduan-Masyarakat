@@ -4,21 +4,13 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  ArrowRight,
-  MapPin,
-  Calendar,
-  Clock,
-  ExternalLink,
-  CheckCircle2,
-  FileText,
-} from "lucide-react";
+import { ArrowRight, MapPin, Calendar, Clock, ExternalLink } from "lucide-react";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { ExportButton } from "@/components/common/ExportButton";
 import { formatDateTime } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 import { subscribeToLiveRoom } from "@/lib/realtimeBroadcast";
 import type { Complaint } from "@/types";
 
@@ -47,7 +39,7 @@ export function CitizenComplaintsList({
     }
   }, [initialComplaints, propComplaints]);
 
-  // Live Real-Time Listener (Shared Live Manager bebas konflik)
+  // Live Real-Time Listener (Shared Live Manager)
   useEffect(() => {
     const unsubscribe = subscribeToLiveRoom((payload) => {
       if (payload?.complaint) {
@@ -88,23 +80,20 @@ export function CitizenComplaintsList({
   });
 
   return (
-    <Card className="rounded-xl p-5 sm:p-7 space-y-5 shadow-xs border-slate-100 dark:border-slate-800">
-      {/* Header and Filter Tabs + Export Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+    <Card className="rounded-xl border border-border bg-card shadow-xs">
+      <CardHeader className="p-5 sm:p-6 pb-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
-              Laporan Saya
-            </h2>
-            <span
-              className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-700 shadow-xs"
-            >
+            <CardTitle className="text-base sm:text-lg font-bold tracking-tight text-foreground">
+              Daftar Laporan Pengaduan
+            </CardTitle>
+            <Badge variant="outline" className="text-xs font-mono">
               {complaints.length} Total
-            </span>
+            </Badge>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Klik laporan untuk membuka halaman detail progres penanganan.
-          </p>
+          <CardDescription className="text-xs text-muted-foreground mt-0.5">
+            Pantau status verifikasi dan hasil pengerjaan jalan yang Anda laporkan.
+          </CardDescription>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -116,104 +105,105 @@ export function CitizenComplaintsList({
             />
           )}
 
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+          <div className="flex items-center gap-1 bg-muted p-1 rounded-lg">
             <button
               onClick={() => setActiveTab("all")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer active:scale-95 duration-150 ${
+              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
                 activeTab === "all"
-                  ? "bg-[#0c3b37] text-white shadow-xs font-bold"
-                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                  ? "bg-background text-foreground shadow-xs font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Semua ({complaints.length})
             </button>
             <button
               onClick={() => setActiveTab("pending")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer active:scale-95 duration-150 ${
+              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
                 activeTab === "pending"
-                  ? "bg-[#0c3b37] text-white shadow-xs font-bold"
-                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                  ? "bg-background text-foreground shadow-xs font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Menunggu ({pendingCount})
             </button>
             <button
               onClick={() => setActiveTab("in_progress")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer active:scale-95 duration-150 ${
+              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
                 activeTab === "in_progress"
-                  ? "bg-[#0c3b37] text-white shadow-xs font-bold"
-                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                  ? "bg-background text-foreground shadow-xs font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Diproses ({inProgressCount})
             </button>
             <button
               onClick={() => setActiveTab("resolved")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer active:scale-95 duration-150 ${
+              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
                 activeTab === "resolved"
-                  ? "bg-[#0c3b37] text-white shadow-xs font-bold"
-                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                  ? "bg-background text-foreground shadow-xs font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Selesai ({resolvedCount})
             </button>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
-      {/* Complaints List items: Navigates directly to dedicated page /dashboard/warga/laporan/[id] */}
-      {filtered.length === 0 ? (
-        <div className="text-center py-12 text-xs text-slate-400">
-          Tidak ada laporan dalam kategori ini.
-        </div>
-      ) : (
-        <div className="divide-y divide-slate-100 dark:divide-slate-800">
-          {filtered.map((item) => (
-            <Link
-              key={item.id}
-              href={`/dashboard/warga/laporan/${item.id}`}
-              className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/70 dark:hover:bg-slate-800/40 p-2.5 sm:p-3 rounded-lg transition-colors group block"
-            >
-              <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-                <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0 border border-slate-200/60 dark:border-slate-700">
-                  <Image
-                    src={item.photo_url}
-                    alt={item.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-200"
-                  />
-                </div>
-
-                <div className="space-y-1 min-w-0">
-                  <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 truncate group-hover:text-[#0c3b37] dark:group-hover:text-emerald-400 transition-colors">
-                    {item.title}
+      <CardContent className="p-0">
+        {filtered.length === 0 ? (
+          <div className="text-center py-12 text-xs text-muted-foreground">
+            Tidak ada laporan dalam kategori ini.
+          </div>
+        ) : (
+          <div className="divide-y divide-border">
+            {filtered.map((item) => (
+              <Link
+                key={item.id}
+                href={`/dashboard/warga/laporan/${item.id}`}
+                className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-muted/50 transition-colors group block"
+              >
+                <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                  <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-muted shrink-0 border border-border">
+                    <Image
+                      src={item.photo_url}
+                      alt={item.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-200"
+                    />
                   </div>
-                  <div className="text-[11px] sm:text-xs text-slate-500 flex items-center gap-1.5 font-medium truncate">
-                    <span className="font-mono text-[#0c3b37] dark:text-emerald-400 font-bold shrink-0">
-                      {item.ticket_number}
-                    </span>
-                    <span>•</span>
-                    <span className="truncate max-w-[180px] sm:max-w-xs">{item.address}</span>
+
+                  <div className="space-y-1 min-w-0">
+                    <div className="text-xs sm:text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                      {item.title}
+                    </div>
+                    <div className="text-xs text-muted-foreground flex items-center gap-1.5 font-medium truncate">
+                      <span className="font-mono text-primary font-bold shrink-0">
+                        {item.ticket_number}
+                      </span>
+                      <span>•</span>
+                      <span className="truncate max-w-[180px] sm:max-w-xs">{item.address}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-1 sm:pt-0 border-t sm:border-0 border-slate-100 dark:border-slate-800">
-                <div className="text-[11px] sm:text-xs text-slate-400 font-medium whitespace-nowrap">
-                  {formatDateTime(item.created_at)}
+                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-1 sm:pt-0 border-t sm:border-0 border-border">
+                  <div className="text-xs text-muted-foreground font-mono whitespace-nowrap">
+                    {formatDateTime(item.created_at)}
+                  </div>
+
+                  <StatusBadge status={item.status} />
+
+                  <div className="flex items-center gap-1 text-xs font-medium text-primary opacity-80 group-hover:opacity-100 shrink-0">
+                    <span className="hidden sm:inline">Detail</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
-
-                <StatusBadge status={item.status} />
-
-                <div className="flex items-center gap-1 text-xs font-semibold text-[#0c3b37] dark:text-emerald-400 opacity-80 group-hover:opacity-100 shrink-0">
-                  <span className="hidden sm:inline">Detail</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
+              </Link>
+            ))}
+          </div>
+        )}
+      </CardContent>
     </Card>
   );
 }

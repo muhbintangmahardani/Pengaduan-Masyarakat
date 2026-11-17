@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardWelcomeHero } from "@/components/dashboard/DashboardWelcomeHero";
 import { DashboardMetricCard } from "@/components/dashboard/DashboardMetricCard";
-import { RecentComplaintsGrid } from "@/components/dashboard/RecentComplaintsGrid";
+import { ComplaintStatsChart } from "@/components/dashboard/ComplaintStatsChart";
 import { RecentActivityTimeline } from "@/components/dashboard/RecentActivityTimeline";
 import { CitizenComplaintsList } from "@/components/citizen/CitizenComplaintsList";
 import { FileText, Clock, TrendingUp, CheckCircle2 } from "lucide-react";
@@ -47,8 +47,8 @@ export default async function WargaDashboardPage() {
   const resolvedCount = complaints.filter((c) => c.status === "resolved").length;
 
   return (
-    <div className="space-y-6 sm:space-y-7">
-      {/* 1. Civora-Style Top Welcome & Quick Status Banner (2 Panels) */}
+    <div className="space-y-6">
+      {/* 1. Shadcn Welcome Hero Banner */}
       <DashboardWelcomeHero
         userName={fullName}
         role="citizen"
@@ -59,28 +59,28 @@ export default async function WargaDashboardPage() {
         totalResolved={resolvedCount}
       />
 
-      {/* 2. 4 Metric Cards Row (Clean, Uppercase Label, Big Value, View All Footer) */}
+      {/* 2. 4 Metric Cards (Shadcn UI Card) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <DashboardMetricCard
-          label="TOTAL LAPORAN"
+          label="Total Laporan"
           count={totalCount}
           icon={FileText}
           variant="slate"
-          description="Semua aduan yang dikirim"
+          description="Semua aduan Anda"
           href="/dashboard/warga/laporan"
-          linkText="Lihat Semua"
+          linkText="Lihat Laporan"
         />
         <DashboardMetricCard
-          label="MENUNGGU VERIFIKASI"
+          label="Menunggu Verifikasi"
           count={pendingCount}
           icon={Clock}
           variant="amber"
-          description="Sedang ditinjau dinas"
+          description="Antrean tinjauan dinas"
           href="/dashboard/warga/laporan"
           linkText="Lihat Antrean"
         />
         <DashboardMetricCard
-          label="SEDANG DIKERJAKAN"
+          label="Sedang Dikerjakan"
           count={inProgressCount}
           icon={TrendingUp}
           variant="blue"
@@ -89,7 +89,7 @@ export default async function WargaDashboardPage() {
           linkText="Lihat Pengerjaan"
         />
         <DashboardMetricCard
-          label="SELESAI DIPERBAIKI"
+          label="Selesai Diperbaiki"
           count={resolvedCount}
           icon={CheckCircle2}
           variant="emerald"
@@ -99,15 +99,10 @@ export default async function WargaDashboardPage() {
         />
       </div>
 
-      {/* 3. Main Content Section: Left 8-cols (Cards Grid) + Right 4-cols (Recent Activity) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      {/* 3. Analytical Row: Left (8-cols Grafik Card) + Right (4-cols Linimasa Aktivitas) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
         <div className="lg:col-span-8">
-          <RecentComplaintsGrid
-            complaints={complaints}
-            role="citizen"
-            title="Laporan Pengaduan Terkini"
-            viewAllHref="/dashboard/warga/laporan"
-          />
+          <ComplaintStatsChart />
         </div>
 
         <div className="lg:col-span-4">
@@ -115,7 +110,7 @@ export default async function WargaDashboardPage() {
         </div>
       </div>
 
-      {/* 4. Tabel Daftar Lengkap dengan Filter Tab & Pencarian */}
+      {/* 4. Tabel / Daftar Lengkap Pengaduan Warga */}
       <CitizenComplaintsList initialComplaints={complaints} />
     </div>
   );

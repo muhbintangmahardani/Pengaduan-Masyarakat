@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, type LucideIcon } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface DashboardMetricCardProps {
   label: string;
@@ -23,71 +24,63 @@ export function DashboardMetricCard({
 }: DashboardMetricCardProps) {
   const variantStyles = {
     slate: {
-      iconBg: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300",
-      numberColor: "text-slate-900 dark:text-slate-100",
-      hoverBorder: "hover:border-slate-300 dark:hover:border-slate-700",
+      iconBg: "bg-muted text-muted-foreground",
+      numberColor: "text-foreground",
+      borderHover: "hover:border-foreground/20",
     },
     amber: {
-      iconBg: "bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/60",
+      iconBg: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
       numberColor: "text-amber-600 dark:text-amber-400",
-      hoverBorder: "hover:border-amber-300 dark:hover:border-amber-800",
+      borderHover: "hover:border-amber-500/30",
     },
     blue: {
-      iconBg: "bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-200/60 dark:border-sky-800/60",
+      iconBg: "bg-sky-500/10 text-sky-600 dark:text-sky-400",
       numberColor: "text-sky-600 dark:text-sky-400",
-      hoverBorder: "hover:border-sky-300 dark:hover:border-sky-800",
+      borderHover: "hover:border-sky-500/30",
     },
     emerald: {
-      iconBg: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60",
+      iconBg: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
       numberColor: "text-emerald-600 dark:text-emerald-400",
-      hoverBorder: "hover:border-emerald-300 dark:hover:border-emerald-800",
+      borderHover: "hover:border-emerald-500/30",
     },
     orange: {
-      iconBg: "bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 border border-orange-200/60 dark:border-orange-800/60",
+      iconBg: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
       numberColor: "text-orange-600 dark:text-orange-400",
-      hoverBorder: "hover:border-orange-300 dark:hover:border-orange-800",
+      borderHover: "hover:border-orange-500/30",
     },
   };
 
   const style = variantStyles[variant] || variantStyles.slate;
 
   return (
-    <div
-      className={`rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm space-y-3 transition-all duration-200 hover:-translate-y-0.5 ${style.hoverBorder} flex flex-col justify-between`}
-    >
-      <div className="space-y-2">
-        {/* Top: Label + Icon Container */}
-        <div className="flex items-center justify-between">
-          <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
-            {label}
-          </span>
-          <div className={`p-2 rounded-xl shrink-0 ${style.iconBg}`}>
-            <Icon className="w-4 h-4" />
-          </div>
+    <Card className={`rounded-xl border border-border bg-card shadow-xs transition-all duration-200 ${style.borderHover}`}>
+      <CardHeader className="flex flex-row items-center justify-between pb-2 p-4 sm:p-5">
+        <CardTitle className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          {label}
+        </CardTitle>
+        <div className={`p-2 rounded-lg shrink-0 ${style.iconBg}`}>
+          <Icon className="w-4 h-4" />
         </div>
-
-        {/* Counter Big & Bold */}
-        <div className={`text-2xl sm:text-3xl font-black tracking-tight ${style.numberColor}`}>
+      </CardHeader>
+      <CardContent className="p-4 sm:p-5 pt-0 space-y-3">
+        <div className={`text-2xl sm:text-3xl font-bold tracking-tight font-sans ${style.numberColor}`}>
           {String(count).padStart(2, "0")}
         </div>
-
         {description && (
-          <p className="text-[11px] text-slate-400 dark:text-slate-500 line-clamp-1">
+          <p className="text-xs text-muted-foreground line-clamp-1">
             {description}
           </p>
         )}
-      </div>
-
-      {/* Bottom Link (View All → style from mockup) */}
-      <div className="border-t border-slate-100 dark:border-slate-800 pt-3">
-        <Link
-          href={href}
-          className="text-xs font-semibold text-[#0c3b37] dark:text-emerald-400 hover:underline flex items-center justify-between group"
-        >
-          <span>{linkText}</span>
-          <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-        </Link>
-      </div>
-    </div>
+        <div className="pt-2 border-t border-border/60">
+          <Link
+            href={href}
+            className="text-xs font-medium text-foreground/80 hover:text-foreground flex items-center justify-between group"
+          >
+            <span>{linkText}</span>
+            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1 text-muted-foreground" />
+          </Link>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
