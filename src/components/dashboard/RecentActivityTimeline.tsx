@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { Clock, CheckCircle2, AlertCircle, Wrench, ArrowRight, ShieldCheck } from "lucide-react";
