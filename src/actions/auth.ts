@@ -47,10 +47,10 @@ export async function loginAction(formData: FormData) {
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    // Catat waktu aktivitas awal login
+    // Catat waktu aktivitas awal login (dapat diperbarui oleh client saat interaksi di ponsel)
     cookieStore.set("jb_last_activity", Date.now().toString(), {
       path: "/",
-      httpOnly: true,
+      httpOnly: false,
       sameSite: "lax",
     });
 
@@ -107,7 +107,7 @@ export async function registerAction(formData: FormData) {
     });
     cookieStore.set("jb_last_activity", Date.now().toString(), {
       path: "/",
-      httpOnly: true,
+      httpOnly: false,
       sameSite: "lax",
     });
     cookieStore.delete("jalanbaik-role");

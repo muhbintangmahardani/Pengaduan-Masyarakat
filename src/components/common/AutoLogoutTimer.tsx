@@ -6,9 +6,31 @@ import { createClient } from "@/lib/supabase/client";
 
 // Konfigurasi Batas Waktu Aktivitas
 const INACTIVITY_TIMEOUT_MS = 15 * 60 * 1000; // 15 menit total
-const WARNING_COUNTDOWN_SECONDS = 60; // 60 detik sebelum sesi habis
+const WARNING_COUNTDOWN_SECONDS = 60; // 60 detik sebelum sesi habis (menit ke-14)
 const WARNING_THRESHOLD_MS = INACTIVITY_TIMEOUT_MS - WARNING_COUNTDOWN_SECONDS * 1000; // 14 menit
-const ACTIVITY_THROTTLE_MS = 4000; // Throttle update ke storage setiap 4 detik
+const ACTIVITY_THROTTLE_MS = 2000; // Throttle update ke storage & cookie setiap 2 detik
+
+// Helper membaca cookie jb_last_activity di browser
+function getCookieLastActivity(): number | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("jb_last_activity="));
+  if (!match) return null;
+  const val = parseInt(match.split("=")[1], 10);
+  return isNaN(val) ? null : val;
+}
+
+// Helper menyimpan timestamp ke localStorage dan document.cookie secara sinkron
+function saveActivityTimestamp(time: number) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem("jb_last_activity_time", time.toString());
+  } catch {}
+  try {
+    document.cookie = `jb_last_activity=${time}; path=/; max-age=86400; SameSite=Lax`;
+  } catch {}
+}
 
 export function AutoLogoutTimer() {
   const [showWarning, setShowWarning] = useState(false);
@@ -26,6 +48,7 @@ export function AutoLogoutTimer() {
       if (typeof window !== "undefined") {
         localStorage.removeItem("jb_last_activity_time");
         sessionStorage.removeItem("jb_last_activity_time");
+        document.cookie = "jb_last_activity=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       }
 
       // Sign out dari Supabase Auth
@@ -39,21 +62,15 @@ export function AutoLogoutTimer() {
     }
   }, []);
 
-  // Catat aktivitas pengguna (klik, ketik, sentuh, scroll)
+  // Catat aktivitas pengguna (klik, ketik, sentuh layar ponsel, scroll)
   const recordUserActivity = useCallback(() => {
     const now = Date.now();
-    // Throttle agar tidak membebani browser
+    // Throttle agar tidak membebani browser atau baterai ponsel
     if (now - lastActivityRef.current > ACTIVITY_THROTTLE_MS) {
       lastActivityRef.current = now;
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.setItem("jb_last_activity_time", now.toString());
-        } catch {
-          // ignore storage error
-        }
-      }
+      saveActivityTimestamp(now);
     }
-    // Jika dialog peringatan sedang muncul dan user beraktivitas, reset peringatan
+    // Jika dialog peringatan sedang muncul dan user menyentuh/menggerakkan layar, sembunyikan dialog
     if (showWarning) {
       setShowWarning(false);
       setSecondsRemaining(WARNING_COUNTDOWN_SECONDS);
@@ -64,13 +81,7 @@ export function AutoLogoutTimer() {
   const handleStayLoggedIn = () => {
     const now = Date.now();
     lastActivityRef.current = now;
-    if (typeof window !== "undefined") {
-      try {
-        localStorage.setItem("jb_last_activity_time", now.toString());
-      } catch {
-        // ignore storage error
-      }
-    }
+    saveActivityTimestamp(now);
     setShowWarning(false);
     setSecondsRemaining(WARNING_COUNTDOWN_SECONDS);
   };
@@ -78,24 +89,50 @@ export function AutoLogoutTimer() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Inisialisasi timestamp awal
+    // 1. Evaluasi timestamp aktivitas sebelumnya saat halaman dimuat (mount / refresh)
     const now = Date.now();
-    lastActivityRef.current = now;
-    try {
-      localStorage.setItem("jb_last_activity_time", now.toString());
-    } catch {
-      // ignore
+    const stored = localStorage.getItem("jb_last_activity_time");
+    const storedTime = stored ? parseInt(stored, 10) : null;
+    const cookieTime = getCookieLastActivity();
+
+    // Ambil waktu aktivitas yang valid (ambil yang paling baru antara cookie & localStorage)
+    const candidates = [storedTime, cookieTime].filter(
+      (t): t is number => typeof t === "number" && !isNaN(t) && t > 0
+    );
+    const existingTime = candidates.length > 0 ? Math.max(...candidates) : null;
+
+    if (existingTime) {
+      const elapsed = now - existingTime;
+      // JIKA SUDAH MELEBIHI 15 MENIT: Logout seketika, JANGAN reset timestamp!
+      if (elapsed >= INACTIVITY_TIMEOUT_MS) {
+        handleAutoLogout();
+        return;
+      }
+      lastActivityRef.current = existingTime;
+    } else {
+      // Sesi benar-benar baru pertama kali dibuka
+      lastActivityRef.current = now;
+      saveActivityTimestamp(now);
     }
 
-    // 1. Event listener interaksi pengguna
-    const events = ["mousedown", "mousemove", "keydown", "touchstart", "scroll", "click"];
+    // 2. Event listener interaksi pengguna (dioptimalkan untuk mobile touch & desktop)
+    const events = [
+      "mousedown",
+      "mousemove",
+      "keydown",
+      "touchstart",
+      "touchmove",
+      "touchend",
+      "scroll",
+      "click",
+    ];
     const handleEvent = () => recordUserActivity();
 
     events.forEach((evt) => {
       window.addEventListener(evt, handleEvent, { passive: true });
     });
 
-    // 2. Sinkronisasi antar Tab (jika user aktif di tab lain)
+    // 3. Sinkronisasi antar Tab (jika user aktif di tab lain)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === "jb_last_activity_time" && e.newValue) {
         const remoteTime = parseInt(e.newValue, 10);
@@ -110,30 +147,49 @@ export function AutoLogoutTimer() {
     };
     window.addEventListener("storage", handleStorageChange);
 
-    // 3. Deteksi saat tab dibuka kembali setelah perangkat tidur / tab blur
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        const currentTime = Date.now();
-        const stored = localStorage.getItem("jb_last_activity_time");
-        const effectiveLast = stored ? parseInt(stored, 10) : lastActivityRef.current;
-        const idleDuration = currentTime - effectiveLast;
+    // 4. Deteksi kebangkitan ponsel / tab setelah layar mati (visibilitychange, focus, pageshow)
+    const checkWakeupInactivity = () => {
+      const currentTime = Date.now();
+      const storedVal = localStorage.getItem("jb_last_activity_time");
+      const sTime = storedVal ? parseInt(storedVal, 10) : null;
+      const cTime = getCookieLastActivity();
 
-        if (idleDuration >= INACTIVITY_TIMEOUT_MS) {
-          handleAutoLogout();
-        } else if (idleDuration >= WARNING_THRESHOLD_MS) {
-          const remainingSec = Math.max(1, Math.round((INACTIVITY_TIMEOUT_MS - idleDuration) / 1000));
-          setSecondsRemaining(remainingSec);
-          setShowWarning(true);
-        }
+      const timePoints = [sTime, cTime, lastActivityRef.current].filter(
+        (t): t is number => typeof t === "number" && !isNaN(t) && t > 0
+      );
+      const effectiveLast = timePoints.length > 0 ? Math.max(...timePoints) : lastActivityRef.current;
+      const idleDuration = currentTime - effectiveLast;
+
+      if (idleDuration >= INACTIVITY_TIMEOUT_MS) {
+        handleAutoLogout();
+      } else if (idleDuration >= WARNING_THRESHOLD_MS) {
+        const remainingSec = Math.max(1, Math.round((INACTIVITY_TIMEOUT_MS - idleDuration) / 1000));
+        setSecondsRemaining(remainingSec);
+        setShowWarning(true);
       }
     };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // 4. Interval Timer pengecekan setiap 1 detik
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        checkWakeupInactivity();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("focus", checkWakeupInactivity);
+    window.addEventListener("pageshow", checkWakeupInactivity);
+
+    // 5. Interval Timer pengecekan aktif setiap 1 detik
     const timerInterval = setInterval(() => {
       const currentTime = Date.now();
-      const stored = localStorage.getItem("jb_last_activity_time");
-      const effectiveLast = stored ? parseInt(stored, 10) : lastActivityRef.current;
+      const storedVal = localStorage.getItem("jb_last_activity_time");
+      const sTime = storedVal ? parseInt(storedVal, 10) : null;
+      const cTime = getCookieLastActivity();
+
+      const timePoints = [sTime, cTime, lastActivityRef.current].filter(
+        (t): t is number => typeof t === "number" && !isNaN(t) && t > 0
+      );
+      const effectiveLast = timePoints.length > 0 ? Math.max(...timePoints) : lastActivityRef.current;
       const idleDuration = currentTime - effectiveLast;
 
       if (idleDuration >= INACTIVITY_TIMEOUT_MS) {
@@ -153,6 +209,8 @@ export function AutoLogoutTimer() {
       });
       window.removeEventListener("storage", handleStorageChange);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("focus", checkWakeupInactivity);
+      window.removeEventListener("pageshow", checkWakeupInactivity);
       clearInterval(timerInterval);
     };
   }, [handleAutoLogout, recordUserActivity, showWarning]);

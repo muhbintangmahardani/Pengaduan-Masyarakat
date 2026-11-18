@@ -92,14 +92,14 @@ export async function updateSession(request: NextRequest) {
       return res;
     }
 
-    // Inactivity Session Timeout Server-Side Check (30 menit tanpa aktivitas)
+    // Inactivity Session Timeout Server-Side Check (15 menit tanpa aktivitas, sinkron dengan mobile & desktop)
     const lastActivity = request.cookies.get("jb_last_activity")?.value;
     const now = Date.now();
-    const MAX_INACTIVITY_MS = 30 * 60 * 1000; // 30 menit
+    const MAX_INACTIVITY_MS = 15 * 60 * 1000; // 15 menit total
 
     if (lastActivity) {
       const lastTime = parseInt(lastActivity, 10);
-      if (!isNaN(lastTime) && now - lastTime > MAX_INACTIVITY_MS) {
+      if (!isNaN(lastTime) && now - lastTime >= MAX_INACTIVITY_MS) {
         // Sesi telah kedaluwarsa karena tidak ada aktivitas
         await supabase.auth.signOut();
         const url = request.nextUrl.clone();
@@ -113,10 +113,10 @@ export async function updateSession(request: NextRequest) {
       }
     }
 
-    // Perbarui timestamp aktivitas server pada response cookie
+    // Perbarui timestamp aktivitas server pada response cookie (non-httpOnly agar client dapat sinkronisasi)
     response.cookies.set("jb_last_activity", now.toString(), {
       path: "/",
-      httpOnly: true,
+      httpOnly: false,
       sameSite: "lax",
     });
 
