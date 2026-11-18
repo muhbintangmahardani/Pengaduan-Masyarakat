@@ -200,11 +200,11 @@ export function AdminIncomingReports({
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       {/* Kolom Kiri: Antrean Laporan (4 cols / 35%) */}
       <Card className="lg:col-span-4 rounded-xl p-5 space-y-4 shadow-sm border-slate-100 dark:border-slate-800">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
             Antrean laporan
           </h2>
-          <Badge variant="outline" className="text-[10px] text-slate-500 font-medium">
+          <Badge variant="outline" className="text-[10px] text-slate-500 font-medium shrink-0 whitespace-nowrap">
             {filtered.length} tiket
           </Badge>
         </div>

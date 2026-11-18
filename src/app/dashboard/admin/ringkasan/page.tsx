@@ -63,43 +63,39 @@ export default async function AdminRingkasanPage() {
         totalResolved={resolved}
       />
 
-      {/* 2. 4 Metric Cards Civora Style */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      {/* 2. 4 Metric Cards (Shadcn UI Card Minimalis) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         <DashboardMetricCard
-          label="TOTAL LAPORAN"
+          label="Total Laporan"
           count={total}
           icon={FileText}
           variant="slate"
           description="Semua aduan terdata"
           href="/dashboard/admin"
-          linkText="Lihat Antrean"
         />
         <DashboardMetricCard
-          label="PERLU VERIFIKASI"
+          label="Perlu Verifikasi"
           count={pending}
           icon={Clock}
           variant="amber"
           description="Menunggu disposisi"
           href="/dashboard/admin"
-          linkText="Verifikasi Sekarang"
         />
         <DashboardMetricCard
-          label="SEDANG DIKERJAKAN"
+          label="Sedang Dikerjakan"
           count={inProgress + underReview}
           icon={TrendingUp}
           variant="blue"
           description="Tim bergerak di lokasi"
           href="/dashboard/admin/penugasan"
-          linkText="Pantau Penugasan"
         />
         <DashboardMetricCard
-          label="SELESAI DITUTUP"
+          label="Selesai Ditutup"
           count={resolved}
           icon={CheckCircle2}
           variant="emerald"
           description="Tuntas disetujui dinas"
           href="/dashboard/admin/review"
-          linkText="Lihat Hasil"
         />
       </div>
 

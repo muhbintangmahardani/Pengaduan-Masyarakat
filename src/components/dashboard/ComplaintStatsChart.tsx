@@ -78,31 +78,32 @@ export function ComplaintStatsChart() {
 
   return (
     <Card className="rounded-xl border border-border bg-card shadow-xs">
-      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border p-5 pb-4">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border p-4 sm:p-5">
         <div>
           <div className="flex items-center gap-2">
             <CardTitle className="text-sm font-semibold tracking-tight text-foreground">
               Statistik & Tren Penanganan ({monthName})
             </CardTitle>
-            <Badge variant="secondary" className="text-[10px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5">
-              ● Live Realtime
-            </Badge>
+            <span className="inline-flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+              Live
+            </span>
           </div>
-          <CardDescription className="text-xs text-muted-foreground mt-1">
-            Visualisasi riil perbandingan laporan masuk dan perbaikan yang telah tuntas.
+          <CardDescription className="text-xs text-muted-foreground mt-0.5 line-clamp-1 sm:line-clamp-none">
+            Visualisasi riil perbandingan laporan masuk dan perbaikan tuntas.
           </CardDescription>
         </div>
 
-        <div className="flex items-center gap-4 text-xs font-medium">
+        <div className="flex items-center gap-3 text-xs font-medium shrink-0">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#0c3b37] dark:bg-emerald-400" />
-            <span className="text-muted-foreground">
-              Laporan Masuk ({totalMasuk})
+            <span className="w-2 h-2 rounded-full bg-[#0c3b37] dark:bg-emerald-400 shrink-0" />
+            <span className="text-muted-foreground whitespace-nowrap">
+              Masuk ({totalMasuk})
             </span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-            <span className="text-muted-foreground">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+            <span className="text-muted-foreground whitespace-nowrap">
               Selesai ({totalSelesai})
             </span>
           </div>

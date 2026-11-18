@@ -17,6 +17,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface AdminReviewDecisionProps {
   complaintId: string;
@@ -90,29 +91,25 @@ export function AdminReviewDecision({ complaintId, status }: AdminReviewDecision
   if (isApproved || status === "resolved") {
     return (
       <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
-        <div className="rounded-xl bg-emerald-50/90 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 p-4 sm:p-5 flex items-start sm:items-center gap-3.5">
-          <div className="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-            <CheckCircle2 className="w-5 h-5" />
-          </div>
-          <div className="space-y-0.5 flex-1 min-w-0">
-            <div className="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-2">
-              <span>Laporan Resmi Disetujui & Selesai Tuntas</span>
-            </div>
-            <p className="text-[11px] sm:text-xs text-emerald-800/80 dark:text-emerald-400">
-              Admin telah memverifikasi dokumentasi perbaikan. Laporan resmi ditutup dan warga pelapor telah menerima pemberitahuan hasil akhir.
-            </p>
-          </div>
-        </div>
+        <Alert variant="success" className="rounded-xl">
+          <CheckCircle2 className="h-4 w-4" />
+          <AlertTitle className="text-xs sm:text-sm font-bold">
+            Laporan Resmi Disetujui & Selesai Tuntas
+          </AlertTitle>
+          <AlertDescription className="text-xs">
+            Admin telah memverifikasi dokumentasi perbaikan. Laporan resmi ditutup dan warga pelapor telah menerima pemberitahuan hasil akhir.
+          </AlertDescription>
+        </Alert>
 
-        <div className="flex items-center justify-between pt-1">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
           <span className="text-[11px] text-slate-400 font-medium">
             Status alur penanganan: <strong className="text-emerald-700 dark:text-emerald-400">100% Selesai</strong>
           </span>
           <Link
             href="/dashboard/admin/penugasan"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0c3b37] dark:text-emerald-400 hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0c3b37] dark:text-emerald-400 hover:underline whitespace-nowrap shrink-0"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
             Kembali ke Monitoring Penugasan
           </Link>
         </div>

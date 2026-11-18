@@ -47,22 +47,22 @@ export function RecentComplaintsGrid({
   return (
     <div className="space-y-4">
       {/* Header Bar dengan Link 'Lihat Semua Laporan →' */}
-      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-        <div>
-          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+      <div className="flex items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight truncate">
             {title}
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
             Daftar aduan jalan rusak terkini yang tercatat di sistem.
           </p>
         </div>
 
         <Link
           href={viewAllHref}
-          className="text-xs font-bold text-[#0c3b37] dark:text-emerald-400 hover:underline flex items-center gap-1 group"
+          className="text-xs font-bold text-[#0c3b37] dark:text-emerald-400 hover:underline flex items-center gap-1 group shrink-0 whitespace-nowrap"
         >
           <span>Lihat Semua</span>
-          <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+          <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1 shrink-0" />
         </Link>
       </div>
 
@@ -128,14 +128,14 @@ export function RecentComplaintsGrid({
                 </div>
 
                 {/* Metadata Meta Info */}
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-                  <div className="flex items-center gap-1">
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400 gap-2">
+                  <div className="flex items-center gap-1 min-w-0 truncate">
                     <Calendar className="w-3 h-3 shrink-0" />
-                    <span>{formatDateTime(item.created_at)}</span>
+                    <span className="truncate">{formatDateTime(item.created_at)}</span>
                   </div>
 
                   {item.priority && (
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0 whitespace-nowrap">
                       {item.priority}
                     </span>
                   )}

@@ -438,23 +438,15 @@ export function NotificationBell({
           className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none cursor-pointer group border border-transparent hover:border-slate-200 dark:hover:border-slate-800"
           aria-label="Notifikasi Real-time"
         >
-          {/* Ikon Lonceng: Menyala Merah Terang Saat Ada Notifikasi Baru */}
-          <Bell
-            className={`w-4 h-4 transition-transform ${
-              unreadCount > 0
-                ? "text-red-600 dark:text-red-400 animate-bounce"
-                : "group-hover:scale-105"
-            }`}
-          />
+          {/* Ikon Lonceng: Bersih & Minimalis Tanpa Animasi Bouncing */}
+          <Bell className="w-4 h-4 text-slate-600 dark:text-slate-300 transition-colors" />
 
-          {/* Badge / Titik Indikator Merah Menyala Berdenyut */}
+          {/* Dot Merah Statis Minimalis Tanpa Animasi atau Denyut */}
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-4.5 min-w-[18px] px-1 items-center justify-center rounded-full bg-red-600 text-[9px] font-black text-white ring-2 ring-white dark:ring-slate-900 shadow-md select-none z-10 animate-in zoom-in-75 duration-200">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-              <span className="relative z-10 font-bold leading-none">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            </span>
+            <span
+              className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900 pointer-events-none"
+              aria-label={`${unreadCount} notifikasi baru`}
+            />
           )}
         </button>
       </DropdownMenuTrigger>

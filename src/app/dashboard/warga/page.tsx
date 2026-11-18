@@ -59,8 +59,8 @@ export default async function WargaDashboardPage() {
         totalResolved={resolvedCount}
       />
 
-      {/* 2. 4 Metric Cards (Shadcn UI Card) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      {/* 2. 4 Metric Cards (Shadcn UI Card Minimalis & Elegan) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         <DashboardMetricCard
           label="Total Laporan"
           count={totalCount}
@@ -68,7 +68,6 @@ export default async function WargaDashboardPage() {
           variant="slate"
           description="Semua aduan Anda"
           href="/dashboard/warga/laporan"
-          linkText="Lihat Laporan"
         />
         <DashboardMetricCard
           label="Menunggu Verifikasi"
@@ -77,7 +76,6 @@ export default async function WargaDashboardPage() {
           variant="amber"
           description="Antrean tinjauan dinas"
           href="/dashboard/warga/laporan"
-          linkText="Lihat Antrean"
         />
         <DashboardMetricCard
           label="Sedang Dikerjakan"
@@ -86,7 +84,6 @@ export default async function WargaDashboardPage() {
           variant="blue"
           description="Ditangani tim lapangan"
           href="/dashboard/warga/laporan"
-          linkText="Lihat Pengerjaan"
         />
         <DashboardMetricCard
           label="Selesai Diperbaiki"
@@ -95,7 +92,6 @@ export default async function WargaDashboardPage() {
           variant="emerald"
           description="Jalan tuntas diperbaiki"
           href="/dashboard/warga/laporan"
-          linkText="Lihat Hasil"
         />
       </div>
 

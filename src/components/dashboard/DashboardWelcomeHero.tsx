@@ -57,31 +57,24 @@ export function DashboardWelcomeHero({
       <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-emerald-400/10 blur-3xl pointer-events-none" />
       <div className="absolute left-1/3 -bottom-16 w-60 h-60 rounded-full bg-teal-400/10 blur-2xl pointer-events-none" />
 
-      <CardContent className="p-6 sm:p-7 relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div className="space-y-3 max-w-xl">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 text-xs font-medium border border-white/10">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>Layanan Pengaduan Jalan Terpadu</span>
-          </div>
-
-          <div className="space-y-1">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
-              Selamat datang, {firstName}
-            </h1>
-            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-              {getSubHeadline()}
-            </p>
-          </div>
+      <CardContent className="p-5 sm:p-6 lg:p-7 relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
+        <div className="space-y-1.5 max-w-xl">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
+            Selamat datang, {firstName}
+          </h1>
+          <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-normal">
+            {getSubHeadline()}
+          </p>
         </div>
 
-        <div className="shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="shrink-0 flex items-center">
           <Button
             asChild
-            className="bg-white hover:bg-emerald-50 text-[#0c3b37] font-semibold text-xs sm:text-sm h-10 px-5 rounded-lg shadow-sm gap-2"
+            className="w-full sm:w-auto bg-white hover:bg-emerald-50 text-[#0c3b37] font-semibold text-xs sm:text-sm h-10 px-5 rounded-lg shadow-sm gap-2 whitespace-nowrap shrink-0"
           >
             <Link href={buttonHref}>
               <span>{buttonText}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 shrink-0" />
             </Link>
           </Button>
         </div>

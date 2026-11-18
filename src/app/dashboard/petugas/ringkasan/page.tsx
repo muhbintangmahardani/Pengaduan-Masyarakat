@@ -55,43 +55,39 @@ export default async function PetugasRingkasanPage() {
         totalResolved={completedTasks}
       />
 
-      {/* 2. 4 Metric Cards Civora Style */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      {/* 2. 4 Metric Cards (Shadcn UI Card Minimalis) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         <DashboardMetricCard
-          label="TOTAL PENUGASAN"
+          label="Total Penugasan"
           count={totalTasks}
           icon={FileText}
           variant="slate"
           description="Semua tugas akun Anda"
           href="/dashboard/petugas/riwayat"
-          linkText="Lihat Riwayat"
         />
         <DashboardMetricCard
-          label="TUGAS AKTIF"
+          label="Tugas Aktif"
           count={activeTasks}
           icon={Wrench}
           variant="blue"
           description="Perlu segera dikerjakan"
           href="/dashboard/petugas"
-          linkText="Buka Tugas"
         />
         <DashboardMetricCard
-          label="MENUNGGU TINJAUAN"
+          label="Menunggu Tinjauan"
           count={submittedTasks}
           icon={Clock}
           variant="orange"
           description="Bukti foto ditinjau admin"
           href="/dashboard/petugas"
-          linkText="Lihat Status"
         />
         <DashboardMetricCard
-          label="SELESAI DISETUJUI"
+          label="Selesai Disetujui"
           count={completedTasks}
           icon={CheckCircle2}
           variant="emerald"
           description="Tuntas disetujui dinas"
           href="/dashboard/petugas/riwayat"
-          linkText="Lihat Arsip"
         />
       </div>
 
