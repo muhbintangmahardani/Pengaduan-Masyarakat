@@ -72,129 +72,127 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Kolom Kanan: 50% Form Registrasi Akun Berukuran Rapi & Pas Layar */}
-        <div className="p-6 sm:p-7 lg:p-7 flex flex-col justify-between bg-white dark:bg-slate-900">
-          <div>
-            <div className="space-y-0.5 mb-2.5">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-                Daftar Akun Baru
-              </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Lengkapi identitas untuk mulai membuat laporan jalan rusak.
-              </p>
-              <div className="pt-1.5">
-                <div className="h-px w-full bg-slate-100 dark:bg-slate-800" />
-              </div>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-2">
-              {/* Nama Lengkap */}
-              <div className="space-y-0.5">
-                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  Nama Lengkap <span className="text-rose-500">*</span>
-                </Label>
-                <Input
-                  type="text"
-                  name="fullName"
-                  required
-                  disabled={isLoading}
-                  placeholder="Budi Setiawan"
-                  className="h-9 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
-                />
-              </div>
-
-              {/* Email Warga */}
-              <div className="space-y-0.5">
-                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  Alamat Email <span className="text-rose-500">*</span>
-                </Label>
-                <Input
-                  type="email"
-                  name="email"
-                  required
-                  disabled={isLoading}
-                  placeholder="budi@gmail.com"
-                  className="h-9 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
-                />
-              </div>
-
-              {/* Nomor WhatsApp/Telepon */}
-              <div className="space-y-0.5">
-                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  Nomor WhatsApp / Telepon
-                </Label>
-                <Input
-                  type="tel"
-                  name="phoneNumber"
-                  disabled={isLoading}
-                  placeholder="081234567890"
-                  className="h-9 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
-                />
-              </div>
-
-              {/* Password Input */}
-              <div className="space-y-0.5">
-                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  Kata Sandi (Minimal 6 Karakter) <span className="text-rose-500">*</span>
-                </Label>
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    required
-                    minLength={6}
-                    disabled={isLoading}
-                    placeholder="••••••••"
-                    className="h-9 text-xs sm:text-sm rounded-xl pr-10 border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer p-1"
-                    title={showPassword ? "Sembunyikan" : "Tampilkan"}
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Tombol Buat Akun Identik dengan Masuk Dashboard */}
-              <Button
-                type="submit"
-                size="lg"
-                disabled={isLoading}
-                className="w-full h-11 py-2.5 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-2.5 whitespace-nowrap flex items-center justify-center"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    Mendaftarkan Akun...
-                  </>
-                ) : (
-                  <>
-                    Daftar Akun Sekarang
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </>
-                )}
-              </Button>
-            </form>
-
-            {/* Link Masuk Akun */}
-            <div className="pt-2.5 text-center">
-              <span className="text-xs text-slate-500 dark:text-slate-400">
-                Sudah memiliki akun?{" "}
-              </span>
-              <Link
-                href="/login"
-                className="text-xs font-bold text-[#0c3b37] dark:text-emerald-400 hover:underline ml-0.5 whitespace-nowrap"
-              >
-                Masuk di sini
-              </Link>
+        {/* Kolom Kanan: 50% Form Registrasi Akun Berukuran Rapi & Pas Layar Tanpa Scroll */}
+        <div className="p-6 sm:p-7 lg:px-8 lg:py-6 flex flex-col justify-center bg-white dark:bg-slate-900">
+          <div className="space-y-0.5 mb-2.5">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+              Daftar Akun Baru
+            </h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Lengkapi identitas untuk mulai membuat laporan jalan rusak.
+            </p>
+            <div className="pt-1">
+              <div className="h-px w-full bg-slate-100 dark:bg-slate-800" />
             </div>
           </div>
 
+          <form onSubmit={handleSubmit} className="space-y-2">
+            {/* Nama Lengkap */}
+            <div className="space-y-1">
+              <Label className="text-[11px] sm:text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Nama Lengkap <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                type="text"
+                name="fullName"
+                required
+                disabled={isLoading}
+                placeholder="Budi Setiawan"
+                className="h-9.5 text-xs sm:text-sm rounded-[14px] border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5 placeholder:text-slate-400 font-medium"
+              />
+            </div>
+
+            {/* Email Warga */}
+            <div className="space-y-1">
+              <Label className="text-[11px] sm:text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Alamat Email <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                type="email"
+                name="email"
+                required
+                disabled={isLoading}
+                placeholder="budi@gmail.com"
+                className="h-9.5 text-xs sm:text-sm rounded-[14px] border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5 placeholder:text-slate-400 font-medium"
+              />
+            </div>
+
+            {/* Nomor WhatsApp/Telepon */}
+            <div className="space-y-1">
+              <Label className="text-[11px] sm:text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Nomor WhatsApp / Telepon
+              </Label>
+              <Input
+                type="tel"
+                name="phoneNumber"
+                disabled={isLoading}
+                placeholder="081234567890"
+                className="h-9.5 text-xs sm:text-sm rounded-[14px] border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5 placeholder:text-slate-400 font-medium"
+              />
+            </div>
+
+            {/* Password Input */}
+            <div className="space-y-1">
+              <Label className="text-[11px] sm:text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Kata Sandi (Minimal 6 Karakter) <span className="text-rose-500">*</span>
+              </Label>
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  required
+                  minLength={6}
+                  disabled={isLoading}
+                  placeholder="••••••••"
+                  className="h-9.5 text-xs sm:text-sm rounded-[14px] pr-10 border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5 placeholder:text-slate-400 font-medium"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer p-1"
+                  title={showPassword ? "Sembunyikan" : "Tampilkan"}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Tombol Buat Akun Identik dengan Shape Form */}
+            <Button
+              type="submit"
+              size="lg"
+              disabled={isLoading}
+              className="w-full h-10.5 sm:h-11 rounded-[14px] bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-3 whitespace-nowrap flex items-center justify-center gap-2"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  Mendaftarkan Akun...
+                </>
+              ) : (
+                <>
+                  Daftar Akun Sekarang
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </Button>
+          </form>
+
+          {/* Link Masuk Akun */}
+          <div className="pt-2 text-center">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              Sudah memiliki akun?{" "}
+            </span>
+            <Link
+              href="/login"
+              className="text-xs font-bold text-[#0c3b37] dark:text-emerald-400 hover:underline ml-0.5 whitespace-nowrap"
+            >
+              Masuk di sini
+            </Link>
+          </div>
+
           {/* Footer Card Dekat & Tanpa Border Sesuai Referensi Gambar */}
-          <div className="pt-5 sm:pt-6 text-center space-y-0.5">
+          <div className="pt-4 sm:pt-5 text-center space-y-0.5">
             <p className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 font-medium">
               © 2026 Suku Dinas Bina Marga • Kota Administrasi JalanBaik.
             </p>

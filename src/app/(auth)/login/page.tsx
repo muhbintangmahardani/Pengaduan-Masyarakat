@@ -80,8 +80,8 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Kolom Kanan: 50% Form Login Bersih, Rapi & Elegan Tanpa Scroll */}
-        <div className="p-6 sm:p-8 lg:p-8 flex flex-col justify-center bg-white dark:bg-slate-900">
+        {/* Kolom Kanan: 50% Form Login Bersih, Rapi & Elegan Sesuai Referensi Gambar */}
+        <div className="p-6 sm:p-8 lg:p-9 flex flex-col justify-center bg-white dark:bg-slate-900">
           <div className="space-y-1 mb-4">
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
               Selamat Datang
@@ -100,9 +100,9 @@ export default function LoginPage() {
           </Suspense>
 
           {/* Form Input Login Langsung */}
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Input */}
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                 ID Karyawan / Email <span className="text-rose-500">*</span>
               </Label>
@@ -112,12 +112,12 @@ export default function LoginPage() {
                 required
                 disabled={isLoading}
                 placeholder="admin@jalanbaik.go.id atau budi@gmail.com"
-                className="h-10 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                className="h-11 text-xs sm:text-sm rounded-[14px] border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-4 placeholder:text-slate-400 font-medium"
               />
             </div>
 
             {/* Password Input */}
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Kata Sandi <span className="text-rose-500">*</span>
               </Label>
@@ -128,12 +128,12 @@ export default function LoginPage() {
                   required
                   disabled={isLoading}
                   placeholder="••••••••"
-                  className="h-10 text-xs sm:text-sm rounded-xl pr-10 border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-11 text-xs sm:text-sm rounded-[14px] pr-11 border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-4 placeholder:text-slate-400 font-medium"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer p-1"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer p-1"
                   title={showPassword ? "Sembunyikan" : "Tampilkan"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -142,7 +142,7 @@ export default function LoginPage() {
             </div>
 
             {/* Checkbox Ingat Saya & Lupa Sandi */}
-            <div className="flex items-center justify-between text-xs pt-0.5">
+            <div className="flex items-center justify-between text-xs pt-1">
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="rememberMe"
@@ -169,12 +169,12 @@ export default function LoginPage() {
               </a>
             </div>
 
-            {/* Tombol Masuk Dashboard */}
+            {/* Tombol Masuk Dashboard Sesuai Shape Form */}
             <Button
               type="submit"
               size="lg"
               disabled={isLoading}
-              className="w-full h-11 py-2.5 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-3 whitespace-nowrap flex items-center justify-center"
+              className="w-full h-11 rounded-[14px] bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-5 whitespace-nowrap flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
@@ -191,7 +191,7 @@ export default function LoginPage() {
           </form>
 
           {/* Link Daftar Warga Baru */}
-          <div className="pt-2.5 text-center">
+          <div className="pt-3 text-center">
             <span className="text-xs text-slate-500 dark:text-slate-400">
               Belum punya akun warga?{" "}
             </span>
