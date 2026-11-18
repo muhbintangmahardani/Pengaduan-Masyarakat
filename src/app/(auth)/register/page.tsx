@@ -37,7 +37,7 @@ export default function RegisterPage() {
       </div>
 
       {/* Floating Balanced Modern Card (Ukuran & Elemen Form 100% Identik & Pas Layar Tanpa Scroll) */}
-      <div className="w-full max-w-[840px] lg:h-[530px] bg-white dark:bg-slate-900 rounded-2xl sm:rounded-[24px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+      <div className="w-full max-w-[840px] lg:h-[530px] bg-white dark:bg-slate-900 rounded-[28px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan */}
         <div className="relative bg-[#0c3b37] text-white p-5 sm:p-6 lg:p-7 flex flex-col justify-between overflow-hidden min-h-[220px] lg:min-h-full">
           <Image
@@ -199,7 +199,7 @@ export default function RegisterPage() {
               © 2026 Suku Dinas Bina Marga • Kota Administrasi JalanBaik.
             </p>
             <p className="text-[9px] text-slate-400/80 dark:text-slate-600">
-              Sistem Terintegrasi v1.0 • Akses Khusus Pengguna Resmi.
+              Internal System v1.0. Restricted Access.
             </p>
           </div>
         </div>
