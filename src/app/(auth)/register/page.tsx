@@ -30,16 +30,16 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#f4f6f8] dark:bg-slate-950 p-4 sm:p-6 transition-colors duration-200 relative select-none">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#f4f6f8] dark:bg-slate-950 p-3 sm:p-4 transition-colors duration-200 relative select-none">
       {/* Dark Mode Toggle Floating di Pojok Kanan Atas */}
       <div className="fixed top-3 right-3 sm:top-4 sm:right-4 z-50">
         <ThemeToggle />
       </div>
 
-      {/* Floating Balanced Modern Card (Ukuran & Elemen Form 100% Identik dengan Halaman Masuk) */}
-      <div className="w-full max-w-[880px] lg:h-[580px] bg-white dark:bg-slate-900 rounded-2xl sm:rounded-[24px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+      {/* Floating Balanced Modern Card (Ukuran & Elemen Form 100% Identik & Pas Layar Tanpa Scroll) */}
+      <div className="w-full max-w-[820px] lg:h-[490px] xl:h-[500px] bg-white dark:bg-slate-900 rounded-2xl border border-border/80 shadow-xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan */}
-        <div className="relative bg-[#0c3b37] text-white p-7 lg:p-9 flex flex-col justify-between overflow-hidden min-h-[240px] lg:min-h-full">
+        <div className="relative bg-[#0c3b37] text-white p-5 sm:p-6 lg:p-7 flex flex-col justify-between overflow-hidden min-h-[220px] lg:min-h-full">
           <Image
             src="/images/auth-hero.jpg"
             alt="Petugas Satgas Bina Marga Memperbaiki Jalan Raya"
@@ -60,36 +60,36 @@ export default function RegisterPage() {
           </div>
 
           {/* Bottom Headline with Accent Line */}
-          <div className="relative z-10 pt-8 lg:pt-0 space-y-2">
-            <h2 className="text-xl font-bold tracking-tight text-white leading-snug">
+          <div className="relative z-10 pt-4 lg:pt-0 space-y-1.5">
+            <h2 className="text-lg lg:text-xl font-bold tracking-tight text-white leading-snug">
               Pendaftaran Akun Warga.
             </h2>
-            <div className="border-l-2 border-emerald-400 pl-3">
-              <p className="text-xs text-slate-200/90 leading-relaxed font-normal">
+            <div className="border-l-2 border-emerald-400 pl-2.5">
+              <p className="text-[11px] lg:text-xs text-slate-200/90 leading-relaxed font-normal">
                 Jadilah pelopor jalan yang aman dan nyaman. Setiap laporan foto Anda langsung ditindaklanjuti oleh petugas dinas terkait secara transparan.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Kolom Kanan: 50% Form Registrasi Akun Berukuran Rapi & Nyaman */}
-        <div className="p-7 sm:p-8 lg:p-9 flex flex-col justify-between bg-white dark:bg-slate-900">
+        {/* Kolom Kanan: 50% Form Registrasi Akun Berukuran Rapi & Pas Layar */}
+        <div className="p-5 sm:p-6 lg:p-6 flex flex-col justify-between bg-white dark:bg-slate-900">
           <div>
-            <div className="space-y-1 mb-4">
-              <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            <div className="space-y-0.5 mb-2.5">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
                 Daftar Akun Baru
               </h1>
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 Lengkapi identitas untuk mulai membuat laporan jalan rusak.
               </p>
-              <div className="pt-2">
+              <div className="pt-1.5">
                 <div className="h-px w-full bg-slate-100 dark:bg-slate-800" />
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-2.5">
+            <form onSubmit={handleSubmit} className="space-y-2">
               {/* Nama Lengkap */}
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Nama Lengkap <span className="text-rose-500">*</span>
                 </Label>
@@ -99,12 +99,12 @@ export default function RegisterPage() {
                   required
                   disabled={isLoading}
                   placeholder="Budi Setiawan"
-                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-9 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3"
                 />
               </div>
 
               {/* Email Warga */}
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Alamat Email <span className="text-rose-500">*</span>
                 </Label>
@@ -114,12 +114,12 @@ export default function RegisterPage() {
                   required
                   disabled={isLoading}
                   placeholder="budi@gmail.com"
-                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-9 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3"
                 />
               </div>
 
               {/* Nomor WhatsApp/Telepon */}
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Nomor WhatsApp / Telepon
                 </Label>
@@ -128,12 +128,12 @@ export default function RegisterPage() {
                   name="phoneNumber"
                   disabled={isLoading}
                   placeholder="081234567890"
-                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-9 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3"
                 />
               </div>
 
               {/* Password Input */}
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Kata Sandi (Minimal 6 Karakter) <span className="text-rose-500">*</span>
                 </Label>
@@ -145,7 +145,7 @@ export default function RegisterPage() {
                     minLength={6}
                     disabled={isLoading}
                     placeholder="••••••••"
-                    className="h-10 text-xs sm:text-sm rounded-xl pr-10 border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                    className="h-9 text-xs sm:text-sm rounded-xl pr-10 border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3"
                   />
                   <button
                     type="button"
@@ -163,7 +163,7 @@ export default function RegisterPage() {
                 type="submit"
                 size="lg"
                 disabled={isLoading}
-                className="w-full h-11 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-2 whitespace-nowrap"
+                className="w-full h-10.5 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-1.5 whitespace-nowrap"
               >
                 {isLoading ? (
                   <>
@@ -180,7 +180,7 @@ export default function RegisterPage() {
             </form>
 
             {/* Link Masuk Akun */}
-            <div className="pt-3 text-center">
+            <div className="pt-2 text-center">
               <span className="text-xs text-slate-500 dark:text-slate-400">
                 Sudah memiliki akun?{" "}
               </span>
@@ -194,11 +194,11 @@ export default function RegisterPage() {
           </div>
 
           {/* Footer Card */}
-          <div className="pt-2.5 mt-auto border-t border-slate-100 dark:border-slate-800 text-center space-y-0.5">
-            <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+          <div className="pt-2 mt-auto border-t border-slate-100 dark:border-slate-800 text-center space-y-0.5">
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
               © 2026 Suku Dinas Bina Marga • Kota Administrasi JalanBaik.
             </p>
-            <p className="text-[10px] text-slate-400/80 dark:text-slate-600">
+            <p className="text-[9px] text-slate-400/80 dark:text-slate-600">
               Sistem Terintegrasi v1.0 • Akses Khusus Pengguna Resmi.
             </p>
           </div>
