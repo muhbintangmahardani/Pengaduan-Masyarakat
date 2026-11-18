@@ -22,6 +22,16 @@ export const metadata: Metadata = {
   },
   description:
     "Platform transparansi layanan pengaduan dan perbaikan fasilitas jalan terintegrasi.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    shortcut: "/icon.svg",
+    apple: [
+      { url: "/icon.svg", sizes: "180x180", type: "image/svg+xml" },
+    ],
+  },
 };
 
 export default function RootLayout({

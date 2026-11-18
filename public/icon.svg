@@ -1,0 +1,37 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Badge -->
+  <rect width="40" height="40" rx="10" fill="#0c3b37" />
+  <rect x="0.75" y="0.75" width="38.5" height="38.5" rx="9.25" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4" />
+  
+  <!-- Converging Road Plane -->
+  <path
+    d="M8 33L16.5 13.5C16.8 12.8 17.5 12.5 18.2 12.5H21.8C22.5 12.5 23.2 12.8 23.5 13.5L32 33H26L21 21H19L14 33H8Z"
+    fill="#6ee7b7"
+  />
+  
+  <!-- Center White Lane Markers -->
+  <line
+    x1="20"
+    y1="22"
+    x2="20"
+    y2="25"
+    stroke="#ffffff"
+    stroke-width="2.2"
+    stroke-linecap="round"
+  />
+  <line
+    x1="20"
+    y1="28"
+    x2="20"
+    y2="33"
+    stroke="#ffffff"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+  
+  <!-- Horizon Star / Waypoint Diamond -->
+  <path
+    d="M20 6.5L21.5 10L25 11.5L21.5 13L20 16.5L18.5 13L15 11.5L18.5 10L20 6.5Z"
+    fill="#34d399"
+  />
+</svg>
