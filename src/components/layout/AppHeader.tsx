@@ -167,23 +167,23 @@ export function AppHeader({
         <button
           type="button"
           onClick={onOpenMobileMenu}
-          className="lg:hidden flex flex-col justify-center items-center w-8 h-8 rounded-lg hover:bg-muted transition-colors cursor-pointer shrink-0 gap-1 p-1 focus:outline-none"
-          title="Menu Navigasi"
-          aria-label="Buka Menu Navigasi"
+          className="lg:hidden flex flex-col justify-center items-center w-9 h-9 rounded-lg hover:bg-muted active:scale-95 transition-all cursor-pointer shrink-0 gap-[5px] p-1.5 focus:outline-none"
+          title={isMobileMenuOpen ? "Tutup Menu" : "Buka Menu"}
+          aria-label={isMobileMenuOpen ? "Tutup Menu" : "Buka Menu"}
         >
           <span
-            className={`block h-0.5 w-4.5 bg-foreground rounded-full transition-all duration-300 ease-in-out ${
-              isMobileMenuOpen ? "rotate-45 translate-y-1.5" : ""
+            className={`block h-[2.5px] w-5 bg-foreground rounded-full transition-all duration-300 ease-in-out origin-center ${
+              isMobileMenuOpen ? "rotate-45 translate-y-[7.5px]" : ""
             }`}
           />
           <span
-            className={`block h-0.5 w-4.5 bg-foreground rounded-full transition-all duration-200 ease-in-out ${
+            className={`block h-[2.5px] w-5 bg-foreground rounded-full transition-all duration-200 ease-in-out ${
               isMobileMenuOpen ? "opacity-0 scale-x-0" : "opacity-100"
             }`}
           />
           <span
-            className={`block h-0.5 w-4.5 bg-foreground rounded-full transition-all duration-300 ease-in-out ${
-              isMobileMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
+            className={`block h-[2.5px] w-5 bg-foreground rounded-full transition-all duration-300 ease-in-out origin-center ${
+              isMobileMenuOpen ? "-rotate-45 -translate-y-[7.5px]" : ""
             }`}
           />
         </button>
