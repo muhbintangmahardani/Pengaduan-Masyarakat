@@ -84,6 +84,28 @@ export default async function AdminReviewPage({
     );
   }
 
+  // Safe parsing untuk menghindari runtime error pada Server Component
+  const officerName = (
+    Array.isArray(current.assigned_officer)
+      ? current.assigned_officer[0]?.full_name
+      : current.assigned_officer?.full_name
+  ) || "Petugas Lapangan";
+
+  const citizenName = (
+    Array.isArray(current.profiles)
+      ? current.profiles[0]?.full_name
+      : current.profiles?.full_name
+  ) || "Pelapor";
+
+  const latNum = Number(current.latitude);
+  const lngNum = Number(current.longitude);
+  const hasValidCoords =
+    !isNaN(latNum) && !isNaN(lngNum) && current.latitude !== null && current.longitude !== null;
+  const coordDisplay = hasValidCoords
+    ? `${latNum.toFixed(4)}, ${lngNum.toFixed(4)}`
+    : "-6.8915, 107.5965";
+  const mapsQuery = hasValidCoords ? `${latNum},${lngNum}` : "-6.8915,107.5965";
+
   return (
     <div className="space-y-6">
       {/* Header Info */}
@@ -111,8 +133,7 @@ export default async function AdminReviewPage({
       <div className="rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xs sm:text-sm font-bold text-blue-900 dark:text-blue-300">
-            Hasil pekerjaan telah dikirim oleh{" "}
-            {current.assigned_officer?.full_name || "Petugas Lapangan"}
+            Hasil pekerjaan telah dikirim oleh {officerName}
           </h2>
           <p className="text-[11px] text-blue-700/80 dark:text-blue-400 mt-0.5">
             {current.completed_at
@@ -140,14 +161,9 @@ export default async function AdminReviewPage({
             </h2>
             <p className="text-xs text-slate-500">{current.address}</p>
             <div className="text-xs font-mono text-[#0c3b37] dark:text-emerald-400 pt-0.5">
-              <span>
-                {current.latitude && current.longitude
-                  ? `${current.latitude.toFixed(4)}, ${current.longitude.toFixed(4)}`
-                  : "-6.8915, 107.5965"}
-              </span>{" "}
-              •{" "}
+              <span>{coordDisplay}</span> •{" "}
               <a
-                href={`https://www.google.com/maps?q=${current.latitude || -6.8915},${current.longitude || 107.5965}`}
+                href={`https://www.google.com/maps?q=${mapsQuery}`}
                 target="_blank"
                 rel="noreferrer"
                 className="hover:underline"
@@ -236,7 +252,7 @@ export default async function AdminReviewPage({
                   {formatDateTime(current.created_at)}
                 </div>
                 <p className="text-xs text-slate-500">
-                  {current.profiles?.full_name || "Pelapor"} mengirim foto dan lokasi.
+                  {citizenName} mengirim foto dan lokasi.
                 </p>
               </div>
             </div>
@@ -256,7 +272,7 @@ export default async function AdminReviewPage({
                     : "14 Nov 2026 • 11.00"}
                 </div>
                 <p className="text-xs text-slate-500">
-                  Admin menugaskan {current.assigned_officer?.full_name || "Tim Jalan 02"}.
+                  Admin menugaskan {officerName}.
                 </p>
               </div>
             </div>
@@ -274,7 +290,7 @@ export default async function AdminReviewPage({
                   15 Nov 2026 • 08.30
                 </div>
                 <p className="text-xs text-slate-500">
-                  {current.assigned_officer?.full_name?.split(" ")[0] || "Petugas"} memulai perbaikan jalan.
+                  {officerName.split(" ")[0]} memulai perbaikan jalan.
                 </p>
               </div>
             </div>

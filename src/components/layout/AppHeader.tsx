@@ -38,6 +38,7 @@ interface AppHeaderProps {
   userRole: UserRole;
   userEmail?: string;
   isSidebarCollapsed?: boolean;
+  isMobileMenuOpen?: boolean;
   onToggleSidebar?: () => void;
   onOpenMobileMenu?: () => void;
 }
@@ -54,6 +55,7 @@ export function AppHeader({
   userRole,
   userEmail,
   isSidebarCollapsed = false,
+  isMobileMenuOpen = false,
   onToggleSidebar,
   onOpenMobileMenu,
 }: AppHeaderProps) {
@@ -159,18 +161,38 @@ export function AppHeader({
 
   return (
     <header className="h-16 border-b border-border bg-background/95 backdrop-blur-sm px-4 sm:px-6 lg:px-8 flex items-center justify-between flex-shrink-0 sticky top-0 z-30">
-      {/* KIRI: Tombol Toggle Sidebar + Breadcrumb Navigasi Sejajar Horisontal */}
+      {/* KIRI: Tombol Toggle Sidebar / Animated Hamburger + Breadcrumb Navigasi Sejajar Horisontal */}
       <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1 mr-3">
+        {/* Tombol Mobile Hamburger dengan Animasi Morf Transisi ke 'X' */}
         <button
           type="button"
-          onClick={() => {
-            if (typeof window !== "undefined" && window.innerWidth < 1024) {
-              onOpenMobileMenu?.();
-            } else {
-              onToggleSidebar?.();
-            }
-          }}
-          className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer shrink-0"
+          onClick={onOpenMobileMenu}
+          className="lg:hidden flex flex-col justify-center items-center w-8 h-8 rounded-lg hover:bg-muted transition-colors cursor-pointer shrink-0 gap-1 p-1 focus:outline-none"
+          title="Menu Navigasi"
+          aria-label="Buka Menu Navigasi"
+        >
+          <span
+            className={`block h-0.5 w-4.5 bg-foreground rounded-full transition-all duration-300 ease-in-out ${
+              isMobileMenuOpen ? "rotate-45 translate-y-1.5" : ""
+            }`}
+          />
+          <span
+            className={`block h-0.5 w-4.5 bg-foreground rounded-full transition-all duration-200 ease-in-out ${
+              isMobileMenuOpen ? "opacity-0 scale-x-0" : "opacity-100"
+            }`}
+          />
+          <span
+            className={`block h-0.5 w-4.5 bg-foreground rounded-full transition-all duration-300 ease-in-out ${
+              isMobileMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
+            }`}
+          />
+        </button>
+
+        {/* Tombol Desktop Sidebar Toggle */}
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          className="hidden lg:flex p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer shrink-0"
           title="Buka / Tutup Sidebar"
           aria-label="Buka / Tutup Sidebar"
         >

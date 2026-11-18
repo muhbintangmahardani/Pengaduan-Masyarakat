@@ -62,6 +62,7 @@ export function DashboardShell({
           userRole={role}
           userEmail={userEmail}
           isSidebarCollapsed={isSidebarCollapsed}
+          isMobileMenuOpen={isMobileMenuOpen}
           onToggleSidebar={() => setIsSidebarCollapsed((prev) => !prev)}
           onOpenMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
         />

@@ -81,13 +81,13 @@ export function CitizenComplaintsList({
 
   return (
     <Card className="rounded-xl border border-border bg-card shadow-xs">
-      <CardHeader className="p-5 sm:p-6 pb-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <CardHeader className="p-4 sm:p-6 pb-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <CardTitle className="text-base sm:text-lg font-bold tracking-tight text-foreground">
               Daftar Laporan Pengaduan
             </CardTitle>
-            <Badge variant="outline" className="text-xs font-mono">
+            <Badge variant="outline" className="text-xs font-mono font-semibold bg-muted/60 text-foreground border-border">
               {complaints.length} Total
             </Badge>
           </div>
@@ -96,19 +96,21 @@ export function CitizenComplaintsList({
           </CardDescription>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 w-full sm:w-auto">
           {showExport && complaints.length > 0 && (
-            <ExportButton
-              complaints={filtered}
-              filename="laporan-saya"
-              label="Export Data"
-            />
+            <div className="shrink-0">
+              <ExportButton
+                complaints={filtered}
+                filename="laporan-saya"
+                label="Export Data"
+              />
+            </div>
           )}
 
-          <div className="flex items-center gap-1 bg-muted p-1 rounded-lg">
+          <div className="flex items-center gap-1 bg-muted/80 p-1 rounded-xl overflow-x-auto max-w-full scrollbar-none shrink-0">
             <button
               onClick={() => setActiveTab("all")}
-              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === "all"
                   ? "bg-background text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
@@ -118,7 +120,7 @@ export function CitizenComplaintsList({
             </button>
             <button
               onClick={() => setActiveTab("pending")}
-              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === "pending"
                   ? "bg-background text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
@@ -128,7 +130,7 @@ export function CitizenComplaintsList({
             </button>
             <button
               onClick={() => setActiveTab("in_progress")}
-              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === "in_progress"
                   ? "bg-background text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
@@ -138,7 +140,7 @@ export function CitizenComplaintsList({
             </button>
             <button
               onClick={() => setActiveTab("resolved")}
-              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === "resolved"
                   ? "bg-background text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
@@ -161,10 +163,10 @@ export function CitizenComplaintsList({
               <Link
                 key={item.id}
                 href={`/dashboard/warga/laporan/${item.id}`}
-                className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-muted/50 transition-colors group block"
+                className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:bg-muted/40 transition-colors group block"
               >
-                <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-                  <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-muted shrink-0 border border-border">
+                <div className="flex items-start sm:items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
+                  <div className="relative w-16 h-16 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-muted shrink-0 border border-border shadow-xs">
                     <Image
                       src={item.photo_url}
                       alt={item.title}
@@ -173,30 +175,37 @@ export function CitizenComplaintsList({
                     />
                   </div>
 
-                  <div className="space-y-1 min-w-0">
-                    <div className="text-xs sm:text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
-                      {item.title}
-                    </div>
-                    <div className="text-xs text-muted-foreground flex items-center gap-1.5 font-medium truncate">
-                      <span className="font-mono text-primary font-bold shrink-0">
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-200 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/80 shrink-0">
                         {item.ticket_number}
                       </span>
-                      <span>•</span>
-                      <span className="truncate max-w-[180px] sm:max-w-xs">{item.address}</span>
+                      <span className="text-[11px] text-muted-foreground font-mono hidden sm:inline">
+                        {formatDateTime(item.created_at)}
+                      </span>
+                    </div>
+
+                    <div className="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors">
+                      {item.title}
+                    </div>
+
+                    <div className="text-xs text-muted-foreground flex items-center gap-1.5 font-medium truncate">
+                      <MapPin className="w-3.5 h-3.5 shrink-0 text-muted-foreground/70" />
+                      <span className="truncate max-w-[220px] sm:max-w-md">{item.address}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-1 sm:pt-0 border-t sm:border-0 border-border">
-                  <div className="text-xs text-muted-foreground font-mono whitespace-nowrap">
+                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pl-[76px] sm:pl-0 pt-0.5 sm:pt-0">
+                  <div className="text-xs text-muted-foreground font-mono whitespace-nowrap sm:hidden">
                     {formatDateTime(item.created_at)}
                   </div>
 
                   <StatusBadge status={item.status} />
 
-                  <div className="flex items-center gap-1 text-xs font-medium text-primary opacity-80 group-hover:opacity-100 shrink-0">
+                  <div className="flex items-center gap-1 text-xs font-semibold text-primary opacity-80 group-hover:opacity-100 shrink-0">
                     <span className="hidden sm:inline">Detail</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </Link>

@@ -43,9 +43,11 @@ export function exportComplaintsToCSV(
   };
 
   const rows = complaints.map((c, index) => {
+    const lat = Number(c.latitude);
+    const lng = Number(c.longitude);
     const coords =
-      c.latitude && c.longitude
-        ? `${c.latitude.toFixed(5)}, ${c.longitude.toFixed(5)}`
+      !isNaN(lat) && !isNaN(lng) && c.latitude !== null && c.longitude !== null
+        ? `${lat.toFixed(5)}, ${lng.toFixed(5)}`
         : "-";
     const reporterName = c.profiles?.full_name || "Masyarakat";
     const officerName = c.assigned_officer?.full_name || "-";
@@ -115,9 +117,11 @@ export function printComplaintsReport(
     const c = complaints[0];
     const reporterName = c.profiles?.full_name || "Masyarakat";
     const officerName = c.assigned_officer?.full_name || "-";
+    const lat = Number(c.latitude);
+    const lng = Number(c.longitude);
     const coords =
-      c.latitude && c.longitude
-        ? `${c.latitude.toFixed(6)}, ${c.longitude.toFixed(6)}`
+      !isNaN(lat) && !isNaN(lng) && c.latitude !== null && c.longitude !== null
+        ? `${lat.toFixed(6)}, ${lng.toFixed(6)}`
         : "-";
 
     reportHtml = `

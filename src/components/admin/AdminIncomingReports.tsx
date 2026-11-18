@@ -343,9 +343,13 @@ export function AdminIncomingReports({
                 </p>
                 <div className="flex items-center gap-2 text-xs font-mono text-[#0c3b37] dark:text-emerald-400 pt-0.5">
                   <span>
-                    {current.latitude && current.longitude
-                      ? `${current.latitude.toFixed(4)}, ${current.longitude.toFixed(4)}`
-                      : "-6.8915, 107.5965"}
+                    {(() => {
+                      const lat = Number(current.latitude);
+                      const lng = Number(current.longitude);
+                      return !isNaN(lat) && !isNaN(lng) && current.latitude !== null && current.longitude !== null
+                        ? `${lat.toFixed(4)}, ${lng.toFixed(4)}`
+                        : "-6.8915, 107.5965";
+                    })()}
                   </span>
                   <span>•</span>
                   <a

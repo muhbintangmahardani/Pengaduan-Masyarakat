@@ -100,11 +100,10 @@ export async function updateSession(request: NextRequest) {
     if (lastActivity) {
       const lastTime = parseInt(lastActivity, 10);
       if (!isNaN(lastTime) && now - lastTime >= MAX_INACTIVITY_MS) {
-        // Sesi telah kedaluwarsa karena tidak ada aktivitas
+        // Sesi telah kedaluwarsa karena tidak ada aktivitas - langsung keluar tanpa modal alert
         await supabase.auth.signOut();
         const url = request.nextUrl.clone();
         url.pathname = "/login";
-        url.searchParams.set("reason", "idle_timeout");
         const res = NextResponse.redirect(url);
         res.cookies.delete("jb_last_activity");
         res.cookies.delete(`jb_role_${user.id}`);

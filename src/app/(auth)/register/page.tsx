@@ -43,8 +43,8 @@ export default function RegisterPage() {
         {/* Kolom Kiri: 50% Showcase Visual Jalan Raya Kota */}
         <div className="relative bg-[#0c3b37] text-white p-7 sm:p-9 md:p-10 flex flex-col justify-between overflow-hidden min-h-[260px] md:min-h-full">
           <Image
-            src="https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=1200&q=85"
-            alt="Infrastruktur Jalan Raya Aspal Terawat"
+            src="https://images.unsplash.com/photo-1494783367193-149034c05e8f?auto=format&fit=crop&w=1200&q=85"
+            alt="Infrastruktur Jalan Raya Beraspal Mulus"
             fill
             className="object-cover opacity-85 transition-opacity"
             priority

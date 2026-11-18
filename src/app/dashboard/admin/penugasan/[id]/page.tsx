@@ -254,8 +254,14 @@ export default async function AdminPenugasanDetailPage({
 
             <div className="text-[11px] font-mono text-slate-400 flex items-center justify-between pt-1">
               <span>
-                Koordinat GPS: {task.latitude?.toFixed(5) || "-6.90250"},{" "}
-                {task.longitude?.toFixed(5) || "107.61860"}
+                Koordinat GPS:{" "}
+                {(() => {
+                  const lat = Number(task.latitude);
+                  const lng = Number(task.longitude);
+                  return !isNaN(lat) && !isNaN(lng) && task.latitude !== null && task.longitude !== null
+                    ? `${lat.toFixed(5)}, ${lng.toFixed(5)}`
+                    : "-6.90250, 107.61860";
+                })()}
               </span>
               <span className="text-emerald-700 dark:text-emerald-400 font-semibold">
                 ✓ Akurasi GPS Terverifikasi
