@@ -210,12 +210,13 @@ export function AdminIncomingReports({
         </div>
 
         {/* Tab Filter Status */}
-        <div className="flex flex-wrap gap-1 bg-slate-50 dark:bg-slate-800/60 p-1 rounded-lg border border-slate-100 dark:border-slate-800">
+        <div className="flex flex-nowrap overflow-x-auto scrollbar-none gap-1 bg-slate-50 dark:bg-slate-800/60 p-1 rounded-lg border border-slate-100 dark:border-slate-800">
           {[
             { id: "all", label: "Semua" },
             { id: "pending", label: "Perlu Verifikasi" },
             { id: "in_progress", label: "Diproses" },
             { id: "under_review", label: "Tinjauan" },
+            { id: "resolved", label: "Selesai" },
           ].map((tab) => (
             <button
               key={tab.id}

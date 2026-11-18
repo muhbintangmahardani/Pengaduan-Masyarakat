@@ -74,6 +74,14 @@ export default async function PetugasDashboardPage({
           <p className="text-xs text-slate-400">
             Ketika admin menugaskan perbaikan jalan baru, detail tugas akan muncul di sini secara otomatis.
           </p>
+          <div className="pt-2">
+            <Link
+              href="/dashboard/petugas/riwayat"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-[#0c3b37] text-white text-xs font-semibold shadow-xs hover:bg-[#082825]"
+            >
+              Lihat Riwayat Pekerjaan Selesai →
+            </Link>
+          </div>
         </Card>
       </div>
     );

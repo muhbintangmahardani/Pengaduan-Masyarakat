@@ -26,18 +26,18 @@ export async function loginAction(formData: FormData) {
   const user = authData.user;
   const cookieStore = await cookies();
 
-  // Optimasi: Cek role dari metadata terlebih dahulu (instan 0ms) atau fallback ke query profiles
-  let role: UserRole = (user.user_metadata?.role as UserRole) || "citizen";
+  // Single Source of Truth: SELALU ambil role resmi langsung dari tabel profiles terlebih dahulu
+  let role: UserRole = "citizen";
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
 
-  if (!user.user_metadata?.role) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-    if (profile?.role) {
-      role = profile.role as UserRole;
-    }
+  if (profile?.role) {
+    role = profile.role as UserRole;
+  } else if (user.user_metadata?.role) {
+    role = user.user_metadata.role as UserRole;
   }
 
   // Cache role aman terikat ID pengguna

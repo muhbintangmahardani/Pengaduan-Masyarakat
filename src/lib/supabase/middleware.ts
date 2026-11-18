@@ -148,19 +148,55 @@ export async function updateSession(request: NextRequest) {
     // RBAC: Rute Admin (/dashboard/admin)
     if (pathname.startsWith("/dashboard/admin")) {
       if (userRole !== "admin") {
-        const redirectUrl = request.nextUrl.clone();
-        redirectUrl.pathname =
-          userRole === "officer" ? "/dashboard/petugas/ringkasan" : "/dashboard/warga";
-        return NextResponse.redirect(redirectUrl);
+        // Self-Healing: Verifikasi langsung ke tabel profiles database untuk mencegah stale cookie
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single();
+        const actualRole = (profile?.role as UserRole) || (user.user_metadata?.role as UserRole) || "citizen";
+
+        if (actualRole === "admin") {
+          userRole = "admin";
+          response.cookies.set(userRoleCookieKey, "admin", {
+            path: "/",
+            httpOnly: true,
+            sameSite: "lax",
+            maxAge: 60 * 60 * 24 * 7,
+          });
+        } else {
+          const redirectUrl = request.nextUrl.clone();
+          redirectUrl.pathname =
+            actualRole === "officer" ? "/dashboard/petugas/ringkasan" : "/dashboard/warga";
+          return NextResponse.redirect(redirectUrl);
+        }
       }
     }
 
     // RBAC: Rute Petugas (/dashboard/petugas)
     if (pathname.startsWith("/dashboard/petugas")) {
       if (userRole !== "officer" && userRole !== "admin") {
-        const redirectUrl = request.nextUrl.clone();
-        redirectUrl.pathname = "/dashboard/warga";
-        return NextResponse.redirect(redirectUrl);
+        // Self-Healing: Verifikasi langsung ke tabel profiles database
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single();
+        const actualRole = (profile?.role as UserRole) || (user.user_metadata?.role as UserRole) || "citizen";
+
+        if (actualRole === "officer" || actualRole === "admin") {
+          userRole = actualRole;
+          response.cookies.set(userRoleCookieKey, actualRole, {
+            path: "/",
+            httpOnly: true,
+            sameSite: "lax",
+            maxAge: 60 * 60 * 24 * 7,
+          });
+        } else {
+          const redirectUrl = request.nextUrl.clone();
+          redirectUrl.pathname = "/dashboard/warga";
+          return NextResponse.redirect(redirectUrl);
+        }
       }
     }
   }
