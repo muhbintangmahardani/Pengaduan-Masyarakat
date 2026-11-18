@@ -3,8 +3,7 @@
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import { ArrowRight, Eye, EyeOff, Loader2, Clock } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
 import { loginAction } from "@/actions/auth";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -38,26 +37,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-slate-100/70 dark:bg-slate-950 p-4 sm:p-6 md:p-8 transition-colors duration-200 relative select-none">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#f4f6f8] dark:bg-slate-950 p-4 sm:p-6 lg:p-8 transition-colors duration-200 relative select-none">
       {/* Dark Mode Toggle Floating di Pojok Kanan Atas */}
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
 
-      {/* Floating 50:50 Balanced Card */}
-      <div className="w-full max-w-4xl bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-[520px]">
-        {/* Kolom Kiri: 50% Showcase Visual Jalan Raya Kota (Gambar Terlihat Jelas & Menawan) */}
-        <div className="relative bg-[#0c3b37] text-white p-7 sm:p-9 md:p-10 flex flex-col justify-between overflow-hidden min-h-[260px] md:min-h-full">
-          {/* Foto Nyata Infrastruktur Jalan Raya Beraspal Mulus */}
+      {/* Floating 50:50 Balanced Modern Card */}
+      <div className="w-full max-w-[960px] bg-white dark:bg-slate-900 rounded-[24px] sm:rounded-[28px] border border-slate-200/90 dark:border-slate-800 shadow-2xl shadow-slate-300/40 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2 min-h-[560px]">
+        {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan (Foto Asli & Elegan) */}
+        <div className="relative bg-[#0c3b37] text-white p-7 sm:p-9 lg:p-10 flex flex-col justify-between overflow-hidden min-h-[280px] lg:min-h-full">
+          {/* Foto Nyata Satgas Pekerjaan Umum / Bina Marga Sedang Memperbaiki Jalan */}
           <Image
-            src="https://images.unsplash.com/photo-1494783367193-149034c05e8f?auto=format&fit=crop&w=1200&q=85"
-            alt="Infrastruktur Jalan Raya Beraspal Mulus"
+            src="/images/auth-hero.jpg"
+            alt="Petugas Satgas Bina Marga Memperbaiki Jalan Raya"
             fill
-            className="object-cover opacity-85 transition-opacity"
+            className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
             priority
           />
           {/* Gradient Overlay Anggun (Gelap di Bawah agar Teks Terbaca Tajam) */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#082825] via-[#0c3b37]/60 to-[#0c3b37]/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-[#0c3b37]/35" />
 
           {/* Top Brand Logo JalanBaik */}
           <div className="relative z-10">
@@ -70,28 +69,31 @@ export default function LoginPage() {
           </div>
 
           {/* Bottom Headline & Description with Accent Line */}
-          <div className="relative z-10 pt-12 md:pt-0 space-y-3">
+          <div className="relative z-10 pt-10 lg:pt-0 space-y-2.5">
             <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white leading-snug">
               Sistem Manajemen Pengaduan.
             </h2>
             <div className="border-l-2 border-emerald-400 pl-3.5">
-              <p className="text-xs text-emerald-50/90 leading-relaxed font-normal">
-                Kontrol penuh atas penanganan infrastruktur jalan, verifikasi laporan warga, dan persetujuan penugasan dalam satu platform terintegrasi.
+              <p className="text-xs text-slate-200/90 leading-relaxed font-normal">
+                Kontrol penuh atas penanganan infrastruktur jalan, verifikasi laporan warga, dan persetujuan penugasan satgas dalam satu platform terintegrasi.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Kolom Kanan: 50% Form Login Bersih & Seimbang */}
-        <div className="p-6 sm:p-8 md:p-10 flex flex-col justify-between bg-white dark:bg-slate-900">
+        {/* Kolom Kanan: 50% Form Login Bersih, Rapi & Elegan */}
+        <div className="p-7 sm:p-9 lg:p-12 flex flex-col justify-between bg-white dark:bg-slate-900">
           <div>
-            <div className="space-y-1 mb-6">
-              <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
+            <div className="space-y-1.5 mb-6">
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
                 Selamat Datang
               </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                 Silakan masuk ke dashboard internal dan layanan jalan.
               </p>
+              <div className="pt-2">
+                <div className="h-px w-full bg-slate-100 dark:bg-slate-800" />
+              </div>
             </div>
 
             {/* Pesan Sesi Kedaluwarsa / Auto-Logout */}
@@ -99,27 +101,27 @@ export default function LoginPage() {
               <SessionMessage />
             </Suspense>
 
-            {/* Form Input Login Langsung (Tanpa Tab Role) */}
+            {/* Form Input Login Langsung */}
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email Input */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Email Akun Terdaftar *
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  ID Karyawan / Email <span className="text-rose-500">*</span>
                 </label>
                 <Input
                   type="email"
                   name="email"
                   required
                   disabled={isLoading}
-                  placeholder="nama@email.com"
-                  className="h-10 text-xs sm:text-sm rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 focus:border-[#0c3b37]"
+                  placeholder="admin@jalanbaik.go.id atau budi@gmail.com"
+                  className="h-11 text-xs sm:text-sm rounded-xl border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                 />
               </div>
 
               {/* Password Input */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Kata Sandi *
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Kata Sandi <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
                   <Input
@@ -128,12 +130,12 @@ export default function LoginPage() {
                     required
                     disabled={isLoading}
                     placeholder="••••••••"
-                    className="h-10 text-xs sm:text-sm rounded-lg pr-10 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 focus:border-[#0c3b37]"
+                    className="h-11 text-xs sm:text-sm rounded-xl pr-10 border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer p-1"
                     title={showPassword ? "Sembunyikan" : "Tampilkan"}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -142,15 +144,17 @@ export default function LoginPage() {
               </div>
 
               {/* Checkbox Ingat Saya & Lupa Sandi */}
-              <div className="flex items-center justify-between text-xs pt-0.5">
-                <label className="flex items-center gap-2 cursor-pointer text-slate-600 dark:text-slate-400 select-none">
+              <div className="flex items-center justify-between text-xs pt-1">
+                <label className="flex items-center gap-2.5 cursor-pointer text-slate-600 dark:text-slate-400 select-none group">
                   <input
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 rounded border-slate-300 text-[#0c3b37] focus:ring-[#0c3b37]"
+                    className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-[#0c3b37] focus:ring-[#0c3b37] dark:bg-slate-900 cursor-pointer accent-[#0c3b37]"
                   />
-                  <span>Ingat saya</span>
+                  <span className="group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">
+                    Ingat saya
+                  </span>
                 </label>
 
                 <a
@@ -159,9 +163,9 @@ export default function LoginPage() {
                     e.preventDefault();
                     toast.info("Hubungi administrator dinas untuk permohonan reset kata sandi.");
                   }}
-                  className="font-bold text-[#0c3b37] dark:text-emerald-400 hover:underline"
+                  className="font-semibold text-[#0c3b37] dark:text-emerald-400 hover:underline"
                 >
-                  Lupa Sandi?
+                  Lupa sandi?
                 </a>
               </div>
 
@@ -176,7 +180,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-11 rounded-lg bg-[#0c3b37] hover:bg-[#082825] text-white font-bold text-xs shadow-sm transition-all cursor-pointer mt-1"
+                className="w-full h-11 sm:h-12 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg active:scale-[0.99] transition-all cursor-pointer mt-2"
               >
                 {isLoading ? (
                   <>
@@ -199,7 +203,7 @@ export default function LoginPage() {
               </span>
               <Link
                 href="/register"
-                className="text-xs font-bold text-[#0c3b37] dark:text-emerald-400 hover:underline"
+                className="text-xs font-bold text-[#0c3b37] dark:text-emerald-400 hover:underline ml-1"
               >
                 Daftar sekarang
               </Link>
@@ -207,8 +211,13 @@ export default function LoginPage() {
           </div>
 
           {/* Footer Card */}
-          <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 text-center text-[10px] text-slate-400">
-            © 2026 Suku Dinas Bina Marga • Kota Administrasi JalanBaik.
+          <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 text-center space-y-0.5">
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+              © 2026 Suku Dinas Bina Marga • Kota Administrasi JalanBaik.
+            </p>
+            <p className="text-[10px] text-slate-400/80 dark:text-slate-600">
+              Internal System v1.0. Restricted Access.
+            </p>
           </div>
         </div>
       </div>

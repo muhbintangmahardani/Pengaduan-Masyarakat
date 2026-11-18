@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogClose,
 } from "@/components/ui/dialog";
 
 interface ImageLightboxModalProps {
@@ -118,7 +119,10 @@ export function ImageLightboxModal({
 
       {/* Lightbox Dialog Modal */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-4xl w-[95vw] max-h-[92vh] p-0 overflow-hidden bg-slate-950/95 border-slate-800 text-white rounded-2xl flex flex-col">
+        <DialogContent
+          hideCloseButton={true}
+          className="max-w-4xl w-[95vw] max-h-[92vh] p-0 overflow-hidden bg-slate-950/95 border-slate-800 text-white rounded-2xl flex flex-col"
+        >
           {/* Header Bar */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md flex-shrink-0">
             <div className="flex items-center gap-2 min-w-0 pr-4">
@@ -134,8 +138,8 @@ export function ImageLightboxModal({
               </DialogTitle>
             </div>
 
-            {/* Quick Action Controls */}
-            <div className="flex items-center gap-1.5 shrink-0">
+            {/* Quick Action Controls Berjejer Rapi Tanpa Tumpang Tindih */}
+            <div className="flex items-center gap-1 shrink-0">
               <button
                 type="button"
                 onClick={handleZoomIn}
@@ -171,6 +175,21 @@ export function ImageLightboxModal({
               >
                 <ExternalLink className="w-4 h-4" />
               </a>
+
+              {/* Pemisah Halus */}
+              <div className="h-4 w-px bg-slate-700/80 mx-1 shrink-0" />
+
+              {/* Tombol Silang (Tutup Modal) yang Mandiri dan Terpisah */}
+              <DialogClose asChild>
+                <button
+                  type="button"
+                  className="p-1.5 rounded-lg text-slate-300 hover:text-rose-400 hover:bg-slate-800 transition-colors cursor-pointer"
+                  title="Tutup Preview Foto"
+                  aria-label="Tutup Preview Foto"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </DialogClose>
             </div>
           </div>
 
