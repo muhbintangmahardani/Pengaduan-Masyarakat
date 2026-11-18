@@ -36,14 +36,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#f4f6f8] dark:bg-slate-950 p-3 sm:p-4 transition-colors duration-200 relative select-none">
+    <div className="min-h-screen lg:h-screen lg:max-h-screen lg:overflow-hidden w-full flex items-center justify-center bg-[#f4f6f8] dark:bg-slate-950 p-3 sm:p-4 transition-colors duration-200 relative select-none">
       {/* Dark Mode Toggle Floating di Pojok Kanan Atas */}
       <div className="fixed top-3 right-3 sm:top-4 sm:right-4 z-50">
         <ThemeToggle />
       </div>
 
       {/* Floating Balanced Modern Card (Ukuran Pas Layar & Tanpa Scroll di 100% Zoom) */}
-      <div className="w-full max-w-[820px] lg:h-[490px] xl:h-[500px] bg-white dark:bg-slate-900 rounded-2xl border border-border/80 shadow-xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+      <div className="w-full max-w-[840px] lg:h-[530px] bg-white dark:bg-slate-900 rounded-2xl sm:rounded-[24px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan */}
         <div className="relative bg-[#0c3b37] text-white p-5 sm:p-6 lg:p-7 flex flex-col justify-between overflow-hidden min-h-[220px] lg:min-h-full">
           {/* Foto Nyata Satgas Pekerjaan Umum / Bina Marga Sedang Memperbaiki Jalan */}
@@ -81,7 +81,7 @@ export default function LoginPage() {
         </div>
 
         {/* Kolom Kanan: 50% Form Login Bersih, Rapi & Elegan Tanpa Scroll */}
-        <div className="p-5 sm:p-6 lg:p-6 flex flex-col justify-between bg-white dark:bg-slate-900">
+        <div className="p-6 sm:p-7 lg:p-7 flex flex-col justify-between bg-white dark:bg-slate-900">
           <div>
             <div className="space-y-0.5 mb-3">
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
@@ -101,7 +101,7 @@ export default function LoginPage() {
             </Suspense>
 
             {/* Form Input Login Langsung */}
-            <form onSubmit={handleSubmit} className="space-y-2.5">
+            <form onSubmit={handleSubmit} className="space-y-3">
               {/* Email Input */}
               <div className="space-y-1">
                 <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -113,7 +113,7 @@ export default function LoginPage() {
                   required
                   disabled={isLoading}
                   placeholder="admin@jalanbaik.go.id atau budi@gmail.com"
-                  className="h-9.5 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3"
+                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                 />
               </div>
 
@@ -129,7 +129,7 @@ export default function LoginPage() {
                     required
                     disabled={isLoading}
                     placeholder="••••••••"
-                    className="h-9.5 text-xs sm:text-sm rounded-xl pr-10 border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3"
+                    className="h-10 text-xs sm:text-sm rounded-xl pr-10 border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                   />
                   <button
                     type="button"
@@ -175,7 +175,7 @@ export default function LoginPage() {
                 type="submit"
                 size="lg"
                 disabled={isLoading}
-                className="w-full h-10.5 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-1.5 whitespace-nowrap"
+                className="w-full h-11 py-2.5 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-2.5 whitespace-nowrap flex items-center justify-center"
               >
                 {isLoading ? (
                   <>
@@ -192,7 +192,7 @@ export default function LoginPage() {
             </form>
 
             {/* Link Daftar Warga Baru */}
-            <div className="pt-2 text-center">
+            <div className="pt-2.5 text-center">
               <span className="text-xs text-slate-500 dark:text-slate-400">
                 Belum punya akun warga?{" "}
               </span>
@@ -206,7 +206,7 @@ export default function LoginPage() {
           </div>
 
           {/* Footer Card */}
-          <div className="pt-2 mt-auto border-t border-slate-100 dark:border-slate-800 text-center space-y-0.5">
+          <div className="pt-2.5 mt-auto border-t border-slate-100 dark:border-slate-800 text-center space-y-0.5">
             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
               © 2026 Suku Dinas Bina Marga • Kota Administrasi JalanBaik.
             </p>
