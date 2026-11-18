@@ -160,30 +160,30 @@ export function AppHeader({
   const breadcrumbs = getBreadcrumbs();
 
   return (
-    <header className="h-16 border-b border-border bg-background/95 backdrop-blur-sm px-4 sm:px-6 lg:px-8 flex items-center justify-between flex-shrink-0 sticky top-0 z-30">
+    <header className="h-14 sm:h-16 border-b border-border bg-background/95 backdrop-blur-sm px-3 sm:px-6 lg:px-8 flex items-center justify-between flex-shrink-0 sticky top-0 z-30">
       {/* KIRI: Tombol Toggle Sidebar / Animated Hamburger + Breadcrumb Navigasi Sejajar Horisontal */}
-      <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1 mr-3">
-        {/* Tombol Mobile Hamburger dengan Animasi Morf Transisi ke 'X' */}
+      <div className="flex items-center gap-2 sm:gap-3.5 min-w-0 flex-1 mr-2 sm:mr-3">
+        {/* Tombol Mobile Hamburger dengan Animasi Morf Transisi ke 'X' (Ukuran & Ketebalan Harmonis dengan Icon Sekitar) */}
         <button
           type="button"
           onClick={onOpenMobileMenu}
-          className="lg:hidden flex flex-col justify-center items-center w-9 h-9 rounded-lg hover:bg-muted active:scale-95 transition-all cursor-pointer shrink-0 gap-[5px] p-1.5 focus:outline-none"
+          className="lg:hidden flex flex-col justify-center items-center w-8 h-8 rounded-lg hover:bg-muted active:scale-95 transition-all cursor-pointer shrink-0 gap-[3.5px] p-1.5 focus:outline-none"
           title={isMobileMenuOpen ? "Tutup Menu" : "Buka Menu"}
           aria-label={isMobileMenuOpen ? "Tutup Menu" : "Buka Menu"}
         >
           <span
-            className={`block h-[2.5px] w-5 bg-foreground rounded-full transition-all duration-300 ease-in-out origin-center ${
-              isMobileMenuOpen ? "rotate-45 translate-y-[7.5px]" : ""
+            className={`block h-[1.75px] w-[18px] bg-foreground/90 rounded-full transition-all duration-300 ease-in-out origin-center ${
+              isMobileMenuOpen ? "rotate-45 translate-y-[5.25px]" : ""
             }`}
           />
           <span
-            className={`block h-[2.5px] w-5 bg-foreground rounded-full transition-all duration-200 ease-in-out ${
+            className={`block h-[1.75px] w-[18px] bg-foreground/90 rounded-full transition-all duration-200 ease-in-out ${
               isMobileMenuOpen ? "opacity-0 scale-x-0" : "opacity-100"
             }`}
           />
           <span
-            className={`block h-[2.5px] w-5 bg-foreground rounded-full transition-all duration-300 ease-in-out origin-center ${
-              isMobileMenuOpen ? "-rotate-45 -translate-y-[7.5px]" : ""
+            className={`block h-[1.75px] w-[18px] bg-foreground/90 rounded-full transition-all duration-300 ease-in-out origin-center ${
+              isMobileMenuOpen ? "-rotate-45 -translate-y-[5.25px]" : ""
             }`}
           />
         </button>
@@ -199,7 +199,8 @@ export function AppHeader({
           <PanelLeft className="w-4 h-4" />
         </button>
 
-        <div className="h-4 w-px bg-border shrink-0" />
+        {/* Divider pemisah hanya di layar desktop/tablet agar mobile tetap rapi */}
+        <div className="hidden sm:block h-4 w-px bg-border shrink-0" />
 
         {/* Shadcn Breadcrumb Sejajar dengan Lonceng Notifikasi */}
         <Breadcrumb className="min-w-0">
@@ -211,14 +212,14 @@ export function AppHeader({
                 <React.Fragment key={step.label}>
                   <BreadcrumbItem className="truncate">
                     {isLast || !step.href ? (
-                      <BreadcrumbPage className="truncate font-semibold text-foreground">
+                      <BreadcrumbPage className="truncate font-semibold text-foreground text-xs sm:text-sm">
                         {step.label}
                       </BreadcrumbPage>
                     ) : (
                       <BreadcrumbLink asChild>
                         <Link
                           href={step.href}
-                          className="text-muted-foreground hover:text-foreground transition-colors truncate"
+                          className="text-muted-foreground hover:text-foreground transition-colors truncate text-xs sm:text-sm"
                         >
                           {step.label}
                         </Link>
@@ -234,7 +235,7 @@ export function AppHeader({
       </div>
 
       {/* KANAN: Mode Malam, Lonceng Notifikasi Real-time & Avatar Profil (Sejajar dengan Breadcrumb) */}
-      <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+      <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
         <ThemeToggle />
         <NotificationBell userId={userId} userRole={userRole} />
 
@@ -242,7 +243,7 @@ export function AppHeader({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="flex items-center gap-2.5 pl-2 py-1.5 rounded-full hover:bg-muted transition-colors focus:outline-none group cursor-pointer"
+              className="flex items-center gap-1.5 sm:gap-2.5 p-0.5 sm:pl-2 sm:py-1.5 rounded-full hover:bg-muted transition-colors focus:outline-none group cursor-pointer"
             >
               <div className="text-right hidden sm:block">
                 <div className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
@@ -253,7 +254,7 @@ export function AppHeader({
                 </div>
               </div>
 
-              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center border border-primary/20 shadow-xs">
+              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center border border-primary/20 shadow-xs shrink-0">
                 {userName ? (
                   userName.charAt(0).toUpperCase()
                 ) : (
@@ -261,7 +262,7 @@ export function AppHeader({
                 )}
               </div>
 
-              <ChevronDown className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-transform" />
+              <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-muted-foreground group-hover:text-foreground transition-transform shrink-0" />
             </button>
           </DropdownMenuTrigger>
 

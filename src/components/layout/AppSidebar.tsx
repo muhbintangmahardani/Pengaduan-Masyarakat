@@ -106,8 +106,8 @@ export function AppSidebar({
         isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       } ${isCollapsed ? "lg:w-20" : "w-72 lg:w-[268px]"}`}
     >
-      {/* 1. Header Bar: Height 64px (h-16) with border-b, matching AppHeader */}
-      <div className="h-16 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between px-4 sm:px-5 flex-shrink-0">
+      {/* 1. Header Bar: Height 56px (h-14) on mobile / 64px (h-16) on desktop, matching AppHeader */}
+      <div className="h-14 sm:h-16 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between px-4 sm:px-5 flex-shrink-0">
         <div className="flex items-center min-w-0 flex-1 mr-2">
           <Link
             href="/"

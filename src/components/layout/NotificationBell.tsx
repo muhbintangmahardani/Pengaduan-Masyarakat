@@ -435,7 +435,7 @@ export function NotificationBell({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="relative w-9 h-9 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none cursor-pointer group border border-transparent hover:border-slate-200 dark:hover:border-slate-800"
+          className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none cursor-pointer group border border-transparent hover:border-slate-200 dark:hover:border-slate-800"
           aria-label="Notifikasi Real-time"
         >
           {/* Ikon Lonceng: Menyala Merah Terang Saat Ada Notifikasi Baru */}
