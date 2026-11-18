@@ -45,7 +45,7 @@ export default function LoginPage() {
       {/* Floating Balanced Modern Card (Ukuran Pas Layar & Tanpa Scroll di 100% Zoom) */}
       <div className="w-full max-w-[860px] lg:h-[530px] bg-white dark:bg-slate-900 rounded-[28px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan */}
-        <div className="relative bg-[#0c3b37] text-white p-5 sm:p-6 lg:p-7 flex flex-col justify-between overflow-hidden min-h-[220px] lg:min-h-full">
+        <div className="relative bg-[#0c3b37] text-white p-6 sm:p-7 pb-10 sm:pb-12 lg:pb-12 flex flex-col justify-between overflow-hidden min-h-[220px] lg:min-h-full">
           {/* Foto Nyata Satgas Pekerjaan Umum / Bina Marga Sedang Memperbaiki Jalan */}
           <Image
             src="/images/auth-hero.jpg"
@@ -68,13 +68,13 @@ export default function LoginPage() {
           </div>
 
           {/* Bottom Headline & Description with Accent Line */}
-          <div className="relative z-10 pt-4 lg:pt-0 space-y-1.5">
+          <div className="relative z-10 pt-4 lg:pt-0 space-y-1.5 mb-2">
             <h2 className="text-lg lg:text-xl font-bold tracking-tight text-white leading-snug">
               Sistem Manajemen Pengaduan.
             </h2>
             <div className="border-l-2 border-emerald-400 pl-2.5">
               <p className="text-[11px] lg:text-xs text-slate-200/90 leading-relaxed font-normal">
-                Kontrol penuh atas penanganan infrastruktur jalan, verifikasi laporan warga, dan persetujuan penugasan satgas dalam satu platform terintegrasi.
+                Kontrol penuh atas verifikasi laporan jalan rusak dan penugasan satgas secara terpadu.
               </p>
             </div>
           </div>

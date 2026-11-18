@@ -37,9 +37,9 @@ export default function RegisterPage() {
       </div>
 
       {/* Floating Balanced Modern Card (Ukuran & Elemen Form 100% Identik dengan Login Tanpa Scroll) */}
-      <div className="w-full max-w-[860px] lg:h-[570px] bg-white dark:bg-slate-900 rounded-[28px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+      <div className="w-full max-w-[860px] lg:h-[545px] bg-white dark:bg-slate-900 rounded-[28px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan */}
-        <div className="relative bg-[#0c3b37] text-white p-5 sm:p-6 lg:p-7 flex flex-col justify-between overflow-hidden min-h-[220px] lg:min-h-full">
+        <div className="relative bg-[#0c3b37] text-white p-6 sm:p-7 pb-10 sm:pb-12 lg:pb-12 flex flex-col justify-between overflow-hidden min-h-[220px] lg:min-h-full">
           <Image
             src="/images/auth-hero.jpg"
             alt="Petugas Satgas Bina Marga Memperbaiki Jalan Raya"
@@ -60,13 +60,13 @@ export default function RegisterPage() {
           </div>
 
           {/* Bottom Headline with Accent Line */}
-          <div className="relative z-10 pt-4 lg:pt-0 space-y-1.5">
+          <div className="relative z-10 pt-4 lg:pt-0 space-y-1.5 mb-2">
             <h2 className="text-lg lg:text-xl font-bold tracking-tight text-white leading-snug">
               Pendaftaran Akun Warga.
             </h2>
             <div className="border-l-2 border-emerald-400 pl-2.5">
               <p className="text-[11px] lg:text-xs text-slate-200/90 leading-relaxed font-normal">
-                Jadilah pelopor jalan yang aman dan nyaman. Setiap laporan foto Anda langsung ditindaklanjuti oleh petugas dinas terkait secara transparan.
+                Lapor jalan rusak di sekitar Anda dengan cepat dan pantau penanganan satgas secara transparan.
               </p>
             </div>
           </div>

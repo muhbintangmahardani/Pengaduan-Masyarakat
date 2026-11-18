@@ -101,13 +101,22 @@ export async function updateSession(request: NextRequest) {
       const lastTime = parseInt(lastActivity, 10);
       if (!isNaN(lastTime) && now - lastTime >= MAX_INACTIVITY_MS) {
         // Sesi telah kedaluwarsa karena tidak ada aktivitas - langsung keluar tanpa modal alert
-        await supabase.auth.signOut();
+        try {
+          await supabase.auth.signOut();
+        } catch {}
         const url = request.nextUrl.clone();
         url.pathname = "/login";
+        url.searchParams.set("expired", "1");
         const res = NextResponse.redirect(url);
-        res.cookies.delete("jb_last_activity");
-        res.cookies.delete(`jb_role_${user.id}`);
-        res.cookies.delete("jalanbaik-role");
+        for (const c of request.cookies.getAll()) {
+          if (
+            c.name.startsWith("sb-") ||
+            c.name.startsWith("jb_") ||
+            c.name === "jalanbaik-role"
+          ) {
+            res.cookies.delete(c.name);
+          }
+        }
         return res;
       }
     }
@@ -203,6 +212,24 @@ export async function updateSession(request: NextRequest) {
 
   // 2. Redirect jika pengguna yang sudah login mencoba mengakses /login atau /register
   if (user && (pathname === "/login" || pathname === "/register")) {
+    const isExpired = request.nextUrl.searchParams.get("expired") === "1";
+    if (isExpired) {
+      try {
+        await supabase.auth.signOut();
+      } catch {}
+      const res = NextResponse.next();
+      for (const c of request.cookies.getAll()) {
+        if (
+          c.name.startsWith("sb-") ||
+          c.name.startsWith("jb_") ||
+          c.name === "jalanbaik-role"
+        ) {
+          res.cookies.delete(c.name);
+        }
+      }
+      return res;
+    }
+
     const userRoleCookieKey = `jb_role_${user.id}`;
     let userRole = request.cookies.get(userRoleCookieKey)?.value as UserRole | undefined;
 
