@@ -19,18 +19,15 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    setErrorMessage(null);
 
     const formData = new FormData(e.currentTarget);
     const result = await loginAction(formData);
 
     if (result && !result.success) {
-      setErrorMessage(result.message);
       toast.error(result.message);
       setIsLoading(false);
     }
@@ -43,8 +40,8 @@ export default function LoginPage() {
         <ThemeToggle />
       </div>
 
-      {/* Floating 50:50 Balanced Modern Card */}
-      <div className="w-full max-w-[960px] bg-white dark:bg-slate-900 rounded-[24px] sm:rounded-[28px] border border-slate-200/90 dark:border-slate-800 shadow-2xl shadow-slate-300/40 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2 min-h-[560px]">
+      {/* Floating Balanced Modern Card (Ukuran Dimensi Identik dengan Halaman Daftar) */}
+      <div className="w-full max-w-[960px] lg:h-[620px] bg-white dark:bg-slate-900 rounded-[24px] sm:rounded-[28px] border border-slate-200/90 dark:border-slate-800 shadow-2xl shadow-slate-300/40 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan (Foto Asli & Elegan) */}
         <div className="relative bg-[#0c3b37] text-white p-7 sm:p-9 lg:p-10 flex flex-col justify-between overflow-hidden min-h-[280px] lg:min-h-full">
           {/* Foto Nyata Satgas Pekerjaan Umum / Bina Marga Sedang Memperbaiki Jalan */}
@@ -82,7 +79,7 @@ export default function LoginPage() {
         </div>
 
         {/* Kolom Kanan: 50% Form Login Bersih, Rapi & Elegan */}
-        <div className="p-7 sm:p-9 lg:p-12 flex flex-col justify-between bg-white dark:bg-slate-900">
+        <div className="p-7 sm:p-9 lg:p-10 flex flex-col justify-between bg-white dark:bg-slate-900">
           <div>
             <div className="space-y-1.5 mb-6">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
@@ -169,13 +166,6 @@ export default function LoginPage() {
                 </a>
               </div>
 
-              {/* Error Banner */}
-              {errorMessage && (
-                <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-rose-700 dark:text-rose-300">
-                  {errorMessage}
-                </div>
-              )}
-
               {/* Tombol Masuk Dashboard dengan Spinner Loading */}
               <Button
                 type="submit"
@@ -211,12 +201,12 @@ export default function LoginPage() {
           </div>
 
           {/* Footer Card */}
-          <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 text-center space-y-0.5">
+          <div className="pt-4 mt-auto border-t border-slate-100 dark:border-slate-800 text-center space-y-0.5">
             <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
               © 2026 Suku Dinas Bina Marga • Kota Administrasi JalanBaik.
             </p>
             <p className="text-[10px] text-slate-400/80 dark:text-slate-600">
-              Internal System v1.0. Restricted Access.
+              Sistem Terintegrasi v1.0 • Akses Khusus Pengguna Resmi.
             </p>
           </div>
         </div>

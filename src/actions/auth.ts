@@ -5,6 +5,38 @@ import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import type { UserRole } from "@/types";
 
+/**
+ * Menerjemahkan pesan error otentikasi dari Supabase ke Bahasa Indonesia yang ramah dan konsisten
+ */
+function translateAuthError(errorMessage?: string): string {
+  if (!errorMessage) return "Terjadi kesalahan saat memproses permintaan Anda.";
+  const lower = errorMessage.toLowerCase();
+
+  if (lower.includes("invalid login credentials")) {
+    return "Email atau kata sandi yang Anda masukkan salah. Silakan periksa kembali.";
+  }
+  if (lower.includes("user already registered")) {
+    return "Alamat email ini sudah terdaftar. Silakan masuk menggunakan akun Anda.";
+  }
+  if (lower.includes("email not confirmed")) {
+    return "Alamat email belum dikonfirmasi. Silakan periksa kotak masuk email Anda.";
+  }
+  if (lower.includes("password should be at least")) {
+    return "Kata sandi minimal harus terdiri dari 6 karakter.";
+  }
+  if (lower.includes("rate limit") || lower.includes("too many requests")) {
+    return "Terlalu banyak percobaan masuk. Harap tunggu beberapa saat sebelum mencoba lagi.";
+  }
+  if (lower.includes("invalid email")) {
+    return "Format alamat email tidak valid.";
+  }
+  if (lower.includes("signup disabled")) {
+    return "Pendaftaran akun baru saat ini sedang dinonaktifkan.";
+  }
+
+  return "Terjadi kendala saat memproses otentikasi. Silakan coba kembali.";
+}
+
 export async function loginAction(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -20,7 +52,7 @@ export async function loginAction(formData: FormData) {
   });
 
   if (error || !authData.user) {
-    return { success: false, message: error?.message || "Login gagal." };
+    return { success: false, message: translateAuthError(error?.message) };
   }
 
   const user = authData.user;
@@ -91,7 +123,7 @@ export async function registerAction(formData: FormData) {
   });
 
   if (error) {
-    return { success: false, message: error.message };
+    return { success: false, message: translateAuthError(error.message) };
   }
 
   if (authData.user) {
