@@ -43,7 +43,7 @@ export default function LoginPage() {
       </div>
 
       {/* Floating Balanced Modern Card (Ukuran Pas Layar & Tanpa Scroll di 100% Zoom) */}
-      <div className="w-full max-w-[840px] lg:h-[530px] bg-white dark:bg-slate-900 rounded-[28px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+      <div className="w-full max-w-[860px] lg:h-[530px] bg-white dark:bg-slate-900 rounded-[28px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan */}
         <div className="relative bg-[#0c3b37] text-white p-5 sm:p-6 lg:p-7 flex flex-col justify-between overflow-hidden min-h-[220px] lg:min-h-full">
           {/* Foto Nyata Satgas Pekerjaan Umum / Bina Marga Sedang Memperbaiki Jalan */}
