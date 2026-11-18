@@ -41,7 +41,7 @@ export default function LoginPage() {
       </div>
 
       {/* Floating Balanced Modern Card (Ukuran Dimensi Identik dengan Halaman Daftar) */}
-      <div className="w-full max-w-[960px] lg:h-[620px] bg-white dark:bg-slate-900 rounded-[24px] sm:rounded-[28px] border border-slate-200/90 dark:border-slate-800 shadow-2xl shadow-slate-300/40 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+      <div className="w-full max-w-[960px] lg:h-[660px] bg-white dark:bg-slate-900 rounded-[24px] sm:rounded-[28px] border border-slate-200/90 dark:border-slate-800 shadow-2xl shadow-slate-300/40 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan (Foto Asli & Elegan) */}
         <div className="relative bg-[#0c3b37] text-white p-7 sm:p-9 lg:p-10 flex flex-col justify-between overflow-hidden min-h-[280px] lg:min-h-full">
           {/* Foto Nyata Satgas Pekerjaan Umum / Bina Marga Sedang Memperbaiki Jalan */}

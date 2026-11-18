@@ -35,8 +35,8 @@ export default function RegisterPage() {
         <ThemeToggle />
       </div>
 
-      {/* Floating Balanced Modern Card (Ukuran Dimensi Identik dengan Halaman Masuk) */}
-      <div className="w-full max-w-[960px] lg:h-[620px] bg-white dark:bg-slate-900 rounded-[24px] sm:rounded-[28px] border border-slate-200/90 dark:border-slate-800 shadow-2xl shadow-slate-300/40 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+      {/* Floating Balanced Modern Card (Ukuran Dimensi & Komponen Form Identik dengan Halaman Masuk) */}
+      <div className="w-full max-w-[960px] lg:h-[660px] bg-white dark:bg-slate-900 rounded-[24px] sm:rounded-[28px] border border-slate-200/90 dark:border-slate-800 shadow-2xl shadow-slate-300/40 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan (Foto Asli & Elegan) */}
         <div className="relative bg-[#0c3b37] text-white p-7 sm:p-9 lg:p-10 flex flex-col justify-between overflow-hidden min-h-[280px] lg:min-h-full">
           <Image
@@ -71,10 +71,10 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Kolom Kanan: 50% Form Registrasi Akun */}
-        <div className="p-7 sm:p-9 lg:p-10 flex flex-col justify-between bg-white dark:bg-slate-900 overflow-y-auto">
+        {/* Kolom Kanan: 50% Form Registrasi Akun Berukuran Proporsional & Lega */}
+        <div className="p-7 sm:p-9 lg:p-10 flex flex-col justify-between bg-white dark:bg-slate-900">
           <div>
-            <div className="space-y-1 mb-4">
+            <div className="space-y-1.5 mb-5">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
                 Daftar Akun Baru
               </h1>
@@ -86,10 +86,10 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-2.5">
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               {/* Nama Lengkap */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Nama Lengkap <span className="text-rose-500">*</span>
                 </label>
                 <Input
@@ -98,13 +98,13 @@ export default function RegisterPage() {
                   required
                   disabled={isLoading}
                   placeholder="Budi Setiawan"
-                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-11 text-xs sm:text-sm rounded-xl border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                 />
               </div>
 
               {/* Email Warga */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Alamat Email <span className="text-rose-500">*</span>
                 </label>
                 <Input
@@ -113,13 +113,13 @@ export default function RegisterPage() {
                   required
                   disabled={isLoading}
                   placeholder="budi@gmail.com"
-                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-11 text-xs sm:text-sm rounded-xl border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                 />
               </div>
 
               {/* Nomor WhatsApp/Telepon */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Nomor WhatsApp / Telepon
                 </label>
                 <Input
@@ -127,13 +127,13 @@ export default function RegisterPage() {
                   name="phoneNumber"
                   disabled={isLoading}
                   placeholder="081234567890"
-                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-11 text-xs sm:text-sm rounded-xl border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                 />
               </div>
 
               {/* Password Input */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Kata Sandi (Minimal 6 Karakter) <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                     minLength={6}
                     disabled={isLoading}
                     placeholder="••••••••"
-                    className="h-10 text-xs sm:text-sm rounded-xl pr-10 border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                    className="h-11 text-xs sm:text-sm rounded-xl pr-10 border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                   />
                   <button
                     type="button"
@@ -161,7 +161,7 @@ export default function RegisterPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-10.5 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg active:scale-[0.99] transition-all cursor-pointer mt-1"
+                className="w-full h-11 sm:h-12 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg active:scale-[0.99] transition-all cursor-pointer mt-2"
               >
                 {isLoading ? (
                   <>
@@ -178,7 +178,7 @@ export default function RegisterPage() {
             </form>
 
             {/* Link Masuk Akun */}
-            <div className="pt-3 text-center">
+            <div className="pt-3.5 text-center">
               <span className="text-xs text-slate-500 dark:text-slate-400">
                 Sudah memiliki akun?{" "}
               </span>
