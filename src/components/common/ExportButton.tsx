@@ -49,7 +49,7 @@ export function ExportButton({
       toast.error("Tidak ada data laporan untuk dicetak.");
       return;
     }
-    printComplaintsReport();
+    printComplaintsReport(complaints, filename);
   };
 
   return (
