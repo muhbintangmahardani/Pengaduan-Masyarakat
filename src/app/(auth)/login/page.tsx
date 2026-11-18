@@ -8,6 +8,8 @@ import { loginAction } from "@/actions/auth";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { JalanBaikLogo } from "@/components/common/JalanBaikLogo";
 
@@ -102,9 +104,9 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-3.5">
               {/* Email Input */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   ID Karyawan / Email <span className="text-rose-500">*</span>
-                </label>
+                </Label>
                 <Input
                   type="email"
                   name="email"
@@ -117,9 +119,9 @@ export default function LoginPage() {
 
               {/* Password Input */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Kata Sandi <span className="text-rose-500">*</span>
-                </label>
+                </Label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
@@ -142,17 +144,19 @@ export default function LoginPage() {
 
               {/* Checkbox Ingat Saya & Lupa Sandi */}
               <div className="flex items-center justify-between text-xs pt-1">
-                <label className="flex items-center gap-2 cursor-pointer text-slate-600 dark:text-slate-400 select-none group">
-                  <input
-                    type="checkbox"
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="rememberMe"
                     checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-3.5 h-3.5 rounded border-slate-300 dark:border-slate-700 text-[#0c3b37] focus:ring-[#0c3b37] dark:bg-slate-900 cursor-pointer accent-[#0c3b37]"
+                    onCheckedChange={(checked) => setRememberMe(Boolean(checked))}
                   />
-                  <span className="group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors whitespace-nowrap">
+                  <Label
+                    htmlFor="rememberMe"
+                    className="text-xs font-normal text-slate-600 dark:text-slate-400 cursor-pointer select-none hover:text-slate-900 dark:hover:text-slate-200 transition-colors whitespace-nowrap"
+                  >
                     Ingat saya
-                  </span>
-                </label>
+                  </Label>
+                </div>
 
                 <a
                   href="#"
@@ -169,6 +173,7 @@ export default function LoginPage() {
               {/* Tombol Masuk Dashboard */}
               <Button
                 type="submit"
+                size="lg"
                 disabled={isLoading}
                 className="w-full h-11 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-2 whitespace-nowrap"
               >

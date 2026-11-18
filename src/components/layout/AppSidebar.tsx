@@ -15,6 +15,7 @@ import {
   User,
 } from "lucide-react";
 import { logoutAction } from "@/actions/auth";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { JalanBaikLogo } from "@/components/common/JalanBaikLogo";
 import type { UserRole } from "@/types";
 
@@ -191,9 +192,11 @@ export function AppSidebar({
           }`}
           title={isCollapsed ? "Profil Saya" : undefined}
         >
-          <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 flex-shrink-0 font-bold text-xs uppercase border border-slate-200 dark:border-slate-700">
-            {userName ? userName.charAt(0) : <User className="w-3.5 h-3.5" />}
-          </div>
+          <Avatar className="w-7 h-7 border border-slate-200 dark:border-slate-700 flex-shrink-0">
+            <AvatarFallback className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs uppercase">
+              {userName ? userName.charAt(0) : <User className="w-3.5 h-3.5" />}
+            </AvatarFallback>
+          </Avatar>
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-slate-800 dark:text-slate-200 truncate leading-none mb-0.5">

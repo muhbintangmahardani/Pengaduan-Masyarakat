@@ -31,6 +31,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
   createComplaintSchema,
@@ -264,9 +265,9 @@ export default function BuatLaporanPage() {
 
             {/* Judul laporan */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-800 dark:text-slate-200">
+              <Label className="text-xs font-bold text-slate-800 dark:text-slate-200">
                 Judul laporan *
-              </label>
+              </Label>
               <Input
                 {...register("title")}
                 placeholder="Contoh: Jalan berlubang cukup dalam di Jl. Melati"
@@ -281,9 +282,9 @@ export default function BuatLaporanPage() {
             {/* Dropdown Jenis & Tingkat Kerusakan (2 cols) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                <Label className="text-xs font-bold text-slate-800 dark:text-slate-200">
                   Jenis kerusakan *
-                </label>
+                </Label>
                 <select
                   {...register("damage_type")}
                   disabled={isSubmitting}
@@ -298,9 +299,9 @@ export default function BuatLaporanPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                <Label className="text-xs font-bold text-slate-800 dark:text-slate-200">
                   Tingkat kerusakan *
-                </label>
+                </Label>
                 <select
                   {...register("damage_level")}
                   disabled={isSubmitting}
@@ -315,9 +316,9 @@ export default function BuatLaporanPage() {
 
             {/* Deskripsi kerusakan */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-800 dark:text-slate-200">
+              <Label className="text-xs font-bold text-slate-800 dark:text-slate-200">
                 Deskripsi kerusakan *
-              </label>
+              </Label>
               <Textarea
                 {...register("description")}
                 rows={3}
@@ -332,14 +333,14 @@ export default function BuatLaporanPage() {
 
             {/* Foto bukti kerusakan: Kamera Langsung & Galeri + Lightbox Preview */}
             <div className="space-y-2.5">
-              <label className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+              <Label className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
                 <span>Foto bukti kerusakan jalan *</span>
                 {previewUrl && (
                   <span className="text-[11px] font-normal text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" /> Foto Siap Dikirim (Klik foto untuk perbesar)
                   </span>
                 )}
-              </label>
+              </Label>
 
               {/* Hidden Inputs: Kamera Langsung & Berkas */}
               <input
@@ -535,9 +536,9 @@ export default function BuatLaporanPage() {
             {/* Alamat lengkap (Editable Textarea) */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                <Label className="text-xs font-bold text-slate-800 dark:text-slate-200">
                   Alamat lengkap / Patokan *
-                </label>
+                </Label>
                 <span className="text-[10px] text-slate-400">Bisa diedit manual</span>
               </div>
               <Textarea

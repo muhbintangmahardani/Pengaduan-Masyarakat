@@ -27,6 +27,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -398,21 +400,25 @@ export function AdminIncomingReports({
                 </div>
 
                 {/* Checkbox Konfirmasi */}
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-emerald-800 dark:text-emerald-300">
-                  <input
-                    type="checkbox"
+                <div className="flex items-center gap-2.5">
+                  <Checkbox
+                    id="photoVerified"
                     checked={isPhotoVerified}
-                    onChange={(e) => setIsPhotoVerified(e.target.checked)}
-                    className="w-4 h-4 rounded border-slate-300 text-[#0c3b37] focus:ring-[#0c3b37]"
+                    onCheckedChange={(checked) => setIsPhotoVerified(Boolean(checked))}
                   />
-                  <span>✓ Foto dan lokasi sesuai</span>
-                </label>
+                  <Label
+                    htmlFor="photoVerified"
+                    className="cursor-pointer text-xs font-semibold text-emerald-800 dark:text-emerald-300"
+                  >
+                    ✓ Foto dan lokasi sesuai
+                  </Label>
+                </div>
 
                 {/* Prioritas Penanganan */}
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                  <Label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
                     Prioritas penanganan
-                  </label>
+                  </Label>
                   <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value as any)}
@@ -427,9 +433,9 @@ export function AdminIncomingReports({
 
                 {/* Petugas Lapangan Dropdown */}
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                  <Label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
                     Petugas lapangan
-                  </label>
+                  </Label>
                   <select
                     value={selectedOfficerId}
                     onChange={(e) => setSelectedOfficerId(e.target.value)}
@@ -448,9 +454,9 @@ export function AdminIncomingReports({
 
                 {/* Target Selesai Date Picker */}
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                  <Label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
                     Target selesai
-                  </label>
+                  </Label>
                   <Input
                     type="date"
                     value={targetDate}

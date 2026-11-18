@@ -19,6 +19,7 @@ import { emitLocalCrossTab } from "@/lib/realtimeBroadcast";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { ImageLightboxModal } from "@/components/common/ImageLightboxModal";
 
@@ -197,14 +198,14 @@ export function OfficerWorkSubmission({
 
         {/* Foto Setelah Perbaikan */}
         <div className="space-y-2.5">
-          <label className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+          <Label className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
             <span>Foto bukti setelah perbaikan *</span>
             {previewUrl && (
               <span className="text-[11px] font-normal text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5" /> Klik foto untuk memperbesar
               </span>
             )}
-          </label>
+          </Label>
 
           {previewUrl ? (
             <div className="space-y-3">
@@ -299,9 +300,9 @@ export function OfficerWorkSubmission({
 
         {/* Catatan Pekerjaan */}
         <div className="space-y-1.5">
-          <label className="text-xs font-bold text-slate-800 dark:text-slate-200">
+          <Label className="text-xs font-bold text-slate-800 dark:text-slate-200">
             Catatan tindakan pekerjaan *
-          </label>
+          </Label>
           <Textarea
             rows={3}
             value={note}

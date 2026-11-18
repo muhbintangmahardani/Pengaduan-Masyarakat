@@ -19,8 +19,10 @@ import {
 import { updateProfileAction } from "@/actions/auth";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatDateTime } from "@/lib/utils";
 import type { Profile, UserRole } from "@/types";
 
@@ -178,10 +180,10 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Nama Lengkap */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <Label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                   <User className="w-3.5 h-3.5 text-slate-400" />
                   Nama Lengkap *
-                </label>
+                </Label>
                 <Input
                   type="text"
                   value={fullName}
@@ -194,10 +196,10 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
 
               {/* Nomor Telepon */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <Label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                   <Phone className="w-3.5 h-3.5 text-slate-400" />
                   Nomor Telepon / WhatsApp
-                </label>
+                </Label>
                 <Input
                   type="tel"
                   value={phoneNumber}
@@ -210,10 +212,10 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
 
             {/* Email (Readonly) */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <Label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5 text-slate-400" />
                 Alamat Email (Akun Utama)
-              </label>
+              </Label>
               <Input
                 type="email"
                 value={profile.email}
@@ -241,9 +243,9 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Kata Sandi Baru */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                   Kata Sandi Baru
-                </label>
+                </Label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
@@ -265,9 +267,9 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
 
               {/* Konfirmasi Kata Sandi Baru */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                   Konfirmasi Kata Sandi Baru
-                </label>
+                </Label>
                 <Input
                   type={showPassword ? "text" : "password"}
                   value={confirmPassword}

@@ -8,6 +8,7 @@ import { registerAction } from "@/actions/auth";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { JalanBaikLogo } from "@/components/common/JalanBaikLogo";
 
@@ -35,7 +36,7 @@ export default function RegisterPage() {
         <ThemeToggle />
       </div>
 
-      {/* Floating Balanced Modern Card (Ukuran Pas & Proporsional Sesuai Standar UI) */}
+      {/* Floating Balanced Modern Card (Ukuran & Elemen Form 100% Identik dengan Halaman Masuk) */}
       <div className="w-full max-w-[880px] lg:h-[580px] bg-white dark:bg-slate-900 rounded-2xl sm:rounded-[24px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan */}
         <div className="relative bg-[#0c3b37] text-white p-7 lg:p-9 flex flex-col justify-between overflow-hidden min-h-[240px] lg:min-h-full">
@@ -89,53 +90,53 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit} className="space-y-2.5">
               {/* Nama Lengkap */}
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Nama Lengkap <span className="text-rose-500">*</span>
-                </label>
+                </Label>
                 <Input
                   type="text"
                   name="fullName"
                   required
                   disabled={isLoading}
                   placeholder="Budi Setiawan"
-                  className="h-9.5 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                 />
               </div>
 
               {/* Email Warga */}
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Alamat Email <span className="text-rose-500">*</span>
-                </label>
+                </Label>
                 <Input
                   type="email"
                   name="email"
                   required
                   disabled={isLoading}
                   placeholder="budi@gmail.com"
-                  className="h-9.5 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                 />
               </div>
 
               {/* Nomor WhatsApp/Telepon */}
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Nomor WhatsApp / Telepon
-                </label>
+                </Label>
                 <Input
                   type="tel"
                   name="phoneNumber"
                   disabled={isLoading}
                   placeholder="081234567890"
-                  className="h-9.5 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                  className="h-10 text-xs sm:text-sm rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                 />
               </div>
 
               {/* Password Input */}
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Kata Sandi (Minimal 6 Karakter) <span className="text-rose-500">*</span>
-                </label>
+                </Label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
@@ -144,7 +145,7 @@ export default function RegisterPage() {
                     minLength={6}
                     disabled={isLoading}
                     placeholder="••••••••"
-                    className="h-9.5 text-xs sm:text-sm rounded-xl pr-10 border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
+                    className="h-10 text-xs sm:text-sm rounded-xl pr-10 border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 focus:bg-white dark:focus:bg-slate-950 focus:border-[#0c3b37] dark:focus:border-emerald-500 transition-all px-3.5"
                   />
                   <button
                     type="button"
@@ -157,11 +158,12 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {/* Tombol Buat Akun dengan Spinner Loading */}
+              {/* Tombol Buat Akun Identik dengan Masuk Dashboard */}
               <Button
                 type="submit"
+                size="lg"
                 disabled={isLoading}
-                className="w-full h-10.5 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-1.5 whitespace-nowrap"
+                className="w-full h-11 rounded-xl bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-2 whitespace-nowrap"
               >
                 {isLoading ? (
                   <>

@@ -14,6 +14,8 @@ import {
 import { logoutAction } from "@/actions/auth";
 import { NotificationBell } from "./NotificationBell";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -254,13 +256,15 @@ export function AppHeader({
                 </div>
               </div>
 
-              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center border border-primary/20 shadow-xs shrink-0">
-                {userName ? (
-                  userName.charAt(0).toUpperCase()
-                ) : (
-                  <User className="w-4 h-4" />
-                )}
-              </div>
+              <Avatar className="w-8 h-8 border border-primary/20 shadow-xs shrink-0">
+                <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
+                  {userName ? (
+                    userName.charAt(0).toUpperCase()
+                  ) : (
+                    <User className="w-4 h-4" />
+                  )}
+                </AvatarFallback>
+              </Avatar>
 
               <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-muted-foreground group-hover:text-foreground transition-transform shrink-0" />
             </button>
@@ -275,9 +279,9 @@ export function AppHeader({
                 {userEmail || "user@jalanbaik.id"}
               </p>
               <div className="mt-2">
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary uppercase">
+                <Badge variant="secondary" className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
                   {roleLabelMap[userRole]}
-                </span>
+                </Badge>
               </div>
             </div>
 
