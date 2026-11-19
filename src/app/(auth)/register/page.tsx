@@ -157,29 +157,31 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Tombol Buat Akun Identik dengan Masuk Dashboard */}
-            <Button
-              type="submit"
-              size="lg"
-              disabled={isLoading}
-              className="w-full h-11 rounded-[14px] bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer mt-5 whitespace-nowrap flex items-center justify-center gap-2"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                  Mendaftarkan Akun...
-                </>
-              ) : (
-                <>
-                  Daftar Akun Sekarang
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </>
-              )}
-            </Button>
+            {/* Tombol Buat Akun dengan Space Nyaman & Proporsional */}
+            <div className="pt-2.5 sm:pt-3.5">
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isLoading}
+                className="w-full h-11 rounded-[14px] bg-[#0c3b37] hover:bg-[#082825] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md active:scale-[0.99] transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-2"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    Mendaftarkan Akun...
+                  </>
+                ) : (
+                  <>
+                    Daftar Akun Sekarang
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </>
+                )}
+              </Button>
+            </div>
           </form>
 
-          {/* Link Masuk Akun */}
-          <div className="pt-3 text-center">
+          {/* Link Masuk Akun dengan Jarak Lega dari Tombol */}
+          <div className="pt-4 sm:pt-5 text-center">
             <span className="text-xs text-slate-500 dark:text-slate-400">
               Sudah memiliki akun?{" "}
             </span>

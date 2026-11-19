@@ -191,7 +191,7 @@ export default function LoginPage() {
           </form>
 
           {/* Link Daftar Warga Baru */}
-          <div className="pt-3 text-center">
+          <div className="pt-4 text-center">
             <span className="text-xs text-slate-500 dark:text-slate-400">
               Belum punya akun warga?{" "}
             </span>
