@@ -36,16 +36,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#f4f6f8] dark:bg-slate-950 p-3 sm:p-4 transition-colors duration-200 relative select-none">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#f4f6f8] dark:bg-slate-950 p-4 sm:p-6 lg:py-8 transition-colors duration-200 relative select-none">
       {/* Dark Mode Toggle Floating di Pojok Kanan Atas */}
       <div className="fixed top-3 right-3 sm:top-4 sm:right-4 z-50">
         <ThemeToggle />
       </div>
 
-      {/* Floating Balanced Modern Card (Ukuran Pas Layar & Tanpa Scroll di 100% Zoom) */}
-      <div className="w-full max-w-[860px] lg:h-[525px] bg-white dark:bg-slate-900 rounded-[28px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+      {/* Floating Balanced Modern Card (Ukuran Pas Layar & Elegan) */}
+      <div className="w-full max-w-[860px] bg-white dark:bg-slate-900 rounded-[28px] border border-border/80 shadow-2xl shadow-slate-300/30 dark:shadow-none overflow-hidden grid grid-cols-1 lg:grid-cols-2 my-auto">
         {/* Kolom Kiri: 50% Showcase Visual Satgas Perbaikan Jalan */}
-        <div className="relative bg-[#0c3b37] text-white p-6 sm:p-7 pb-10 sm:pb-12 lg:pb-12 flex flex-col justify-between overflow-hidden min-h-[220px] lg:min-h-full">
+        <div className="relative bg-[#0c3b37] text-white p-6 sm:p-8 lg:p-9 pb-10 sm:pb-12 lg:pb-12 flex flex-col justify-between overflow-hidden min-h-[260px] lg:min-h-full">
           {/* Foto Nyata Satgas Pekerjaan Umum / Bina Marga Sedang Memperbaiki Jalan */}
           <Image
             src="/images/auth-hero.jpg"
