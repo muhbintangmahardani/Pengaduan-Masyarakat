@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { AppSidebar } from "./AppSidebar";
 import { AppHeader } from "./AppHeader";
@@ -55,17 +55,19 @@ export function DashboardShell({
 
       {/* Main Content Area (Independent Scroll) */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        <AppHeader
-          subtitle={subtitle}
-          userId={userId}
-          userName={userName}
-          userRole={role}
-          userEmail={userEmail}
-          isSidebarCollapsed={isSidebarCollapsed}
-          isMobileMenuOpen={isMobileMenuOpen}
-          onToggleSidebar={() => setIsSidebarCollapsed((prev) => !prev)}
-          onOpenMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
-        />
+        <Suspense fallback={<div className="h-16 border-b border-border bg-card/60 backdrop-blur-md" />}>
+          <AppHeader
+            subtitle={subtitle}
+            userId={userId}
+            userName={userName}
+            userRole={role}
+            userEmail={userEmail}
+            isSidebarCollapsed={isSidebarCollapsed}
+            isMobileMenuOpen={isMobileMenuOpen}
+            onToggleSidebar={() => setIsSidebarCollapsed((prev) => !prev)}
+            onOpenMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
+          />
+        </Suspense>
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <div
             key={pathname}

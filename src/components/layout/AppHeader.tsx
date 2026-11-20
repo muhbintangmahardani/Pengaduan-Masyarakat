@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   Bell,
   ChevronDown,
@@ -63,16 +63,8 @@ export function AppHeader({
   onOpenMobileMenu,
 }: AppHeaderProps) {
   const pathname = usePathname();
-  const [ticketQuery, setTicketQuery] = useState<string | null>(null);
-
-  // Ambil tiket dari query string browser (misal ?ticket=JB-2026-4158)
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const t = params.get("ticket");
-      setTicketQuery(t || null);
-    }
-  }, [pathname]);
+  const searchParams = useSearchParams();
+  const ticketQuery = searchParams.get("ticket");
 
   const roleLabelMap: Record<UserRole, string> = {
     citizen: "Masyarakat",

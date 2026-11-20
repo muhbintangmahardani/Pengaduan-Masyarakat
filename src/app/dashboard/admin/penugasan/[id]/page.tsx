@@ -17,6 +17,7 @@ import {
   Phone,
   Mail,
   AlertTriangle,
+  AlertCircle,
   ChevronRight,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -281,24 +282,42 @@ export default async function AdminPenugasanDetailPage({
               <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 Personel Bertugas
               </h3>
-              <Badge className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 text-[10px]">
-                Unit Lapangan Aktif
-              </Badge>
+              {task.status === "rejected" ? (
+                <Badge className="bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800 text-[10px]">
+                  Laporan Ditolak
+                </Badge>
+              ) : (
+                <Badge className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 text-[10px]">
+                  Unit Lapangan Aktif
+                </Badge>
+              )}
             </div>
 
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary font-black text-base flex items-center justify-center border border-primary/20 shrink-0">
-                {task.assigned_officer?.full_name?.charAt(0) || "P"}
+              <div className={`w-12 h-12 rounded-xl font-black text-base flex items-center justify-center border shrink-0 ${
+                task.status === "rejected"
+                  ? "bg-rose-50 dark:bg-rose-950/40 text-rose-600 border-rose-200 dark:border-rose-800"
+                  : "bg-primary/10 text-primary border-primary/20"
+              }`}>
+                {task.status === "rejected" ? "X" : task.assigned_officer?.full_name?.charAt(0) || "P"}
               </div>
               <div className="space-y-0.5 min-w-0">
                 <div className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
-                  {task.assigned_officer?.full_name || "Petugas Lapangan"}
+                  {task.status === "rejected"
+                    ? "Tidak Ditugaskan (Laporan Ditolak)"
+                    : task.assigned_officer?.full_name || "Petugas Lapangan"}
                 </div>
                 <div className="text-xs text-muted-foreground truncate">
-                  {task.assigned_officer?.email || "petugas@jalanbaik.id"}
+                  {task.status === "rejected"
+                    ? "Verifikasi admin: Laporan tidak memenuhi kriteria"
+                    : task.assigned_officer?.email || "petugas@jalanbaik.id"}
                 </div>
-                <div className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
-                  Tim Satuan Tugas 02 • Suku Dinas Bina Marga
+                <div className={`text-[11px] font-semibold ${
+                  task.status === "rejected" ? "text-rose-600 dark:text-rose-400" : "text-emerald-700 dark:text-emerald-400"
+                }`}>
+                  {task.status === "rejected"
+                    ? "Penanganan Dihentikan Admin"
+                    : "Tim Satuan Tugas 02 • Suku Dinas Bina Marga"}
                 </div>
               </div>
             </div>
@@ -307,13 +326,21 @@ export default async function AdminPenugasanDetailPage({
               <div className="p-3 rounded-xl bg-muted/40 border border-border">
                 <span className="text-[10px] text-muted-foreground block font-medium">Tanggal Penugasan</span>
                 <span className="font-bold text-slate-800 dark:text-slate-200">
-                  {task.verified_at ? formatDateTime(task.verified_at) : formatDateTime(task.created_at)}
+                  {task.status === "rejected"
+                    ? "-"
+                    : task.verified_at
+                    ? formatDateTime(task.verified_at)
+                    : formatDateTime(task.created_at)}
                 </span>
               </div>
               <div className="p-3 rounded-xl bg-muted/40 border border-border">
                 <span className="text-[10px] text-muted-foreground block font-medium">Target Penyelesaian</span>
                 <span className="font-bold text-slate-800 dark:text-slate-200">
-                  {task.target_date ? formatDateTime(task.target_date) : "2 Hari Kerja"}
+                  {task.status === "rejected"
+                    ? "-"
+                    : task.target_date
+                    ? formatDateTime(task.target_date)
+                    : "2 Hari Kerja"}
                 </span>
               </div>
             </div>
@@ -331,119 +358,185 @@ export default async function AdminPenugasanDetailPage({
             </div>
 
             {/* Timeline Tree */}
-            <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
-              {/* Step 1: Laporan Masuk */}
-              <div className="flex items-start gap-3.5 relative">
-                <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    Laporan Diterima Sistem
+            {task.status === "rejected" ? (
+              /* KONDISI KHUSUS: LAPORAN DITOLAK -> LANGSUNG DITOLAK & VERIFIKASI AKHIR DITUTUP */
+              <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-rose-200 dark:before:bg-rose-900/40">
+                {/* Step 1: Laporan Diterima Sistem */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
-                  <div className="text-[11px] text-slate-400">
-                    {formatDateTime(task.created_at)}
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Laporan Diterima Sistem
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      {formatDateTime(task.created_at)}
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Warga mengirim foto dan titik koordinat kerusakan jalan.
+                    </p>
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Warga mengirim foto dan titik koordinat kerusakan jalan.
-                  </p>
                 </div>
-              </div>
 
-              {/* Step 2: Diverifikasi & Ditugaskan */}
-              <div className="flex items-start gap-3.5 relative">
-                <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    Diverifikasi & Ditugaskan
+                {/* Step 2: Laporan Ditolak oleh Admin */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div className="w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
+                    <AlertCircle className="w-3.5 h-3.5" />
                   </div>
-                  <div className="text-[11px] text-slate-400">
-                    {task.verified_at ? formatDateTime(task.verified_at) : formatDateTime(task.created_at)}
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                      <span>Laporan Ditolak oleh Admin</span>
+                      <Badge variant="outline" className="text-[9px] bg-rose-50 text-rose-700 border-rose-300 py-0">
+                        Tidak Valid
+                      </Badge>
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      {task.updated_at ? formatDateTime(task.updated_at) : formatDateTime(task.created_at)}
+                    </div>
+                    <p className="text-xs text-rose-950 dark:text-rose-200 bg-rose-50/70 dark:bg-rose-950/30 p-2.5 rounded-lg border border-rose-200 dark:border-rose-900/50 leading-relaxed mt-1">
+                      {task.completion_note || "Laporan tidak valid, fiktif, atau tidak ditemukan kerusakan jalan di lokasi kejadian."}
+                    </p>
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Admin menugaskan {task.assigned_officer?.full_name || "Petugas"} dengan prioritas {task.priority || "Sedang"}.
-                  </p>
                 </div>
-              </div>
 
-              {/* Step 3: Dalam Pengerjaan */}
-              <div className="flex items-start gap-3.5 relative">
-                <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900 ${
-                    task.status === "in_progress" || task.status === "under_review" || task.status === "resolved"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-slate-200 dark:bg-slate-700 text-slate-500"
-                  }`}
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    Pengerjaan Lapangan
+                {/* Step 3: Verifikasi Akhir & Ditutup */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div className="w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
-                  <div className="text-[11px] text-slate-400">
-                    {task.status === "in_progress"
-                      ? "Sedang berlangsung di lokasi"
-                      : "Pengerjaan fisik telah dimulai"}
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                      <span>Verifikasi Akhir & Ditutup</span>
+                      <Badge variant="outline" className="text-[9px] bg-rose-50 text-rose-700 border-rose-300 py-0">
+                        Ditutup
+                      </Badge>
+                    </div>
+                    <div className="text-[11px] font-semibold text-rose-600 dark:text-rose-400">
+                      Laporan Resmi Ditutup (Ditolak)
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Proses administrasi selesai. Laporan ditutup tanpa penugasan ke lapangan dan notifikasi penolakan telah diteruskan ke warga pelapor.
+                    </p>
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Tim lapangan melakukan penambalan, pembersihan, dan perataan jalan.
-                  </p>
                 </div>
               </div>
+            ) : (
+              /* KONDISI NORMAL: LAPORAN DALAM PROSES PENANGANAN */
+              <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
+                {/* Step 1: Laporan Masuk */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Laporan Diterima Sistem
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      {formatDateTime(task.created_at)}
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Warga mengirim foto dan titik koordinat kerusakan jalan.
+                    </p>
+                  </div>
+                </div>
 
-              {/* Step 4: Hasil Dikirim */}
-              <div className="flex items-start gap-3.5 relative">
-                <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900 ${
-                    task.status === "under_review" || task.status === "resolved"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-slate-200 dark:bg-slate-700 text-slate-500"
-                  }`}
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    Dokumentasi Hasil Terkirim
+                {/* Step 2: Diverifikasi & Ditugaskan */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
-                  <div className="text-[11px] text-slate-400">
-                    {task.completed_at ? formatDateTime(task.completed_at) : "Menunggu pengunggahan bukti"}
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Diverifikasi & Ditugaskan
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      {task.verified_at ? formatDateTime(task.verified_at) : formatDateTime(task.created_at)}
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Admin menugaskan {task.assigned_officer?.full_name || "Petugas"} dengan prioritas {task.priority || "Sedang"}.
+                    </p>
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Petugas mengunggah foto sesudah perbaikan dan catatan lapangan.
-                  </p>
                 </div>
-              </div>
 
-              {/* Step 5: Selesai Resmi */}
-              <div className="flex items-start gap-3.5 relative">
-                <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900 ${
-                    task.status === "resolved"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-slate-200 dark:bg-slate-700 text-slate-500 font-bold"
-                  }`}
-                >
-                  {task.status === "resolved" ? <CheckCircle2 className="w-3.5 h-3.5" /> : "5"}
+                {/* Step 3: Dalam Pengerjaan */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div
+                    className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900 ${
+                      task.status === "in_progress" || task.status === "under_review" || task.status === "resolved"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-slate-200 dark:bg-slate-700 text-slate-500"
+                    }`}
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Pengerjaan Lapangan
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      {task.status === "in_progress"
+                        ? "Sedang berlangsung di lokasi"
+                        : "Pengerjaan fisik telah dimulai"}
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Tim lapangan melakukan penambalan, pembersihan, dan perataan jalan.
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    Verifikasi Akhir & Ditutup
+
+                {/* Step 4: Hasil Dikirim */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div
+                    className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900 ${
+                      task.status === "under_review" || task.status === "resolved"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-slate-200 dark:bg-slate-700 text-slate-500"
+                    }`}
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
-                  <div className="text-[11px] text-slate-400">
-                    {task.status === "resolved"
-                      ? "Tuntas disetujui admin"
-                      : "Menunggu persetujuan admin"}
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Dokumentasi Hasil Terkirim
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      {task.completed_at ? formatDateTime(task.completed_at) : "Menunggu pengunggahan bukti"}
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Petugas mengunggah foto sesudah perbaikan dan catatan lapangan.
+                    </p>
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Laporan selesai 100% dan warga menerima notifikasi perbaikan tuntas.
-                  </p>
+                </div>
+
+                {/* Step 5: Selesai Resmi */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div
+                    className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900 ${
+                      task.status === "resolved"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-slate-200 dark:bg-slate-700 text-slate-500 font-bold"
+                    }`}
+                  >
+                    {task.status === "resolved" ? <CheckCircle2 className="w-3.5 h-3.5" /> : "5"}
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Verifikasi Akhir & Ditutup
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      {task.status === "resolved"
+                        ? "Tuntas disetujui admin"
+                        : "Menunggu persetujuan admin"}
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Laporan selesai 100% dan warga menerima notifikasi perbaikan tuntas.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Tombol Tinjau jika status under_review */}
             {task.status === "under_review" && (

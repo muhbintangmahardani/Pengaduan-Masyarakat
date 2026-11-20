@@ -336,139 +336,180 @@ export default async function WargaLaporanDetailPage({
               </p>
             </div>
 
-            <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800 pl-1">
-              {/* Step 1: Diterima */}
-              <div className="flex items-start gap-3.5 relative">
-                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+            {/* Card Alur Timeline Transparan */}
+            {complaint.status === "rejected" ? (
+              /* KONDISI KHUSUS WARGA: LAPORAN DITOLAK -> LANGSUNG DITOLAK & VERIFIKASI AKHIR DITUTUP */
+              <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-rose-200 dark:before:bg-rose-900/40 pl-1">
+                {/* Step 1: Diterima */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Laporan Diterima Sistem
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      {formatDateTimeWithHours(complaint.created_at)}
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      Laporan berhasil dikirim dan diverifikasi oleh admin dinas terkait.
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    Laporan Diterima Sistem
+
+                {/* Step 2: Ditolak Admin */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div className="w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900">
+                    <AlertCircle className="w-3.5 h-3.5" />
                   </div>
-                  <div className="text-[10px] text-slate-400">
-                    {formatDateTimeWithHours(complaint.created_at)}
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                      <span>Laporan Ditolak Admin</span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-rose-50 text-rose-700 border border-rose-300">
+                        Tidak Valid
+                      </span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      {complaint.updated_at
+                        ? formatDateTimeWithHours(complaint.updated_at)
+                        : formatDateTimeWithHours(complaint.created_at)}
+                    </div>
+                    <p className="text-[11px] text-rose-950 dark:text-rose-200 bg-rose-50/70 dark:bg-rose-950/30 p-2.5 rounded-lg border border-rose-200 dark:border-rose-900/50 leading-relaxed mt-1">
+                      {complaint.completion_note || "Laporan tidak valid, fiktif, atau kerusakan tidak ditemukan saat dicek di lapangan."}
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-500">
-                    Laporan berhasil dikirim dan masuk ke antrean verifikasi dinas.
-                  </p>
+                </div>
+
+                {/* Step 3: Verifikasi Akhir & Ditutup */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div className="w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                      <span>Verifikasi Akhir & Ditutup</span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-rose-50 text-rose-700 border border-rose-300">
+                        Ditutup
+                      </span>
+                    </div>
+                    <div className="text-[10px] font-semibold text-rose-600 dark:text-rose-400">
+                      Laporan Resmi Ditutup (Ditolak)
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      Laporan telah resmi ditutup oleh admin sistem dan penanganan jalan di lokasi tidak diproses.
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              {/* Step 2: Diverifikasi atau Ditolak */}
-              <div className="flex items-start gap-3.5 relative">
-                <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900 ${
-                    complaint.status === "rejected"
-                      ? "bg-rose-600 text-white"
-                      : complaint.status !== "pending"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-slate-100 dark:bg-slate-800 text-slate-400"
-                  }`}
-                >
-                  {complaint.status === "rejected" ? (
-                    <AlertCircle className="w-3.5 h-3.5" />
-                  ) : (
+            ) : (
+              /* KONDISI NORMAL WARGA: 4 TAHAP */
+              <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800 pl-1">
+                {/* Step 1: Diterima */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                  )}
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Laporan Diterima Sistem
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      {formatDateTimeWithHours(complaint.created_at)}
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      Laporan berhasil dikirim dan masuk ke antrean verifikasi dinas.
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-0.5">
+
+                {/* Step 2: Diverifikasi */}
+                <div className="flex items-start gap-3.5 relative">
                   <div
-                    className={`text-xs font-bold ${
-                      complaint.status === "rejected"
-                        ? "text-rose-600 dark:text-rose-400"
-                        : "text-slate-900 dark:text-slate-100"
+                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900 ${
+                      complaint.status !== "pending"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-400"
                     }`}
                   >
-                    {complaint.status === "rejected"
-                      ? "Laporan Ditolak Admin"
-                      : "Diverifikasi & Ditugaskan"}
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
-                  <div className="text-[10px] text-slate-400">
-                    {complaint.verified_at
-                      ? formatDateTimeWithHours(complaint.verified_at)
-                      : complaint.status === "rejected"
-                      ? "Diverifikasi & ditolak oleh admin"
-                      : complaint.status !== "pending"
-                      ? "Admin memverifikasi bukti foto"
-                      : "Menunggu verifikasi admin"}
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Diverifikasi & Ditugaskan
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      {complaint.verified_at
+                        ? formatDateTimeWithHours(complaint.verified_at)
+                        : complaint.status !== "pending"
+                        ? "Admin memverifikasi bukti foto"
+                        : "Menunggu verifikasi admin"}
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      {complaint.assigned_officer?.full_name
+                        ? `Ditugaskan kepada ${complaint.assigned_officer.full_name} (Tim Lapangan)`
+                        : "Admin memeriksa keabsahan foto dan koordinat jalan."}
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-500">
-                    {complaint.status === "rejected"
-                      ? complaint.completion_note || "Laporan tidak valid atau tidak ditemukan kerusakan di lapangan."
-                      : complaint.assigned_officer?.full_name
-                      ? `Ditugaskan kepada ${complaint.assigned_officer.full_name} (Tim Lapangan)`
-                      : "Admin memeriksa keabsahan foto dan koordinat jalan."}
-                  </p>
                 </div>
-              </div>
 
-              {/* Step 3: Pengerjaan */}
-              <div className="flex items-start gap-3.5 relative">
-                <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900 ${
-                    complaint.status === "rejected"
-                      ? "bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600"
-                      : complaint.status === "in_progress" ||
-                        complaint.status === "under_review" ||
-                        complaint.status === "resolved"
-                      ? "bg-blue-600 text-white"
-                      : "bg-slate-100 dark:bg-slate-800 text-slate-400"
-                  }`}
-                >
-                  <Wrench className="w-3 h-3" />
-                </div>
-                <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    Pengerjaan di Lapangan
+                {/* Step 3: Pengerjaan */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div
+                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900 ${
+                      complaint.status === "in_progress" ||
+                      complaint.status === "under_review" ||
+                      complaint.status === "resolved"
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-400"
+                    }`}
+                  >
+                    <Wrench className="w-3 h-3" />
                   </div>
-                  <div className="text-[10px] text-slate-400">
-                    {complaint.status === "rejected"
-                      ? "Dibatalkan"
-                      : complaint.status === "in_progress"
-                      ? "Sedang dikerjakan sekarang"
-                      : complaint.status === "under_review" || complaint.status === "resolved"
-                      ? "Pekerjaan lapangan selesai"
-                      : "Menunggu penanganan petugas"}
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Pengerjaan di Lapangan
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      {complaint.status === "in_progress"
+                        ? "Sedang dikerjakan sekarang"
+                        : complaint.status === "under_review" || complaint.status === "resolved"
+                        ? "Pekerjaan lapangan selesai"
+                        : "Menunggu penanganan petugas"}
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      Petugas satgas dinas PU melakukan penambalan dan perataan aspal di lokasi.
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-500">
-                    {complaint.status === "rejected"
-                      ? "Pengerjaan tidak dilakukan karena laporan ditolak."
-                      : "Petugas satgas dinas PU melakukan penambalan dan perataan aspal di lokasi."}
-                  </p>
                 </div>
-              </div>
 
-              {/* Step 4: Finalisasi */}
-              <div className="flex items-start gap-3.5 relative">
-                <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900 ${
-                    complaint.status === "resolved"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-slate-100 dark:bg-slate-800 text-slate-400"
-                  }`}
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    {complaint.status === "rejected" ? "Selesai Ditolak" : "Perbaikan Selesai & Ditutup"}
+                {/* Step 4: Finalisasi */}
+                <div className="flex items-start gap-3.5 relative">
+                  <div
+                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900 ${
+                      complaint.status === "resolved"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-400"
+                    }`}
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
-                  <div className="text-[10px] text-slate-400">
-                    {complaint.status === "rejected"
-                      ? "Tiket ditutup"
-                      : complaint.completed_at
-                      ? formatDateTimeWithHours(complaint.completed_at)
-                      : "Tahap finalisasi"}
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                      Perbaikan Selesai & Ditutup
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      {complaint.completed_at
+                        ? formatDateTimeWithHours(complaint.completed_at)
+                        : "Tahap finalisasi"}
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      Dokumentasi perbaikan telah disetujui admin dan jalan kembali aman dilalui.
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-500">
-                    {complaint.status === "rejected"
-                      ? "Laporan ditutup oleh admin sistem."
-                      : "Dokumentasi perbaikan telah disetujui admin dan jalan kembali aman dilalui."}
-                  </p>
                 </div>
               </div>
-            </div>
+            )}
           </Card>
         </div>
       </div>
