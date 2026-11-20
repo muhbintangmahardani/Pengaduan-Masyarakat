@@ -45,9 +45,9 @@ export function RecentComplaintsGrid({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 h-full flex flex-col">
       {/* Header Bar dengan Link 'Lihat Semua Laporan →' */}
-      <div className="flex items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+      <div className="flex items-center justify-between gap-3 border-b border-border pb-3 min-h-[52px]">
         <div className="min-w-0 flex-1">
           <h3 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight truncate">
             {title}
@@ -68,7 +68,7 @@ export function RecentComplaintsGrid({
 
       {/* Grid 2x2 Persis Layout Civora */}
       {displayItems.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 p-8 text-center space-y-3 bg-white/50 dark:bg-slate-900/50">
+        <div className="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 p-8 text-center space-y-3 bg-white/50 dark:bg-slate-900/50 flex-1 flex flex-col items-center justify-center">
           <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
             <FileText className="w-6 h-6 opacity-60" />
           </div>
@@ -90,7 +90,7 @@ export function RecentComplaintsGrid({
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
           {displayItems.map((item) => {
             const IconComponent = getDamageIcon(item.damage_type || item.title);
             const detailHref = getDetailHref(item.id, item.ticket_number);

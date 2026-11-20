@@ -9,15 +9,19 @@ interface RecentActivityTimelineProps {
   complaints: Complaint[];
   role?: string;
   className?: string;
+  externalHeader?: boolean;
+  limit?: number;
 }
 
 export function RecentActivityTimeline({
   complaints,
   role = "citizen",
   className,
+  externalHeader = false,
+  limit = 3,
 }: RecentActivityTimelineProps) {
-  // Ambil maksimal 3 laporan agar tinggi card proporsional dan sejajar persis dengan grafik di sampingnya
-  const activities = (complaints || []).slice(0, 3);
+  // Ambil laporan sesuai limit agar tinggi card proporsional dan sejajar persis dengan komponen di sampingnya
+  const activities = (complaints || []).slice(0, limit);
 
   const getActivityDetails = (item: Complaint) => {
     switch (item.status) {
@@ -70,21 +74,23 @@ export function RecentActivityTimeline({
       ? "/dashboard/petugas"
       : "/dashboard/warga/laporan";
 
-  return (
+  const cardContent = (
     <Card className={cn("rounded-xl border border-border bg-card shadow-xs h-full flex flex-col justify-between overflow-hidden", className)}>
-      <CardHeader className="p-4 sm:p-5 pb-3 border-b border-border shrink-0">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-semibold tracking-tight text-foreground">
-            Aktivitas Progres Terkini
-          </CardTitle>
-          <span className="text-xs font-mono text-muted-foreground">
-            {complaints.length} Laporan
-          </span>
-        </div>
-        <CardDescription className="text-xs text-muted-foreground">
-          Linimasa pembaruan status pengerjaan jalan Anda.
-        </CardDescription>
-      </CardHeader>
+      {!externalHeader && (
+        <CardHeader className="p-4 sm:p-5 pb-3 border-b border-border shrink-0">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm font-semibold tracking-tight text-foreground">
+              Aktivitas Progres Terkini
+            </CardTitle>
+            <span className="text-xs font-mono text-muted-foreground">
+              {complaints.length} Laporan
+            </span>
+          </div>
+          <CardDescription className="text-xs text-muted-foreground">
+            Linimasa pembaruan status pengerjaan jalan Anda.
+          </CardDescription>
+        </CardHeader>
+      )}
 
       <CardContent className="p-4 sm:p-5 flex-1 flex flex-col justify-center">
         {activities.length === 0 ? (
@@ -153,4 +159,29 @@ export function RecentActivityTimeline({
       </div>
     </Card>
   );
+
+  if (externalHeader) {
+    return (
+      <div className="space-y-4 h-full flex flex-col">
+        {/* External Header Bar Sejajar Presisi dengan RecentComplaintsGrid */}
+        <div className="flex items-center justify-between gap-3 border-b border-border pb-3 min-h-[52px]">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight truncate">
+              Aktivitas Progres Terkini
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
+              Linimasa pembaruan status pengerjaan jalan.
+            </p>
+          </div>
+          <span className="text-xs font-mono font-medium text-slate-500 shrink-0">
+            {complaints.length} Laporan
+          </span>
+        </div>
+
+        <div className="flex-1 flex flex-col">{cardContent}</div>
+      </div>
+    );
+  }
+
+  return cardContent;
 }

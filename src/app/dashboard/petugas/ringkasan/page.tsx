@@ -91,9 +91,9 @@ export default async function PetugasRingkasanPage() {
         />
       </div>
 
-      {/* 3. Main Two-Column Layout (Civora Style: 8-cols Left Cards + 4-cols Right Activity) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        <div className="lg:col-span-8">
+      {/* 3. Main Two-Column Layout (Civora Style: 8-cols Left Cards + 4-cols Right Activity - 100% Sejajar Presisi) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+        <div className="lg:col-span-8 flex flex-col">
           <RecentComplaintsGrid
             complaints={tasks}
             role="officer"
@@ -102,8 +102,8 @@ export default async function PetugasRingkasanPage() {
           />
         </div>
 
-        <div className="lg:col-span-4">
-          <RecentActivityTimeline complaints={tasks} role="officer" />
+        <div className="lg:col-span-4 flex flex-col">
+          <RecentActivityTimeline complaints={tasks} role="officer" externalHeader={true} limit={4} />
         </div>
       </div>
     </div>

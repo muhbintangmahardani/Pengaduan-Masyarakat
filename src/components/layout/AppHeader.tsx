@@ -14,6 +14,7 @@ import {
 import { logoutAction } from "@/actions/auth";
 import { NotificationBell } from "./NotificationBell";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { LiveClockBadge } from "@/components/common/LiveClockBadge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -238,6 +239,7 @@ export function AppHeader({
 
       {/* KANAN: Mode Malam, Lonceng Notifikasi Real-time & Avatar Profil (Sejajar dengan Breadcrumb) */}
       <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+        <LiveClockBadge className="hidden md:inline-flex mr-1" />
         <ThemeToggle />
         <NotificationBell userId={userId} userRole={userRole} />
 
