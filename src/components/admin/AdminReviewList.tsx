@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   CheckCircle2,
   Clock,
@@ -14,7 +15,6 @@ import {
   Filter,
   Eye,
   FileCheck2,
-  Loader2,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -30,9 +30,25 @@ interface AdminReviewListProps {
 }
 
 export function AdminReviewList({ complaints }: AdminReviewListProps) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"all" | "under_review" | "resolved">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [navigatingTicket, setNavigatingTicket] = useState<string | null>(null);
+
+  const handleNavigate = (ticketNumber: string) => {
+    setNavigatingTicket(ticketNumber);
+    router.push(`/dashboard/admin/review?ticket=${ticketNumber}`);
+  };
+
+  // Langsung tampilkan Skeleton UI halaman detail saat tombol diklik (tanpa jeda loading di tombol)
+  if (navigatingTicket) {
+    return (
+      <DetailReviewSkeleton
+        ticketNumber={navigatingTicket}
+        onBack={() => setNavigatingTicket(null)}
+      />
+    );
+  }
 
   // Metrik Ringkasan
   const pendingCount = useMemo(
@@ -343,27 +359,19 @@ export function AdminReviewList({ complaints }: AdminReviewListProps) {
                     </span>
                   </div>
 
-                  <Link
-                    href={`/dashboard/admin/review?ticket=${item.ticket_number}`}
-                    onClick={() => setNavigatingTicket(item.ticket_number)}
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate(item.ticket_number)}
+                    onMouseEnter={() => router.prefetch(`/dashboard/admin/review?ticket=${item.ticket_number}`)}
                     className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                       isPendingReview
                         ? "bg-[#0c3b37] text-white hover:bg-[#0c3b37]/90 shadow-2xs hover:shadow-xs"
                         : "border border-border bg-card text-slate-700 dark:text-slate-200 hover:bg-muted/80 shadow-2xs"
                     }`}
                   >
-                    {navigatingTicket === item.ticket_number ? (
-                      <>
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        <span>Memuat...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>{isPendingReview ? "Tinjau Hasil" : "Lihat Bukti"}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </>
-                    )}
-                  </Link>
+                    <span>{isPendingReview ? "Tinjau Hasil" : "Lihat Bukti"}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </Card>
             );
