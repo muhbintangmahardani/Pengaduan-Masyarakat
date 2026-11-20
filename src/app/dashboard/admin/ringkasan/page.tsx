@@ -107,11 +107,12 @@ export default async function AdminRingkasanPage() {
             role="admin"
             title="Antrean Laporan & Penugasan Terbaru"
             viewAllHref="/dashboard/admin"
+            limit={2}
           />
         </div>
 
         <div className="lg:col-span-4 flex flex-col">
-          <RecentActivityTimeline complaints={complaints} role="admin" externalHeader={true} limit={4} />
+          <RecentActivityTimeline complaints={complaints} role="admin" externalHeader={true} limit={2} />
         </div>
       </div>
 

@@ -5,7 +5,6 @@ import { AdminIncomingReports } from "@/components/admin/AdminIncomingReports";
 import { Card } from "@/components/ui/card";
 import { Clock, TrendingUp, FileCheck } from "lucide-react";
 import { ExportButton } from "@/components/common/ExportButton";
-import { LiveClockBadge } from "@/components/common/LiveClockBadge";
 import { formatCurrentDateWIB } from "@/lib/utils";
 import type { Complaint, Profile } from "@/types";
 
@@ -59,7 +58,6 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto shrink-0 flex-wrap sm:flex-nowrap">
-          <LiveClockBadge />
           <ExportButton
             complaints={complaints}
             filename="semua-laporan-admin"

@@ -18,7 +18,7 @@ export function RecentActivityTimeline({
   role = "citizen",
   className,
   externalHeader = false,
-  limit = 3,
+  limit = 2,
 }: RecentActivityTimelineProps) {
   // Ambil laporan sesuai limit agar tinggi card proporsional dan sejajar persis dengan komponen di sampingnya
   const activities = (complaints || []).slice(0, limit);
@@ -49,6 +49,14 @@ export function RecentActivityTimeline({
           badgeVariant: "secondary" as const,
           badgeText: "Dikerjakan",
           badgeColor: "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20",
+        };
+      case "rejected":
+        return {
+          title: "Laporan Ditolak",
+          desc: item.completion_note || "Laporan tidak memenuhi kriteria / tidak valid.",
+          badgeVariant: "destructive" as const,
+          badgeText: "Ditolak",
+          badgeColor: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
         };
       default:
         return {

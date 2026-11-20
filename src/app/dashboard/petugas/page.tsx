@@ -7,7 +7,6 @@ import { createClient } from "@/lib/supabase/server";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { OfficerWorkSubmission } from "@/components/officer/OfficerWorkSubmission";
 import { ImageLightboxModal } from "@/components/common/ImageLightboxModal";
-import { LiveClockBadge } from "@/components/common/LiveClockBadge";
 import { formatDateTime } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -104,7 +103,6 @@ export default async function PetugasDashboardPage({
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-          <LiveClockBadge />
           <StatusBadge status={currentTask.status} />
         </div>
       </div>

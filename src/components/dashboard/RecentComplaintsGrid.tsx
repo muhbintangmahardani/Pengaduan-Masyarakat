@@ -20,6 +20,7 @@ interface RecentComplaintsGridProps {
   role?: UserRole;
   title?: string;
   viewAllHref?: string;
+  limit?: number;
 }
 
 export function RecentComplaintsGrid({
@@ -27,9 +28,10 @@ export function RecentComplaintsGrid({
   role = "citizen",
   title = "Laporan Pengaduan Terkini",
   viewAllHref = "/dashboard/warga/laporan",
+  limit = 2,
 }: RecentComplaintsGridProps) {
-  // Ambil maksimal 4 laporan untuk grid 2x2 persis mockup
-  const displayItems = complaints.slice(0, 4);
+  // Ambil maksimal 2 laporan (atau sesuai limit) agar seimbang dan rapi
+  const displayItems = complaints.slice(0, limit);
 
   const getDetailHref = (id: string, ticketNumber: string) => {
     if (role === "admin") return `/dashboard/admin/penugasan/${id}`;
@@ -98,17 +100,17 @@ export function RecentComplaintsGrid({
             return (
               <div
                 key={item.id}
-                className="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm space-y-4 hover:border-slate-300 dark:hover:border-slate-700 transition-all hover:-translate-y-0.5 duration-200 flex flex-col justify-between"
+                className="rounded-xl border border-border bg-card p-5 shadow-xs space-y-4 hover:border-border/80 transition-all hover:-translate-y-0.5 duration-200 flex flex-col justify-between"
               >
                 {/* Top Section: Icon + Ticket Badge + Status */}
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="p-2.5 rounded-xl bg-[#e6f4f1] dark:bg-emerald-950/60 text-[#0c3b37] dark:text-emerald-400 border border-[#0c3b37]/10 shrink-0">
+                    <div className="p-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 shrink-0">
                       <IconComponent className="w-5 h-5" />
                     </div>
 
                     <div className="flex flex-col items-end gap-1">
-                      <span className="font-mono text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
+                      <span className="font-mono text-[10px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded-md">
                         {item.ticket_number}
                       </span>
                       <StatusBadge status={item.status as ComplaintStatus} />
@@ -117,36 +119,36 @@ export function RecentComplaintsGrid({
 
                   {/* Title & Damage Type */}
                   <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1">
+                    <h4 className="text-sm font-bold text-foreground line-clamp-1">
                       {item.title}
                     </h4>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 shrink-0 text-slate-400" />
+                    <p className="text-[11px] text-muted-foreground line-clamp-1 flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 shrink-0 text-muted-foreground/70" />
                       <span>{item.address}</span>
                     </p>
                   </div>
                 </div>
 
                 {/* Metadata Meta Info */}
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400 gap-2">
+                <div className="pt-2 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground gap-2">
                   <div className="flex items-center gap-1 min-w-0 truncate">
                     <Calendar className="w-3 h-3 shrink-0" />
                     <span className="truncate">{formatDateTime(item.created_at)}</span>
                   </div>
 
                   {item.priority && (
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0 whitespace-nowrap">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-muted text-foreground shrink-0 whitespace-nowrap">
                       {item.priority}
                     </span>
                   )}
                 </div>
 
-                {/* Card Button: Lihat Detail Laporan (Civora style button) */}
+                {/* Card Button: Lihat Detail Laporan */}
                 <Link
                   href={detailHref}
-                  className="w-full py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  className="w-full py-2 px-3 rounded-xl border border-border bg-card hover:bg-muted/80 text-foreground text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
                 >
-                  <Eye className="w-3.5 h-3.5 text-slate-500" />
+                  <Eye className="w-3.5 h-3.5 text-muted-foreground" />
                   <span>Lihat Dokumen Laporan</span>
                 </Link>
               </div>

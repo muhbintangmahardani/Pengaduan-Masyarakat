@@ -99,11 +99,12 @@ export default async function PetugasRingkasanPage() {
             role="officer"
             title="Daftar Tugas Lapangan Terkini"
             viewAllHref="/dashboard/petugas"
+            limit={2}
           />
         </div>
 
         <div className="lg:col-span-4 flex flex-col">
-          <RecentActivityTimeline complaints={tasks} role="officer" externalHeader={true} limit={4} />
+          <RecentActivityTimeline complaints={tasks} role="officer" externalHeader={true} limit={2} />
         </div>
       </div>
     </div>

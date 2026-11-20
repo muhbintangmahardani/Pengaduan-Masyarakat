@@ -1,10 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Sparkles, CheckCircle2, ShieldCheck } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { ArrowRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { LiveClockBadge } from "@/components/common/LiveClockBadge";
 import type { Complaint, UserRole } from "@/types";
 
 interface DashboardWelcomeHeroProps {
@@ -60,7 +58,6 @@ export function DashboardWelcomeHero({
 
       <CardContent className="p-5 sm:p-6 lg:p-7 relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
         <div className="space-y-2 max-w-xl">
-          <LiveClockBadge variant="hero" className="self-start" />
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
             Selamat datang, {firstName}
           </h1>

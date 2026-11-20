@@ -113,7 +113,7 @@ export default async function PetugasRiwayatDetailPage({
         {/* KOLOM KIRI (7 cols): Dokumentasi Foto Before-After, Peta, & Catatan */}
         <div className="lg:col-span-7 space-y-6">
           {/* Komparasi Foto Sebelum & Sesudah Perbaikan */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-xs space-y-4">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
               Dokumentasi Hasil Lapangan
             </h2>
@@ -156,7 +156,7 @@ export default async function PetugasRiwayatDetailPage({
           </Card>
 
           {/* Catatan Pekerjaan Petugas */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-3">
+          <Card className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-xs space-y-3">
             <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider block">
               Catatan Pengerjaan Yang Telah Anda Kirim
             </span>
@@ -168,7 +168,7 @@ export default async function PetugasRiwayatDetailPage({
           </Card>
 
           {/* Lokasi & Peta Nyata Navigasi */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
@@ -202,12 +202,12 @@ export default async function PetugasRiwayatDetailPage({
         {/* KOLOM KANAN (5 cols): Rincian Tiket & Timeline Persetujuan Admin */}
         <div className="lg:col-span-5 space-y-6">
           {/* Card Rincian Tugas */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-xs space-y-4">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
               Informasi Penugasan
             </h2>
 
-            <div className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+            <div className="divide-y divide-border text-xs">
               <div className="py-2.5 flex justify-between items-center">
                 <span className="text-slate-400">Nomor Tiket:</span>
                 <span className="font-mono font-bold text-[#0c3b37] dark:text-emerald-400">
@@ -260,17 +260,17 @@ export default async function PetugasRiwayatDetailPage({
           </Card>
 
           {/* Card Alur Riwayat Penugasan */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-xs space-y-4">
             <div>
               <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 Alur Riwayat Penugasan
               </h2>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+              <p className="text-[11px] text-muted-foreground mt-0.5">
                 Rekam jejak pengerjaan perbaikan jalan ini.
               </p>
             </div>
 
-            <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800 pl-1">
+            <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-border pl-1">
               {/* Step 1 */}
               <div className="flex items-start gap-3.5 relative">
                 <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900">

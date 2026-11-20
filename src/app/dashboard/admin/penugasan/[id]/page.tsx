@@ -77,29 +77,32 @@ export default async function AdminPenugasanDetailPage({
   return (
     <div className="space-y-6">
       {/* 1. Header Navigasi & Aksi */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 mb-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-4">
+        <div className="space-y-2">
+          {/* Tombol Kembali Ber-shape Seragam */}
+          <div>
             <Link
               href="/dashboard/admin/penugasan"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-[#0c3b37] dark:hover:text-emerald-400 transition-colors"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              Kembali
+              <span>Kembali</span>
             </Link>
           </div>
 
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
-            Detail Penugasan: {task.title}
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Ditugaskan kepada{" "}
-            <strong className="text-slate-800 dark:text-slate-200">
-              {task.assigned_officer?.full_name || "Petugas Lapangan"}
-            </strong>{" "}
-            • Target:{" "}
-            {task.target_date ? formatDateTime(task.target_date) : "2 Hari"}
-          </p>
+          <div className="space-y-1">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
+              Detail Penugasan: {task.title}
+            </h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Ditugaskan kepada{" "}
+              <strong className="text-slate-800 dark:text-slate-200">
+                {task.assigned_officer?.full_name || "Petugas Lapangan"}
+              </strong>{" "}
+              • Target:{" "}
+              {task.target_date ? formatDateTime(task.target_date) : "2 Hari"}
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-2.5">
@@ -126,8 +129,8 @@ export default async function AdminPenugasanDetailPage({
         {/* Kolom Kiri: Detail Laporan, Foto & Peta Nyata (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Card Info Utama */}
-          <Card className="rounded-xl p-5 sm:p-7 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-5">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+          <Card className="rounded-xl border border-border bg-card p-5 sm:p-7 shadow-xs space-y-5">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
               <div>
                 <span className="text-xs font-mono font-bold text-[#0c3b37] dark:text-emerald-400">
                   {task.ticket_number}
@@ -151,7 +154,7 @@ export default async function AdminPenugasanDetailPage({
               <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                 Deskripsi Kerusakan dari Pelapor:
               </span>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line bg-slate-50 dark:bg-slate-800/40 p-3.5 rounded-xl border border-slate-100 dark:border-slate-700/60">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line bg-muted/40 p-3.5 rounded-xl border border-border">
                 {task.description}
               </p>
             </div>
@@ -195,7 +198,7 @@ export default async function AdminPenugasanDetailPage({
                     </p>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-44 sm:h-52 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30 text-center p-4">
+                  <div className="flex flex-col items-center justify-center h-44 sm:h-52 rounded-xl border border-dashed border-border bg-muted/20 text-center p-4">
                     <Clock className="w-7 h-7 text-amber-500 mb-2 animate-pulse" />
                     <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                       Sedang Dikerjakan di Lapangan
@@ -209,9 +212,9 @@ export default async function AdminPenugasanDetailPage({
             </div>
 
             {/* Informasi Pelapor */}
-            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+            <div className="pt-3 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
               <div className="flex items-center gap-2">
-                <User className="w-3.5 h-3.5 text-slate-400" />
+                <User className="w-3.5 h-3.5 text-muted-foreground" />
                 <span>
                   Pelapor: <strong>{task.profiles?.full_name || "Warga"}</strong>
                 </span>
@@ -223,7 +226,7 @@ export default async function AdminPenugasanDetailPage({
           </Card>
 
           {/* Card Peta Lokasi Nyata */}
-          <Card className="rounded-xl p-5 sm:p-7 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl border border-border bg-card p-5 sm:p-7 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
@@ -273,8 +276,8 @@ export default async function AdminPenugasanDetailPage({
         {/* Kolom Kanan: Personel Petugas & Riwayat Linimasa (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Card Personel Petugas yang Ditugaskan */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+          <Card className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
               <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 Personel Bertugas
               </h3>
@@ -284,14 +287,14 @@ export default async function AdminPenugasanDetailPage({
             </div>
 
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-[#e6f4f1] dark:bg-emerald-950/60 text-[#0c3b37] dark:text-emerald-300 font-black text-base flex items-center justify-center border border-[#0c3b37]/20 shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary font-black text-base flex items-center justify-center border border-primary/20 shrink-0">
                 {task.assigned_officer?.full_name?.charAt(0) || "P"}
               </div>
               <div className="space-y-0.5 min-w-0">
                 <div className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
                   {task.assigned_officer?.full_name || "Petugas Lapangan"}
                 </div>
-                <div className="text-xs text-slate-400 truncate">
+                <div className="text-xs text-muted-foreground truncate">
                   {task.assigned_officer?.email || "petugas@jalanbaik.id"}
                 </div>
                 <div className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
@@ -301,14 +304,14 @@ export default async function AdminPenugasanDetailPage({
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/60">
-                <span className="text-[10px] text-slate-400 block font-medium">Tanggal Penugasan</span>
+              <div className="p-3 rounded-xl bg-muted/40 border border-border">
+                <span className="text-[10px] text-muted-foreground block font-medium">Tanggal Penugasan</span>
                 <span className="font-bold text-slate-800 dark:text-slate-200">
                   {task.verified_at ? formatDateTime(task.verified_at) : formatDateTime(task.created_at)}
                 </span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/60">
-                <span className="text-[10px] text-slate-400 block font-medium">Target Penyelesaian</span>
+              <div className="p-3 rounded-xl bg-muted/40 border border-border">
+                <span className="text-[10px] text-muted-foreground block font-medium">Target Penyelesaian</span>
                 <span className="font-bold text-slate-800 dark:text-slate-200">
                   {task.target_date ? formatDateTime(task.target_date) : "2 Hari Kerja"}
                 </span>
@@ -317,18 +320,18 @@ export default async function AdminPenugasanDetailPage({
           </Card>
 
           {/* Card Riwayat & Linimasa Penanganan */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-xs space-y-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 Riwayat & Linimasa Penanganan
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Catatan riwayat pergerakan status tugas
               </p>
             </div>
 
             {/* Timeline Tree */}
-            <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
+            <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
               {/* Step 1: Laporan Masuk */}
               <div className="flex items-start gap-3.5 relative">
                 <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
@@ -444,7 +447,7 @@ export default async function AdminPenugasanDetailPage({
 
             {/* Tombol Tinjau jika status under_review */}
             {task.status === "under_review" && (
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+              <div className="pt-3 border-t border-border">
                 <Link
                   href={`/dashboard/admin/review?ticket=${task.ticket_number}`}
                   className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#0c3b37] hover:bg-[#082825] text-white text-xs font-semibold shadow-xs"

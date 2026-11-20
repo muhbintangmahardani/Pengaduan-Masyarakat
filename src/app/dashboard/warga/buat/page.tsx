@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +9,7 @@ import { toast } from "sonner";
 import {
   MapPin,
   ArrowRight,
+  ArrowLeft,
   Upload,
   CheckCircle2,
   AlertTriangle,
@@ -234,14 +236,27 @@ export default function BuatLaporanPage() {
   return (
     <div className="space-y-6">
       {/* 1. Header Halaman */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-4">
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
-            Ada jalan rusak? Laporkan.
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Lengkapi informasi dan foto kondisi jalan agar petugas cepat menangani di lokasi.
-          </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
+        <div className="space-y-2">
+          {/* Tombol Kembali Ber-shape Seragam */}
+          <div>
+            <Link
+              href="/dashboard/warga"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Kembali</span>
+            </Link>
+          </div>
+
+          <div className="space-y-1">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+              Ada jalan rusak? Laporkan.
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Lengkapi informasi dan foto kondisi jalan agar petugas cepat menangani di lokasi.
+            </p>
+          </div>
         </div>
 
         <Badge

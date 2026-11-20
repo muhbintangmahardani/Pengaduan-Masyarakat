@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Check, Clock, AlertTriangle, ArrowRight, ExternalLink, ChevronRight } from "lucide-react";
+import { Check, Clock, AlertTriangle, ArrowRight, ExternalLink, ChevronRight, ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { ExportButton } from "@/components/common/ExportButton";
@@ -109,14 +109,27 @@ export default async function AdminReviewPage({
   return (
     <div className="space-y-6">
       {/* Header Info */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-            Tinjau Hasil Perbaikan Lapangan
-          </h1>
-          <p className="text-xs text-slate-500">
-            Periksa dokumentasi bukti foto petugas sebelum menyetujui dan menutup laporan.
-          </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
+        <div className="space-y-2">
+          {/* Tombol Kembali Ber-shape Seragam */}
+          <div>
+            <Link
+              href="/dashboard/admin"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Kembali</span>
+            </Link>
+          </div>
+
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              Tinjau Hasil Perbaikan Lapangan
+            </h1>
+            <p className="text-xs text-slate-500">
+              Periksa dokumentasi bukti foto petugas sebelum menyetujui dan menutup laporan.
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -150,7 +163,7 @@ export default async function AdminReviewPage({
       {/* Main Two Columns */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Kolom Kiri: Before-After Photo Comparison & Action (7 cols) */}
-        <Card className="lg:col-span-7 rounded-xl p-5 sm:p-7 space-y-6 shadow-xs border-slate-200/70 dark:border-slate-800">
+        <Card className="lg:col-span-7 rounded-xl border border-border bg-card p-5 sm:p-7 space-y-6 shadow-xs">
           {/* Header Info */}
           <div className="space-y-1">
             <span className="text-xs font-mono font-bold text-[#0c3b37] dark:text-emerald-400">
@@ -227,18 +240,18 @@ export default async function AdminReviewPage({
         </Card>
 
         {/* Kolom Kanan: Riwayat Penanganan (5 cols) */}
-        <Card className="lg:col-span-5 rounded-xl p-5 sm:p-7 space-y-6 shadow-xs border-slate-200/70 dark:border-slate-800">
+        <Card className="lg:col-span-5 rounded-xl border border-border bg-card p-5 sm:p-7 space-y-6 shadow-xs">
           <div>
             <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
               Riwayat Penanganan
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5">
               Diperbarui secara transparan
             </p>
           </div>
 
           {/* Timeline Nodes */}
-          <div className="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
+          <div className="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
             {/* Step 1 */}
             <div className="flex items-start gap-4 relative">
               <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
