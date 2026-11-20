@@ -319,8 +319,8 @@ export function AdminIncomingReports({
           />
         </div>
 
-        {/* Daftar Item Antrean: Tinggi pas 2 card agar rapi dan tidak memanjangkan hasil laporan */}
-        <div className="space-y-2 max-h-[195px] overflow-y-auto pr-1">
+        {/* Daftar Item Antrean: Ketinggian pas persis 2 card, bisa discroll ke bawah */}
+        <div className="space-y-2 h-[192px] max-h-[192px] overflow-y-auto pr-1">
           {filtered.length === 0 ? (
             <div className="text-center py-10 text-xs text-slate-400">
               Tidak ada laporan dalam filter ini.
@@ -338,13 +338,13 @@ export function AdminIncomingReports({
                       document.getElementById("report-detail")?.scrollIntoView({ behavior: "smooth" });
                     }
                   }}
-                  className={`p-3.5 rounded-xl cursor-pointer transition-all border ${
+                  className={`p-3 rounded-xl cursor-pointer transition-all border ${
                     isSelected
                       ? "bg-[#eef7f5] dark:bg-emerald-950/40 border-[#b2ded6] dark:border-emerald-700/60 shadow-xs"
                       : "bg-white dark:bg-slate-900/90 border-slate-200/70 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <div className="flex items-center justify-between gap-2 mb-1">
                     <span
                       className={`text-[11px] font-mono font-bold ${
                         isSelected
@@ -361,7 +361,7 @@ export function AdminIncomingReports({
                     {item.title}
                   </h3>
 
-                  <p className="text-[11px] text-slate-500 dark:text-slate-300 mt-1 line-clamp-1 font-medium">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-300 mt-0.5 line-clamp-1 font-medium">
                     {item.address} • {formatDateTime(item.created_at)}
                   </p>
                 </div>
@@ -649,7 +649,7 @@ export function AdminIncomingReports({
               </div>
             ) : current.status === "under_review" ? (
               /* KONDISI 3: PEKERJAAN SELESAI, MENUNGGU TINJAUAN ADMIN (MATCHING SCREENSHOT ISSUE) */
-              <div className="bg-[#f0f9f8] dark:bg-slate-800/60 border border-[#b8dfd8] dark:border-emerald-800/40 rounded-xl p-5 space-y-4 h-full flex flex-col justify-between">
+              <div className="bg-[#f0f9f8] dark:bg-slate-800/60 border border-[#b8dfd8] dark:border-emerald-800/40 rounded-xl p-4 sm:p-5 space-y-3.5 shadow-2xs">
                 <div className="flex items-center gap-2">
                   <span className="p-2 rounded-xl bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
                     <FileCheck className="w-5 h-5" />
@@ -692,7 +692,7 @@ export function AdminIncomingReports({
 
                 <Link
                   href={`/dashboard/admin/review?ticket=${current.ticket_number}`}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#0c3b37] hover:bg-[#082825] text-white font-semibold text-xs transition-all shadow-sm"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#0c3b37] hover:bg-[#082825] text-white font-semibold text-xs transition-all shadow-sm"
                 >
                   Tinjau & Konfirmasi Hasil Perbaikan
                   <ArrowRight className="w-4 h-4" />
@@ -703,7 +703,7 @@ export function AdminIncomingReports({
               </div>
             ) : current.status === "resolved" ? (
               /* KONDISI 4: LAPORAN TELAH SELESAI & DITUTUP */
-              <div className="bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 rounded-xl p-4 sm:p-5 space-y-4">
+              <div className="bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 rounded-xl p-4 sm:p-5 space-y-3.5 shadow-2xs">
                 <div className="flex items-center gap-2">
                   <span className="p-2 rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300">
                     <CheckCircle2 className="w-5 h-5" />
@@ -718,7 +718,7 @@ export function AdminIncomingReports({
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-emerald-100 dark:border-slate-800 text-xs space-y-2">
+                <div className="bg-white dark:bg-slate-900 rounded-xl p-3.5 border border-emerald-100 dark:border-slate-800 text-xs space-y-1.5">
                   <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                     Laporan ini telah melewati seluruh tahapan: Verifikasi Admin → Penanganan Petugas → Tinjauan & Penutupan.
                   </p>
@@ -729,7 +729,7 @@ export function AdminIncomingReports({
 
                 <Link
                   href={`/dashboard/admin/review?ticket=${current.ticket_number}`}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-white dark:bg-slate-900 text-emerald-900 dark:text-emerald-200 hover:bg-emerald-50 text-xs font-semibold transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-white dark:bg-slate-900 text-emerald-900 dark:text-emerald-200 hover:bg-emerald-50 text-xs font-semibold transition-colors shadow-2xs"
                 >
                   Lihat Dokumentasi Selesai
                   <ArrowRight className="w-4 h-4" />
