@@ -32,62 +32,37 @@ export default function AdminRingkasanLoading() {
         ))}
       </div>
 
-      {/* 3. Main Two-Column Layout: Left (8 cols) + Right (4 cols) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* Left: RecentComplaintsGrid (2x2 Cards) */}
-        <div className="lg:col-span-8 space-y-4">
-          <div className="flex items-center justify-between border-b border-border pb-3">
-            <div className="space-y-1">
-              <Skeleton className="h-5 w-56 rounded-md" />
-              <Skeleton className="h-3.5 w-64 rounded-md" />
-            </div>
-            <Skeleton className="h-4 w-24 rounded-md" />
+      {/* 3. Antrean Laporan & Penugasan Terbaru Skeleton (Full Width) */}
+      <div className="w-full space-y-4">
+        <div className="flex items-center justify-between border-b border-border pb-3">
+          <div className="space-y-1">
+            <Skeleton className="h-5 w-56 rounded-md" />
+            <Skeleton className="h-3.5 w-64 rounded-md" />
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[1, 2, 3, 4].map((i) => (
-              <Card key={i} className="rounded-2xl border border-border bg-card p-5 space-y-4">
-                <div className="flex items-start justify-between gap-2">
-                  <Skeleton className="w-10 h-10 rounded-xl shrink-0" />
-                  <div className="flex flex-col items-end gap-1">
-                    <Skeleton className="h-4 w-20 rounded-md" />
-                    <Skeleton className="h-5 w-16 rounded-full" />
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  <Skeleton className="h-4 w-3/4 rounded-md" />
-                  <Skeleton className="h-3 w-1/2 rounded-md" />
-                </div>
-                <div className="pt-2 border-t border-border flex justify-between items-center">
-                  <Skeleton className="h-3 w-24 rounded-md" />
-                  <Skeleton className="h-4 w-16 rounded-md" />
-                </div>
-              </Card>
-            ))}
-          </div>
+          <Skeleton className="h-4 w-24 rounded-md" />
         </div>
 
-        {/* Right: RecentActivityTimeline */}
-        <Card className="lg:col-span-4 p-5 sm:p-6 rounded-xl border border-border bg-card space-y-4">
-          <div className="space-y-1 pb-3 border-b border-border">
-            <Skeleton className="h-5 w-36 rounded-md" />
-            <Skeleton className="h-3.5 w-48 rounded-md" />
-          </div>
-          <div className="space-y-4 pt-1">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex gap-3 items-start">
-                <Skeleton className="w-7 h-7 rounded-full shrink-0" />
-                <div className="space-y-1.5 flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <Skeleton className="h-3.5 w-28 rounded-md" />
-                    <Skeleton className="h-4 w-14 rounded-full shrink-0" />
-                  </div>
-                  <Skeleton className="h-3 w-40 rounded-md" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[1, 2].map((i) => (
+            <Card key={i} className="rounded-2xl border border-border bg-card p-5 space-y-4">
+              <div className="flex items-start justify-between gap-2">
+                <Skeleton className="w-10 h-10 rounded-xl shrink-0" />
+                <div className="flex flex-col items-end gap-1">
+                  <Skeleton className="h-4 w-20 rounded-md" />
+                  <Skeleton className="h-5 w-16 rounded-full" />
                 </div>
               </div>
-            ))}
-          </div>
-        </Card>
+              <div className="space-y-1.5">
+                <Skeleton className="h-4 w-3/4 rounded-md" />
+                <Skeleton className="h-3 w-1/2 rounded-md" />
+              </div>
+              <div className="pt-2 border-t border-border flex justify-between items-center">
+                <Skeleton className="h-3 w-24 rounded-md" />
+                <Skeleton className="h-4 w-16 rounded-md" />
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
 
       {/* 4. Personel Petugas Lapangan Siaga (3 cols grid) */}

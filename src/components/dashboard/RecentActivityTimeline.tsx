@@ -20,6 +20,11 @@ export function RecentActivityTimeline({
   externalHeader = false,
   limit,
 }: RecentActivityTimelineProps) {
+  // Bagian Aktivitas Progres Terkini dihapus khusus untuk role admin
+  if (role === "admin") {
+    return null;
+  }
+
   // Ambil laporan sesuai limit: default 4 untuk role citizen (warga) agar card terisi penuh sejajar grafik,
   // dan default 2 untuk role admin/officer agar sejajar 1 baris antrean
   const effectiveLimit = limit ?? (role === "citizen" ? 4 : 2);

@@ -13,7 +13,6 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardWelcomeHero } from "@/components/dashboard/DashboardWelcomeHero";
 import { DashboardMetricCard } from "@/components/dashboard/DashboardMetricCard";
 import { RecentComplaintsGrid } from "@/components/dashboard/RecentComplaintsGrid";
-import { RecentActivityTimeline } from "@/components/dashboard/RecentActivityTimeline";
 import { ExportButton } from "@/components/common/ExportButton";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -99,21 +98,15 @@ export default async function AdminRingkasanPage() {
         />
       </div>
 
-      {/* 3. Main Two-Column Layout (Civora Style: 8-cols Left Cards + 4-cols Right Activity - 100% Sejajar Presisi) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-        <div className="lg:col-span-8 flex flex-col">
-          <RecentComplaintsGrid
-            complaints={complaints}
-            role="admin"
-            title="Antrean Laporan & Penugasan Terbaru"
-            viewAllHref="/dashboard/admin"
-            limit={2}
-          />
-        </div>
-
-        <div className="lg:col-span-4 flex flex-col">
-          <RecentActivityTimeline complaints={complaints} role="admin" externalHeader={true} limit={2} />
-        </div>
+      {/* 3. Antrean Laporan & Penugasan Terbaru (Full Width) */}
+      <div className="w-full flex flex-col">
+        <RecentComplaintsGrid
+          complaints={complaints}
+          role="admin"
+          title="Antrean Laporan & Penugasan Terbaru"
+          viewAllHref="/dashboard/admin"
+          limit={2}
+        />
       </div>
 
       {/* 4. Personel Petugas Lapangan Siaga */}
