@@ -3,7 +3,6 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import {
   CheckCircle2,
   Clock,
@@ -30,25 +29,8 @@ interface AdminReviewListProps {
 }
 
 export function AdminReviewList({ complaints }: AdminReviewListProps) {
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"all" | "under_review" | "resolved">("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [navigatingTicket, setNavigatingTicket] = useState<string | null>(null);
-
-  const handleNavigate = (ticketNumber: string) => {
-    setNavigatingTicket(ticketNumber);
-    router.push(`/dashboard/admin/review?ticket=${ticketNumber}`);
-  };
-
-  // Langsung tampilkan Skeleton UI halaman detail saat tombol diklik (tanpa jeda loading di tombol)
-  if (navigatingTicket) {
-    return (
-      <DetailReviewSkeleton
-        ticketNumber={navigatingTicket}
-        onBack={() => setNavigatingTicket(null)}
-      />
-    );
-  }
 
   // Metrik Ringkasan
   const pendingCount = useMemo(
@@ -359,10 +341,8 @@ export function AdminReviewList({ complaints }: AdminReviewListProps) {
                     </span>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleNavigate(item.ticket_number)}
-                    onMouseEnter={() => router.prefetch(`/dashboard/admin/review?ticket=${item.ticket_number}`)}
+                  <Link
+                    href={`/dashboard/admin/review?ticket=${item.ticket_number}`}
                     className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                       isPendingReview
                         ? "bg-[#0c3b37] text-white hover:bg-[#0c3b37]/90 shadow-2xs hover:shadow-xs"
@@ -371,7 +351,7 @@ export function AdminReviewList({ complaints }: AdminReviewListProps) {
                   >
                     <span>{isPendingReview ? "Tinjau Hasil" : "Lihat Bukti"}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  </Link>
                 </div>
               </Card>
             );

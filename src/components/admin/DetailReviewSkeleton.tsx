@@ -6,10 +6,9 @@ import { Card } from "@/components/ui/card";
 
 interface DetailReviewSkeletonProps {
   ticketNumber?: string;
-  onBack?: () => void;
 }
 
-export function DetailReviewSkeleton({ ticketNumber, onBack }: DetailReviewSkeletonProps) {
+export function DetailReviewSkeleton({ ticketNumber }: DetailReviewSkeletonProps) {
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-200">
       {/* 1. Header Info & Tombol Kembali */}
@@ -19,7 +18,6 @@ export function DetailReviewSkeleton({ ticketNumber, onBack }: DetailReviewSkele
           <div>
             <Link
               href="/dashboard/admin/review"
-              onClick={onBack}
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />

@@ -1,6 +1,5 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { Check, Clock, AlertTriangle, AlertCircle, CheckCircle2, ArrowRight, ExternalLink, ChevronRight, ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -9,82 +8,21 @@ import { ExportButton } from "@/components/common/ExportButton";
 import { AdminReviewDecision } from "@/components/admin/AdminReviewDecision";
 import { AdminReviewList } from "@/components/admin/AdminReviewList";
 import { ImageLightboxModal } from "@/components/common/ImageLightboxModal";
+import { DetailReviewSkeleton } from "@/components/admin/DetailReviewSkeleton";
 import { formatDateTime, formatDateTimeWithHours } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import type { Complaint } from "@/types";
 
 export const metadata: Metadata = {
   title: "Hasil Perbaikan Lapangan",
 };
 
-export default async function AdminReviewPage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ ticket?: string }>;
-}) {
-  let ticket: string | undefined;
-  try {
-    const resolvedParams = searchParams ? await searchParams : {};
-    ticket = resolvedParams?.ticket;
-  } catch (err) {
-    console.error("Error resolving searchParams in AdminReviewPage:", err);
-  }
-
+// 1. Komponen Detail Tinjauan Laporan (Async Server Component)
+async function ReviewDetailContent({ ticket }: { ticket: string }) {
   try {
     const supabase = await createClient();
 
-    // Mode 1: Jika TIDAK ada query param ticket, tampilkan Halaman Rekapitulasi / Daftar Hasil Perbaikan
-    if (!ticket) {
-      // Ambil laporan yang berada di tahap tinjauan atau sudah selesai
-      const { data: reviewComplaints, error: listError } = await supabase
-        .from("complaints")
-        .select(
-          `
-          *,
-          profiles:user_id(full_name, email),
-          assigned_officer:assigned_officer_id(full_name),
-          complaint_timelines(
-            id,
-            status,
-            note,
-            created_at,
-            actor:actor_id(full_name, role)
-          )
-        `
-        )
-        .in("status", ["under_review", "resolved"])
-        .order("created_at", { ascending: false });
-
-      // Fallback: Jika belum ada status under_review / resolved sama sekali, ambil laporan terbaru untuk demo/pengujian
-      let listData = (reviewComplaints as any[]) || [];
-      if (listData.length === 0) {
-        const { data: fallbackData } = await supabase
-          .from("complaints")
-          .select(
-            `
-            *,
-            profiles:user_id(full_name, email),
-            assigned_officer:assigned_officer_id(full_name),
-            complaint_timelines(
-              id,
-              status,
-              note,
-              created_at,
-              actor:actor_id(full_name, role)
-            )
-          `
-          )
-          .order("created_at", { ascending: false })
-          .limit(10);
-        listData = (fallbackData as any[]) || [];
-      }
-
-      return <AdminReviewList complaints={listData} />;
-    }
-
-    // Mode 2: Jika ADA query param ticket, tampilkan Halaman Detail Tinjauan Hasil Perbaikan
     const { data: ticketData, error: ticketError } = await supabase
       .from("complaints")
       .select(
@@ -178,7 +116,6 @@ export default async function AdminReviewPage({
         {/* Header Info */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
           <div className="space-y-2">
-            {/* Tombol Kembali Ber-shape Seragam Menuju Daftar Hasil Perbaikan */}
             <div>
               <Link
                 href="/dashboard/admin/review"
@@ -249,7 +186,6 @@ export default async function AdminReviewPage({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Kolom Kiri: Before-After Photo Comparison & Action (7 cols) */}
           <Card className="lg:col-span-7 rounded-xl border border-border bg-card p-5 sm:p-7 space-y-6 shadow-xs">
-            {/* Header Info */}
             <div className="space-y-1">
               <span className="text-xs font-mono font-bold text-[#0c3b37] dark:text-emerald-400">
                 {current.ticket_number}
@@ -273,7 +209,6 @@ export default async function AdminReviewPage({
 
             {/* Side-by-side Photo Comparison with Lightbox */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Foto SEBELUM (Foto pelapor) */}
               <div className="space-y-2">
                 <ImageLightboxModal
                   src={photoBefore}
@@ -289,7 +224,6 @@ export default async function AdminReviewPage({
                 </p>
               </div>
 
-              {/* Foto SESUDAH (Foto petugas) */}
               <div className="space-y-2">
                 <ImageLightboxModal
                   src={photoAfter}
@@ -345,9 +279,7 @@ export default async function AdminReviewPage({
 
             {/* Timeline Nodes */}
             {current.status === "rejected" ? (
-              /* KONDISI KHUSUS: LAPORAN DITOLAK */
               <div className="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-rose-200 dark:before:bg-rose-900/40">
-                {/* Step 1 */}
                 <div className="flex items-start gap-4 relative">
                   <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
                     <Check className="w-3.5 h-3.5" />
@@ -365,7 +297,6 @@ export default async function AdminReviewPage({
                   </div>
                 </div>
 
-                {/* Step 2 */}
                 <div className="flex items-start gap-4 relative">
                   <div className="w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
                     <AlertCircle className="w-3.5 h-3.5" />
@@ -386,7 +317,6 @@ export default async function AdminReviewPage({
                   </div>
                 </div>
 
-                {/* Step 3 */}
                 <div className="flex items-start gap-4 relative">
                   <div className="w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
                     <CheckCircle2 className="w-3.5 h-3.5" />
@@ -408,9 +338,7 @@ export default async function AdminReviewPage({
                 </div>
               </div>
             ) : (
-              /* KONDISI NORMAL: 5 TAHAPAN */
               <div className="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
-                {/* Step 1 */}
                 <div className="flex items-start gap-4 relative">
                   <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
                     <Check className="w-3.5 h-3.5" />
@@ -428,7 +356,6 @@ export default async function AdminReviewPage({
                   </div>
                 </div>
 
-                {/* Step 2 */}
                 <div className="flex items-start gap-4 relative">
                   <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
                     <Check className="w-3.5 h-3.5" />
@@ -448,7 +375,6 @@ export default async function AdminReviewPage({
                   </div>
                 </div>
 
-                {/* Step 3 */}
                 <div className="flex items-start gap-4 relative">
                   <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
                     <Check className="w-3.5 h-3.5" />
@@ -466,7 +392,6 @@ export default async function AdminReviewPage({
                   </div>
                 </div>
 
-                {/* Step 4 */}
                 <div className="flex items-start gap-4 relative">
                   <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
                     <Check className="w-3.5 h-3.5" />
@@ -486,7 +411,6 @@ export default async function AdminReviewPage({
                   </div>
                 </div>
 
-                {/* Step 5 */}
                 {current.status === "resolved" ? (
                   <div className="flex items-start gap-4 relative">
                     <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 text-xs shadow-sm ring-4 ring-white dark:ring-slate-900">
@@ -531,8 +455,8 @@ export default async function AdminReviewPage({
         </div>
       </div>
     );
-  } catch (error) {
-    console.error("AdminReviewPage critical failure:", error);
+  } catch (err) {
+    console.error("ReviewDetailContent error:", err);
     return (
       <div className="space-y-6">
         <Card className="text-center py-16 p-8 space-y-3 rounded-xl border border-rose-200 dark:border-rose-900/50 bg-card shadow-xs">
@@ -555,4 +479,78 @@ export default async function AdminReviewPage({
       </div>
     );
   }
+}
+
+// 2. Komponen Daftar Rekapitulasi Hasil Perbaikan (Async Server Component)
+async function ReviewListContent() {
+  const supabase = await createClient();
+
+  const { data: reviewComplaints } = await supabase
+    .from("complaints")
+    .select(
+      `
+      *,
+      profiles:user_id(full_name, email),
+      assigned_officer:assigned_officer_id(full_name),
+      complaint_timelines(
+        id,
+        status,
+        note,
+        created_at,
+        actor:actor_id(full_name, role)
+      )
+    `
+    )
+    .in("status", ["under_review", "resolved"])
+    .order("created_at", { ascending: false });
+
+  let listData = (reviewComplaints as any[]) || [];
+  if (listData.length === 0) {
+    const { data: fallbackData } = await supabase
+      .from("complaints")
+      .select(
+        `
+        *,
+        profiles:user_id(full_name, email),
+        assigned_officer:assigned_officer_id(full_name),
+        complaint_timelines(
+          id,
+          status,
+          note,
+          created_at,
+          actor:actor_id(full_name, role)
+        )
+      `
+      )
+      .order("created_at", { ascending: false })
+      .limit(10);
+    listData = (fallbackData as any[]) || [];
+  }
+
+  return <AdminReviewList complaints={listData} />;
+}
+
+// 3. Entrypoint Halaman Utama Review
+export default async function AdminReviewPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ ticket?: string }>;
+}) {
+  let ticket: string | undefined;
+  try {
+    const resolvedParams = searchParams ? await searchParams : {};
+    ticket = resolvedParams?.ticket;
+  } catch (err) {
+    console.error("Error resolving searchParams:", err);
+  }
+
+  if (!ticket) {
+    return <ReviewListContent />;
+  }
+
+  return (
+    <Suspense key={ticket} fallback={<DetailReviewSkeleton ticketNumber={ticket} />}>
+      <ReviewDetailContent ticket={ticket} />
+    </Suspense>
+  );
 }
