@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | JalanBaik",
-    default: "JalanBaik | Jalan Lebih Baik, Bersama",
+    template: "%s | Jalan Baik",
+    default: "Jalan Baik | Jalan Lebih Baik, Bersama",
   },
   description:
     "Platform transparansi layanan pengaduan dan perbaikan fasilitas jalan terintegrasi.",

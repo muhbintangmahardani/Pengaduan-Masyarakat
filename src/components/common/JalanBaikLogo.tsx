@@ -96,7 +96,7 @@ export function JalanBaikLogo({
 
   const LogoText = (
     <div className="flex flex-col justify-center min-w-0">
-      <div className="flex items-center gap-1 leading-none">
+      <div className="flex items-center leading-none">
         <span
           className={cn(
             "font-black tracking-tight",
@@ -104,9 +104,8 @@ export function JalanBaikLogo({
             inverted ? "text-white" : "text-[#0c3b37] dark:text-emerald-400"
           )}
         >
-          JalanBaik
+          Jalan Baik
         </span>
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
       </div>
       {subtext && (
         <span

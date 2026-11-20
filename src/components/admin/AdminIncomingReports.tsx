@@ -19,6 +19,7 @@ import {
   CheckCircle2,
   AlertCircle,
   FileCheck,
+  ChevronDown,
 } from "lucide-react";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { formatDateTime, formatDateTimeWithHours } from "@/lib/utils";
@@ -491,16 +492,21 @@ export function AdminIncomingReports({
                   <Label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
                     Prioritas penanganan
                   </Label>
-                  <select
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value as any)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0c3b37]"
-                  >
-                    <option value="Rendah">Rendah</option>
-                    <option value="Sedang">Sedang</option>
-                    <option value="Tinggi">Tinggi</option>
-                    <option value="Darurat">Darurat</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={priority}
+                      onChange={(e) => setPriority(e.target.value as any)}
+                      className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0c3b37]/20 focus:border-[#0c3b37] appearance-none transition-all cursor-pointer"
+                    >
+                      <option value="Rendah">Rendah</option>
+                      <option value="Sedang">Sedang</option>
+                      <option value="Tinggi">Tinggi</option>
+                      <option value="Darurat">Darurat</option>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 dark:text-slate-500">
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Petugas Lapangan Dropdown */}
@@ -508,20 +514,25 @@ export function AdminIncomingReports({
                   <Label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
                     Petugas lapangan
                   </Label>
-                  <select
-                    value={selectedOfficerId}
-                    onChange={(e) => setSelectedOfficerId(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0c3b37]"
-                  >
-                    {officers.map((officer) => (
-                      <option key={officer.id} value={officer.id}>
-                        {officer.full_name} • Tim Jalan 02
-                      </option>
-                    ))}
-                    {officers.length === 0 && (
-                      <option value="">(Belum ada petugas terdaftar)</option>
-                    )}
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={selectedOfficerId}
+                      onChange={(e) => setSelectedOfficerId(e.target.value)}
+                      className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-200 shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0c3b37]/20 focus:border-[#0c3b37] appearance-none transition-all cursor-pointer"
+                    >
+                      {officers.map((officer) => (
+                        <option key={officer.id} value={officer.id}>
+                          {officer.full_name} • Tim Jalan 02
+                        </option>
+                      ))}
+                      {officers.length === 0 && (
+                        <option value="">(Belum ada petugas terdaftar)</option>
+                      )}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 dark:text-slate-500">
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Target Selesai Date Picker */}
@@ -783,18 +794,23 @@ export function AdminIncomingReports({
                 <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                   Kategori Alasan Penolakan <span className="text-rose-500">*</span>
                 </Label>
-                <select
-                  value={rejectReason}
-                  onChange={(e) => setRejectReason(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500"
-                >
-                  <option value="Laporan Tidak Valid / Fiktif">Laporan Tidak Valid / Fiktif (Hoax)</option>
-                  <option value="Jalan Tidak Rusak / Kondisi Normal">Jalan Tidak Rusak / Kondisi Normal</option>
-                  <option value="Foto Tidak Jelas / Tidak Relevan">Foto Tidak Jelas / Tidak Relevan</option>
-                  <option value="Lokasi Di Luar Wilayah Operasional">Lokasi Di Luar Wilayah Operasional</option>
-                  <option value="Laporan Duplikat">Laporan Duplikat / Sedang Ditangani</option>
-                  <option value="Lainnya">Alasan Lainnya</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={rejectReason}
+                    onChange={(e) => setRejectReason(e.target.value)}
+                    className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 appearance-none transition-all cursor-pointer"
+                  >
+                    <option value="Laporan Tidak Valid / Fiktif">Laporan Tidak Valid / Fiktif (Hoax)</option>
+                    <option value="Jalan Tidak Rusak / Kondisi Normal">Jalan Tidak Rusak / Kondisi Normal</option>
+                    <option value="Foto Tidak Jelas / Tidak Relevan">Foto Tidak Jelas / Tidak Relevan</option>
+                    <option value="Lokasi Di Luar Wilayah Operasional">Lokasi Di Luar Wilayah Operasional</option>
+                    <option value="Laporan Duplikat">Laporan Duplikat / Sedang Ditangani</option>
+                    <option value="Lainnya">Alasan Lainnya</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 dark:text-slate-500">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-1.5">

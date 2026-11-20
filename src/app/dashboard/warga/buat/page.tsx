@@ -18,6 +18,7 @@ import {
   ImageIcon,
   Sparkles,
   RotateCcw,
+  ChevronDown,
 } from "lucide-react";
 
 import { RealMap } from "@/components/common/RealMap";
@@ -285,32 +286,42 @@ export default function BuatLaporanPage() {
                 <Label className="text-xs font-bold text-slate-800 dark:text-slate-200">
                   Jenis kerusakan *
                 </Label>
-                <select
-                  {...register("damage_type")}
-                  disabled={isSubmitting}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs sm:text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0c3b37]/20"
-                >
-                  <option value="Jalan berlubang">Jalan berlubang</option>
-                  <option value="Aspal retak">Aspal retak</option>
-                  <option value="Aspal ambles">Aspal ambles</option>
-                  <option value="Jalan bergelombang">Jalan bergelombang</option>
-                  <option value="Lainnya">Lainnya</option>
-                </select>
+                <div className="relative">
+                  <select
+                    {...register("damage_type")}
+                    disabled={isSubmitting}
+                    className="w-full h-11 pl-3.5 pr-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm text-slate-900 dark:text-slate-100 shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0c3b37]/20 dark:focus:ring-emerald-500/20 focus:border-[#0c3b37] dark:focus:border-emerald-500 appearance-none transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    <option value="Jalan berlubang">Jalan berlubang</option>
+                    <option value="Aspal retak">Aspal retak</option>
+                    <option value="Aspal ambles">Aspal ambles</option>
+                    <option value="Jalan bergelombang">Jalan bergelombang</option>
+                    <option value="Lainnya">Lainnya</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 dark:text-slate-500">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-1.5">
                 <Label className="text-xs font-bold text-slate-800 dark:text-slate-200">
                   Tingkat kerusakan *
                 </Label>
-                <select
-                  {...register("damage_level")}
-                  disabled={isSubmitting}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs sm:text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0c3b37]/20"
-                >
-                  <option value="Ringan">Ringan</option>
-                  <option value="Sedang">Sedang</option>
-                  <option value="Berat">Berat</option>
-                </select>
+                <div className="relative">
+                  <select
+                    {...register("damage_level")}
+                    disabled={isSubmitting}
+                    className="w-full h-11 pl-3.5 pr-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm text-slate-900 dark:text-slate-100 shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0c3b37]/20 dark:focus:ring-emerald-500/20 focus:border-[#0c3b37] dark:focus:border-emerald-500 appearance-none transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    <option value="Ringan">Ringan</option>
+                    <option value="Sedang">Sedang</option>
+                    <option value="Berat">Berat</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 dark:text-slate-500">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
               </div>
             </div>
 

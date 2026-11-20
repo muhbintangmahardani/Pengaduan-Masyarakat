@@ -206,7 +206,7 @@ export default function LoginPage() {
           {/* Footer Card Dekat & Tanpa Border Sesuai Referensi Gambar */}
           <div className="pt-6 sm:pt-7 text-center space-y-0.5">
             <p className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 font-medium">
-              © 2026 Suku Dinas Bina Marga • Kota Administrasi JalanBaik.
+              © 2026 Suku Dinas Bina Marga • Kota Administrasi Jalan Baik.
             </p>
             <p className="text-[9px] sm:text-[10px] text-slate-400/80 dark:text-slate-600">
               Internal System v1.0. Restricted Access.
