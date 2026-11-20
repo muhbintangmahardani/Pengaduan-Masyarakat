@@ -95,14 +95,14 @@ export default async function WargaDashboardPage() {
         />
       </div>
 
-      {/* 3. Analytical Row: Left (8-cols Grafik Card) + Right (4-cols Linimasa Aktivitas) */}
+      {/* 3. Analytical Row: Left (8-cols Grafik Card) + Right (4-cols Linimasa Aktivitas) - 100% Sejajar Presisi */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-        <div className="lg:col-span-8">
-          <ComplaintStatsChart />
+        <div className="lg:col-span-8 flex flex-col">
+          <ComplaintStatsChart className="h-full" />
         </div>
 
-        <div className="lg:col-span-4">
-          <RecentActivityTimeline complaints={complaints} role="citizen" />
+        <div className="lg:col-span-4 flex flex-col">
+          <RecentActivityTimeline complaints={complaints} role="citizen" className="h-full" />
         </div>
       </div>
 

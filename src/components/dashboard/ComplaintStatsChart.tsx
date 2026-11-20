@@ -20,6 +20,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { getComplaintStatsAction } from "@/actions/complaints";
 import { subscribeToLiveRoom } from "@/lib/realtimeBroadcast";
+import { cn } from "@/lib/utils";
 
 interface MonthlyData {
   month: string;
@@ -27,7 +28,11 @@ interface MonthlyData {
   selesai: number;
 }
 
-export function ComplaintStatsChart() {
+interface ComplaintStatsChartProps {
+  className?: string;
+}
+
+export function ComplaintStatsChart({ className }: ComplaintStatsChartProps = {}) {
   const [chartData, setChartData] = useState<MonthlyData[]>([
     { month: "Mgg 1", masuk: 0, selesai: 0 },
     { month: "Mgg 2", masuk: 0, selesai: 0 },
@@ -77,8 +82,8 @@ export function ComplaintStatsChart() {
   }, []);
 
   return (
-    <Card className="rounded-xl border border-border bg-card shadow-xs">
-      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border p-4 sm:p-5">
+    <Card className={cn("rounded-xl border border-border bg-card shadow-xs h-full flex flex-col", className)}>
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border p-4 sm:p-5 shrink-0">
         <div>
           <div className="flex items-center gap-2">
             <CardTitle className="text-sm font-semibold tracking-tight text-foreground">
@@ -110,8 +115,8 @@ export function ComplaintStatsChart() {
         </div>
       </CardHeader>
 
-      <CardContent className="p-5 pt-6">
-        <div className="h-64 w-full">
+      <CardContent className="p-4 sm:p-5 pt-5 sm:pt-6 flex-1 flex flex-col justify-center">
+        <div className="h-64 sm:h-72 w-full flex-1 min-h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>

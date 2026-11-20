@@ -32,43 +32,54 @@ export default function CitizenDashboardLoading() {
         ))}
       </div>
 
-      {/* 3. Analytical Row: Left 8-cols (Grafik Statistik) + Right 4-cols (Linimasa Aktivitas) */}
+      {/* 3. Analytical Row: Left 8-cols (Grafik Statistik) + Right 4-cols (Linimasa Aktivitas) - 100% Sejajar Presisi */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-        <Card className="lg:col-span-8 p-5 sm:p-6 rounded-xl border border-border bg-card space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-border">
-            <div className="space-y-1">
-              <Skeleton className="h-5 w-52 rounded-md" />
-              <Skeleton className="h-3.5 w-72 rounded-md" />
-            </div>
-            <Skeleton className="h-6 w-24 rounded-full shrink-0" />
-          </div>
-          <div className="flex items-center gap-4 text-xs pt-1">
-            <Skeleton className="h-4 w-28 rounded-md" />
-            <Skeleton className="h-4 w-28 rounded-md" />
-          </div>
-          <Skeleton className="h-[230px] w-full rounded-xl" />
-        </Card>
-
-        <Card className="lg:col-span-4 p-5 sm:p-6 rounded-xl border border-border bg-card space-y-4">
-          <div className="space-y-1 pb-3 border-b border-border">
-            <Skeleton className="h-5 w-36 rounded-md" />
-            <Skeleton className="h-3.5 w-48 rounded-md" />
-          </div>
-          <div className="space-y-4 pt-1">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex gap-3 items-start">
-                <Skeleton className="w-7 h-7 rounded-full shrink-0" />
-                <div className="space-y-1.5 flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <Skeleton className="h-3.5 w-28 rounded-md" />
-                    <Skeleton className="h-4 w-14 rounded-full shrink-0" />
-                  </div>
-                  <Skeleton className="h-3 w-40 rounded-md" />
-                </div>
+        <div className="lg:col-span-8 flex flex-col">
+          <Card className="p-4 sm:p-5 rounded-xl border border-border bg-card h-full flex flex-col justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-border">
+              <div className="space-y-1">
+                <Skeleton className="h-5 w-52 rounded-md" />
+                <Skeleton className="h-3.5 w-72 rounded-md" />
               </div>
-            ))}
-          </div>
-        </Card>
+              <Skeleton className="h-6 w-24 rounded-full shrink-0" />
+            </div>
+            <div className="flex items-center gap-4 text-xs pt-1">
+              <Skeleton className="h-4 w-28 rounded-md" />
+              <Skeleton className="h-4 w-28 rounded-md" />
+            </div>
+            <Skeleton className="h-[250px] w-full rounded-xl flex-1 mt-3" />
+          </Card>
+        </div>
+
+        <div className="lg:col-span-4 flex flex-col">
+          <Card className="rounded-xl border border-border bg-card h-full flex flex-col justify-between overflow-hidden">
+            <div className="p-4 sm:p-5 pb-3 border-b border-border space-y-1">
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-5 w-36 rounded-md" />
+                <Skeleton className="h-4 w-16 rounded-md" />
+              </div>
+              <Skeleton className="h-3.5 w-48 rounded-md" />
+            </div>
+            <div className="p-4 sm:p-5 space-y-3.5 flex-1 my-auto">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex gap-3 items-start border-b border-border/50 pb-3 last:border-0 last:pb-0">
+                  <div className="space-y-1.5 flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <Skeleton className="h-3.5 w-28 rounded-md" />
+                      <Skeleton className="h-4 w-14 rounded-full shrink-0" />
+                    </div>
+                    <Skeleton className="h-3 w-40 rounded-md" />
+                    <Skeleton className="h-2.5 w-20 rounded-md" />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="p-3.5 sm:p-4 border-t border-border/60 bg-muted/20 flex items-center justify-between">
+              <Skeleton className="h-3 w-28 rounded-md" />
+              <Skeleton className="h-3 w-20 rounded-md" />
+            </div>
+          </Card>
+        </div>
       </div>
 
       {/* 4. Citizen Complaints List Skeleton (Sesuai CitizenComplaintsList) */}
