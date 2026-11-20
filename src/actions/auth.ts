@@ -91,7 +91,7 @@ export async function loginAction(formData: FormData) {
   cookieStore.delete("jalanbaik-role");
 
   // Pengalihan instan ke dashboard yang sesuai tanpa blocking revalidatePath
-  if (role === "admin") redirect("/dashboard/admin");
+  if (role === "admin") redirect("/dashboard/admin/ringkasan");
   if (role === "officer") redirect("/dashboard/petugas/ringkasan");
   redirect("/dashboard/warga");
 }

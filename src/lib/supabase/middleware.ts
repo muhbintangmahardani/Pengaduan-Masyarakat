@@ -72,7 +72,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     if (userRole === "admin") {
-      url.pathname = "/dashboard/admin";
+      url.pathname = "/dashboard/admin/ringkasan";
     } else if (userRole === "officer") {
       url.pathname = "/dashboard/petugas/ringkasan";
     } else {
@@ -244,7 +244,7 @@ export async function updateSession(request: NextRequest) {
 
     const redirectUrl = request.nextUrl.clone();
     if (userRole === "admin") {
-      redirectUrl.pathname = "/dashboard/admin";
+      redirectUrl.pathname = "/dashboard/admin/ringkasan";
     } else if (userRole === "officer") {
       redirectUrl.pathname = "/dashboard/petugas/ringkasan";
     } else {
