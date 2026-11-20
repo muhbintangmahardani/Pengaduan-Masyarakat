@@ -1,8 +1,21 @@
-import React from "react";
+"use client";
+
+import React, { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
+import { DetailReviewSkeleton } from "@/components/admin/DetailReviewSkeleton";
 
-export default function AdminReviewLoading() {
+function ReviewLoadingContent() {
+  const searchParams = useSearchParams();
+  const isDetailView = searchParams ? searchParams.has("ticket") : false;
+
+  // Jika sedang membuka detail tinjauan hasil perbaikan (ada query ?ticket=...)
+  if (isDetailView) {
+    return <DetailReviewSkeleton />;
+  }
+
+  // Jika sedang di halaman daftar rekapitulasi hasil perbaikan
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-200">
       {/* 1. Header Halaman */}
@@ -82,5 +95,13 @@ export default function AdminReviewLoading() {
         ))}
       </div>
     </div>
+  );
+}
+
+export default function AdminReviewLoading() {
+  return (
+    <Suspense fallback={<DetailReviewSkeleton />}>
+      <ReviewLoadingContent />
+    </Suspense>
   );
 }

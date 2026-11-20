@@ -21,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { ExportButton } from "@/components/common/ExportButton";
 import { formatDateTime } from "@/lib/utils";
+import { DetailReviewSkeleton } from "@/components/admin/DetailReviewSkeleton";
 import type { Complaint } from "@/types";
 
 interface AdminReviewListProps {
@@ -30,6 +31,12 @@ interface AdminReviewListProps {
 export function AdminReviewList({ complaints }: AdminReviewListProps) {
   const [activeTab, setActiveTab] = useState<"all" | "under_review" | "resolved">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [navigatingTicket, setNavigatingTicket] = useState<string | null>(null);
+
+  // Jika admin mengklik "Lihat Bukti" / "Tinjau Hasil", langsung tampilkan Skeleton Animasi yang presisi sesuai Layout UI Detail
+  if (navigatingTicket) {
+    return <DetailReviewSkeleton ticketNumber={navigatingTicket} />;
+  }
 
   // Metrik Ringkasan
   const pendingCount = useMemo(
@@ -342,6 +349,7 @@ export function AdminReviewList({ complaints }: AdminReviewListProps) {
 
                   <Link
                     href={`/dashboard/admin/review?ticket=${item.ticket_number}`}
+                    onClick={() => setNavigatingTicket(item.ticket_number)}
                     className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                       isPendingReview
                         ? "bg-[#0c3b37] text-white hover:bg-[#0c3b37]/90 shadow-2xs hover:shadow-xs"
