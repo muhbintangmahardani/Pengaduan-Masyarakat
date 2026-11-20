@@ -230,6 +230,105 @@ export async function assignComplaintAction(
   }
 }
 
+export interface RejectComplaintInput {
+  complaintId: string;
+  reason: string;
+  note?: string;
+}
+
+/**
+ * 2B. ADMIN ACTION: Menolak Laporan Warga (Tidak Valid / Hoax / Iseng)
+ */
+export async function rejectComplaintAction(
+  input: RejectComplaintInput
+): Promise<ActionResponse<Complaint>> {
+  try {
+    const supabase = await createClient();
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return { success: false, message: "Sesi tidak sah. Silakan login." };
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role, full_name")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.role !== "admin") {
+      return { success: false, message: "Akses ditolak. Khusus Administrator." };
+    }
+
+    const { complaintId, reason, note } = input;
+    if (!complaintId || !reason) {
+      return { success: false, message: "ID Laporan dan Alasan Penolakan wajib diisi." };
+    }
+
+    const fullReason = note && note.trim().length > 0 ? `${reason}: ${note.trim()}` : reason;
+
+    // Update status pengaduan menjadi 'rejected'
+    const { data: updatedComplaint, error: updateError } = await supabase
+      .from("complaints")
+      .update({
+        status: "rejected",
+        completion_note: fullReason,
+        verified_at: new Date().toISOString(),
+      })
+      .eq("id", complaintId)
+      .select()
+      .single();
+
+    if (updateError) {
+      return { success: false, message: "Gagal menolak laporan: " + updateError.message };
+    }
+
+    // Catat ke Linimasa Transparan
+    await supabase.from("complaint_timelines").insert({
+      complaint_id: complaintId,
+      actor_id: user.id,
+      status: "rejected",
+      note: `Laporan Ditolak Admin: ${fullReason}`,
+    });
+
+    revalidatePath("/dashboard/admin");
+    revalidatePath("/dashboard/petugas");
+    revalidatePath("/dashboard/warga");
+    revalidatePath(`/dashboard/warga/laporan/${complaintId}`);
+
+    // Siarkan broadcast ke Petugas & Warga secara instan
+    await broadcastComplaintEvent({
+      eventType: "UPDATE",
+      actionType: "REJECTED",
+      actorRole: "admin",
+      complaint: {
+        id: updatedComplaint.id,
+        ticket_number: updatedComplaint.ticket_number,
+        title: updatedComplaint.title,
+        status: updatedComplaint.status,
+        user_id: updatedComplaint.user_id,
+        assigned_officer_id: updatedComplaint.assigned_officer_id,
+        updated_at: updatedComplaint.updated_at,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Laporan berhasil ditolak dan status laporan warga telah diperbarui.",
+      data: updatedComplaint as Complaint,
+    };
+  } catch (err: unknown) {
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Terjadi kesalahan internal.",
+    };
+  }
+}
+
 /**
  * 3. OFFICER ACTION: Mengirimkan Hasil Pekerjaan / Foto Setelah Perbaikan (Image 4)
  */

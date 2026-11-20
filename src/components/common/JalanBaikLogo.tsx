@@ -104,7 +104,7 @@ export function JalanBaikLogo({
             inverted ? "text-white" : "text-[#0c3b37] dark:text-emerald-400"
           )}
         >
-          jalanbaik
+          JalanBaik
         </span>
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
       </div>

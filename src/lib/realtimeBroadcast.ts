@@ -12,6 +12,7 @@ export interface BroadcastComplaintData {
   status: string;
   user_id: string;
   assigned_officer_id?: string | null;
+  completion_note?: string | null;
   updated_at?: string;
   created_at?: string;
 }
@@ -19,7 +20,7 @@ export interface BroadcastComplaintData {
 export interface BroadcastComplaintPayload {
   eventType: "INSERT" | "UPDATE";
   complaint: BroadcastComplaintData;
-  actionType?: "CREATED" | "ASSIGNED" | "WORK_SUBMITTED" | "RESOLVED" | "REWORK_REQUESTED";
+  actionType?: "CREATED" | "ASSIGNED" | "WORK_SUBMITTED" | "RESOLVED" | "REWORK_REQUESTED" | "REJECTED";
   actorRole: "citizen" | "officer" | "admin";
 }
 

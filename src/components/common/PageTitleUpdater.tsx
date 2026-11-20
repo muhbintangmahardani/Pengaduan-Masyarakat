@@ -8,32 +8,32 @@ export function PageTitleUpdater() {
 
   useEffect(() => {
     const routeTitles: Record<string, string> = {
-      "/": "jalanbaik | Jalan Lebih Baik, Bersama",
-      "/login": "Masuk Akun | jalanbaik",
-      "/register": "Daftar Warga | jalanbaik",
-      "/dashboard/warga": "Dashboard Masyarakat | jalanbaik",
-      "/dashboard/warga/buat": "Buat Laporan Baru | jalanbaik",
-      "/dashboard/warga/laporan": "Laporan Saya | jalanbaik",
-      "/dashboard/admin": "Laporan Masuk & Penugasan | jalanbaik",
-      "/dashboard/admin/ringkasan": "Ringkasan Eksekutif | jalanbaik",
-      "/dashboard/admin/penugasan": "Monitoring Penugasan | jalanbaik",
-      "/dashboard/admin/review": "Tinjau Hasil Perbaikan | jalanbaik",
-      "/dashboard/petugas": "Tugas Lapangan | jalanbaik",
-      "/dashboard/petugas/ringkasan": "Ringkasan Kerja Petugas | jalanbaik",
-      "/dashboard/petugas/riwayat": "Riwayat Pekerjaan Selesai | jalanbaik",
+      "/": "JalanBaik | Jalan Lebih Baik, Bersama",
+      "/login": "Masuk Akun | JalanBaik",
+      "/register": "Daftar Warga | JalanBaik",
+      "/dashboard/warga": "Dashboard Masyarakat | JalanBaik",
+      "/dashboard/warga/buat": "Buat Laporan Baru | JalanBaik",
+      "/dashboard/warga/laporan": "Laporan Saya | JalanBaik",
+      "/dashboard/admin": "Laporan Masuk & Penugasan | JalanBaik",
+      "/dashboard/admin/ringkasan": "Ringkasan Eksekutif | JalanBaik",
+      "/dashboard/admin/penugasan": "Monitoring Penugasan | JalanBaik",
+      "/dashboard/admin/review": "Tinjau Hasil Perbaikan | JalanBaik",
+      "/dashboard/petugas": "Tugas Lapangan | JalanBaik",
+      "/dashboard/petugas/ringkasan": "Ringkasan Kerja Petugas | JalanBaik",
+      "/dashboard/petugas/riwayat": "Riwayat Pekerjaan Selesai | JalanBaik",
     };
 
     let title = routeTitles[pathname];
 
     if (!title) {
       if (pathname.startsWith("/dashboard/admin")) {
-        title = "Panel Admin | jalanbaik";
+        title = "Panel Admin | JalanBaik";
       } else if (pathname.startsWith("/dashboard/petugas")) {
-        title = "Ruang Petugas | jalanbaik";
+        title = "Ruang Petugas | JalanBaik";
       } else if (pathname.startsWith("/dashboard/warga")) {
-        title = "Ruang Warga | jalanbaik";
+        title = "Ruang Warga | JalanBaik";
       } else {
-        title = "jalanbaik | Jalan Lebih Baik, Bersama";
+        title = "JalanBaik | Jalan Lebih Baik, Bersama";
       }
     }
 

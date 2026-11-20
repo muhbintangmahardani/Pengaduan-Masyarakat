@@ -114,7 +114,7 @@ export function AppSidebar({
             href="/"
             onClick={() => onCloseMobile?.()}
             className="flex items-center focus:outline-none min-w-0"
-            title="jalanbaik"
+            title="JalanBaik"
           >
             <JalanBaikLogo
               size={isCollapsed ? "md" : "md"}

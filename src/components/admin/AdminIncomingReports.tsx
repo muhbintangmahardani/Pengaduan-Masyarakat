@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { formatDateTime, formatDateTimeWithHours } from "@/lib/utils";
-import { assignComplaintAction } from "@/actions/complaints";
+import { assignComplaintAction, rejectComplaintAction } from "@/actions/complaints";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -66,6 +66,12 @@ export function AdminIncomingReports({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showReassignForm, setShowReassignForm] = useState(false);
+
+  // State untuk Fitur Penolakan Laporan (Hoax / Tidak Valid)
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectReason, setRejectReason] = useState("Laporan Tidak Valid / Fiktif");
+  const [rejectNote, setRejectNote] = useState("");
+  const [isRejecting, setIsRejecting] = useState(false);
 
   // Sinkronkan state saat props berubah
   useEffect(() => {
@@ -120,6 +126,7 @@ export function AdminIncomingReports({
       return c.status === "in_progress" || c.status === "verified";
     if (statusFilter === "under_review") return c.status === "under_review";
     if (statusFilter === "resolved") return c.status === "resolved";
+    if (statusFilter === "rejected") return c.status === "rejected";
 
     return true;
   });
@@ -198,6 +205,70 @@ export function AdminIncomingReports({
     }
   };
 
+  const handleReject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!current) return;
+
+    setIsRejecting(true);
+    const toastId = toast.loading("Memproses penolakan laporan...");
+
+    try {
+      const result = await rejectComplaintAction({
+        complaintId: current.id,
+        reason: rejectReason,
+        note: rejectNote.trim(),
+      });
+
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+
+      const fullReasonText = rejectNote.trim()
+        ? `[${rejectReason}] ${rejectNote.trim()}`
+        : rejectReason;
+
+      // Optimistic update status lokal langsung menjadi 'rejected'
+      setComplaints((prev) =>
+        prev.map((c) =>
+          c.id === current.id
+            ? {
+                ...c,
+                status: "rejected",
+                completion_note: fullReasonText,
+                verified_at: new Date().toISOString(),
+              }
+            : c
+        )
+      );
+
+      emitLocalCrossTab({
+        eventType: "UPDATE",
+        actionType: "REJECTED",
+        actorRole: "admin",
+        complaint: {
+          id: current.id,
+          ticket_number: current.ticket_number,
+          title: current.title,
+          status: "rejected",
+          user_id: current.user_id,
+          completion_note: fullReasonText,
+          updated_at: new Date().toISOString(),
+        },
+      });
+
+      setShowRejectModal(false);
+      setRejectNote("");
+      toast.dismiss(toastId);
+      toast.success("Laporan berhasil ditolak dan status diperbarui.");
+      router.refresh();
+    } catch (err: unknown) {
+      toast.dismiss(toastId);
+      toast.error(err instanceof Error ? err.message : "Gagal menolak laporan.");
+    } finally {
+      setIsRejecting(false);
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       {/* Kolom Kiri: Antrean Laporan (4 cols / 35%) */}
@@ -219,6 +290,7 @@ export function AdminIncomingReports({
             { id: "in_progress", label: "Diproses" },
             { id: "under_review", label: "Tinjauan" },
             { id: "resolved", label: "Selesai" },
+            { id: "rejected", label: "Ditolak" },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -466,11 +538,11 @@ export function AdminIncomingReports({
                 </div>
 
                 {/* Tombol Verifikasi & Tugaskan */}
-                <div className="pt-2">
+                <div className="pt-2 space-y-2">
                   <Button
                     type="submit"
                     disabled={isSubmitting || !isPhotoVerified}
-                    className="w-full h-11 bg-[#0c3b37] hover:bg-[#082825] text-white font-semibold text-xs shadow-sm"
+                    className="w-full h-11 bg-[#0c3b37] hover:bg-[#082825] text-white font-semibold text-xs shadow-sm rounded-xl cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>
@@ -484,8 +556,23 @@ export function AdminIncomingReports({
                       </>
                     )}
                   </Button>
+
+                  {!showReassignForm && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowRejectModal(true)}
+                      className="w-full h-10 border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-semibold rounded-xl cursor-pointer"
+                    >
+                      <AlertCircle className="w-4 h-4 mr-1.5" />
+                      Tolak Laporan (Tidak Sesuai / Hoax)
+                    </Button>
+                  )}
+
                   <p className="text-[10px] text-slate-400 text-center mt-2">
-                    Status akan berubah menjadi Diproses.
+                    {showReassignForm
+                      ? "Perubahan penugasan akan langsung tersimpan."
+                      : "Pilih verifikasi untuk menugaskan petugas, atau tolak jika laporan tidak sesuai."}
                   </p>
                 </div>
               </form>
@@ -637,10 +724,124 @@ export function AdminIncomingReports({
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
+            ) : current.status === "rejected" ? (
+              /* KONDISI 5: LAPORAN TELAH DITOLAK */
+              <div className="bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/40 rounded-xl p-5 space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="p-2 rounded-xl bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-300">
+                    <AlertCircle className="w-5 h-5" />
+                  </span>
+                  <div>
+                    <h3 className="text-sm font-bold text-rose-900 dark:text-rose-200">
+                      Laporan Ditolak / Tidak Diproses
+                    </h3>
+                    <p className="text-[11px] text-rose-700/80">
+                      Laporan ditandai tidak valid oleh admin.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-rose-100 dark:border-slate-800 text-xs space-y-2.5">
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Alasan & Penjelasan Penolakan:
+                    </span>
+                    <p className="text-xs text-rose-900 dark:text-rose-300 font-medium mt-1 leading-relaxed whitespace-pre-line">
+                      {current.completion_note || "Laporan tidak valid atau tidak ditemukan kerusakan jalan di lokasi."}
+                    </p>
+                  </div>
+                  <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    Status ini otomatis ditampilkan pada halaman detail pelapor dan tercatat di linimasa.
+                  </div>
+                </div>
+              </div>
             ) : null}
           </div>
         </Card>
       ) : null}
+
+      {/* MODAL PENOLAKAN LAPORAN (HOAX / TIDAK SESUAI / ISENG) */}
+      {showRejectModal && current && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in-50 duration-200">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 shrink-0">
+                <AlertCircle className="w-5 h-5" />
+              </div>
+              <div className="space-y-1 min-w-0 flex-1">
+                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  Tolak Laporan #{current.ticket_number}
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Pastikan bukti foto dan informasi telah diperiksa. Penolakan akan memberitahukan warga alasan laporan tidak dapat diproses.
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={handleReject} className="space-y-4 pt-1">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                  Kategori Alasan Penolakan <span className="text-rose-500">*</span>
+                </Label>
+                <select
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                >
+                  <option value="Laporan Tidak Valid / Fiktif">Laporan Tidak Valid / Fiktif (Hoax)</option>
+                  <option value="Jalan Tidak Rusak / Kondisi Normal">Jalan Tidak Rusak / Kondisi Normal</option>
+                  <option value="Foto Tidak Jelas / Tidak Relevan">Foto Tidak Jelas / Tidak Relevan</option>
+                  <option value="Lokasi Di Luar Wilayah Operasional">Lokasi Di Luar Wilayah Operasional</option>
+                  <option value="Laporan Duplikat">Laporan Duplikat / Sedang Ditangani</option>
+                  <option value="Lainnya">Alasan Lainnya</option>
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                  Catatan Tambahan untuk Warga (Opsional)
+                </Label>
+                <textarea
+                  rows={3}
+                  value={rejectNote}
+                  onChange={(e) => setRejectNote(e.target.value)}
+                  placeholder="Contoh: Setelah pengecekan lapangan, jalan ini sudah diperbaiki minggu lalu atau foto tidak menampilkan jalan umum."
+                  className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2.5 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setShowRejectModal(false);
+                    setRejectNote("");
+                  }}
+                  className="rounded-xl text-xs font-semibold px-4"
+                  disabled={isRejecting}
+                >
+                  Batal
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isRejecting}
+                  className="rounded-xl text-xs font-semibold px-4 bg-rose-600 hover:bg-rose-700 text-white shadow-xs"
+                >
+                  {isRejecting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin mr-1.5" />
+                      Menolak...
+                    </>
+                  ) : (
+                    "Konfirmasi Tolak Laporan"
+                  )}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

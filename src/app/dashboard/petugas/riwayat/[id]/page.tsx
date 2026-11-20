@@ -73,26 +73,29 @@ export default async function PetugasRiwayatDetailPage({
   return (
     <div className="space-y-6">
       {/* 1. Header Navigasi & Aksi */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 mb-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
+        <div className="space-y-3">
+          {/* Tombol Kembali dengan Shape Pill Modern & Jarak Nyaman */}
+          <div>
             <Link
               href="/dashboard/petugas/riwayat"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-[#0c3b37] dark:hover:text-emerald-400 transition-colors"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              Kembali
+              <span>Kembali</span>
             </Link>
           </div>
 
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
-            Dokumentasi Perbaikan: {task.title}
-          </h1>
-          <p className="text-xs text-slate-400">
-            {task.completed_at
-              ? `Tuntas dikerjakan pada ${formatDateTimeWithHours(task.completed_at)}`
-              : `Status: ${task.status}`}
-          </p>
+          <div className="space-y-1">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
+              Dokumentasi Perbaikan: {task.title}
+            </h1>
+            <p className="text-xs text-slate-400">
+              {task.completed_at
+                ? `Tuntas dikerjakan pada ${formatDateTimeWithHours(task.completed_at)}`
+                : `Status: ${task.status}`}
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -225,9 +228,15 @@ export default async function PetugasRiwayatDetailPage({
               </div>
               <div className="py-2.5 flex justify-between items-center">
                 <span className="text-slate-400">Tingkat / Prioritas:</span>
-                <Badge variant="outline" className="font-semibold text-xs">
-                  {task.damage_level || "Sedang"} • {task.priority || "Sedang"}
-                </Badge>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700/80">
+                    {task.damage_level || "Sedang"}
+                  </span>
+                  <span className="text-slate-400">•</span>
+                  <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80">
+                    {task.priority || "Sedang"}
+                  </span>
+                </span>
               </div>
               <div className="py-2.5 flex justify-between items-center">
                 <span className="text-slate-400">Tanggal Ditugaskan:</span>

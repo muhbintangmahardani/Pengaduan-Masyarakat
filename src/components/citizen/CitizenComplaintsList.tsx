@@ -29,7 +29,7 @@ export function CitizenComplaintsList({
   const [complaints, setComplaints] = useState<Complaint[]>(
     initialComplaints || propComplaints || []
   );
-  const [activeTab, setActiveTab] = useState<"all" | "pending" | "in_progress" | "resolved">("all");
+  const [activeTab, setActiveTab] = useState<"all" | "pending" | "in_progress" | "resolved" | "rejected">("all");
 
   useEffect(() => {
     if (initialComplaints) {
@@ -69,6 +69,7 @@ export function CitizenComplaintsList({
     (c) => c?.status === "in_progress" || c?.status === "under_review" || c?.status === "verified"
   ).length;
   const resolvedCount = safeComplaints.filter((c) => c?.status === "resolved").length;
+  const rejectedCount = safeComplaints.filter((c) => c?.status === "rejected").length;
 
   const filtered = safeComplaints.filter((c) => {
     if (!c) return false;
@@ -76,6 +77,7 @@ export function CitizenComplaintsList({
     if (activeTab === "in_progress")
       return c.status === "in_progress" || c.status === "under_review" || c.status === "verified";
     if (activeTab === "resolved") return c.status === "resolved";
+    if (activeTab === "rejected") return c.status === "rejected";
     return true;
   });
 
@@ -148,6 +150,16 @@ export function CitizenComplaintsList({
             >
               Selesai ({resolvedCount})
             </button>
+            <button
+              onClick={() => setActiveTab("rejected")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                activeTab === "rejected"
+                  ? "bg-background text-foreground shadow-xs font-semibold text-rose-600 dark:text-rose-400"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Ditolak ({rejectedCount})
+            </button>
           </div>
         </div>
       </CardHeader>
@@ -203,9 +215,9 @@ export function CitizenComplaintsList({
 
                   <StatusBadge status={item.status} />
 
-                  <div className="flex items-center gap-1 text-xs font-semibold text-primary opacity-80 group-hover:opacity-100 shrink-0">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-slate-100/80 dark:bg-slate-800 text-xs font-bold text-[#0c3b37] dark:text-emerald-400 group-hover:bg-[#0c3b37] group-hover:text-white dark:group-hover:bg-emerald-600 dark:group-hover:text-white shadow-2xs transition-all shrink-0">
                     <span className="hidden sm:inline">Detail</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </div>
               </Link>

@@ -31,6 +31,53 @@ export const metadata: Metadata = {
   title: "Detail Laporan Warga",
 };
 
+// Helper kontras tinggi untuk badge tingkat kerusakan & prioritas
+function DamageLevelBadge({ level }: { level?: string }) {
+  const norm = (level || "Sedang").toLowerCase();
+  if (norm.includes("ringan")) {
+    return (
+      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 shadow-2xs">
+        Ringan
+      </span>
+    );
+  }
+  if (norm.includes("berat")) {
+    return (
+      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-950/70 dark:text-rose-300 dark:border-rose-700/80 shadow-2xs">
+        Berat
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700/80 shadow-2xs">
+      Sedang
+    </span>
+  );
+}
+
+function PriorityBadge({ priority }: { priority?: string }) {
+  const norm = (priority || "Sedang").toLowerCase();
+  if (norm.includes("darurat") || norm.includes("tinggi")) {
+    return (
+      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-800 border border-rose-300 dark:bg-rose-950/70 dark:text-rose-300 dark:border-rose-700/80 shadow-2xs">
+        {priority || "Tinggi"}
+      </span>
+    );
+  }
+  if (norm.includes("rendah")) {
+    return (
+      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 shadow-2xs">
+        Rendah
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-700/80 shadow-2xs">
+      Sedang
+    </span>
+  );
+}
+
 export default async function WargaLaporanDetailPage({
   params,
 }: {
@@ -73,24 +120,27 @@ export default async function WargaLaporanDetailPage({
   return (
     <div className="space-y-6">
       {/* 1. Header Navigasi & Aksi */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 mb-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
+        <div className="space-y-3">
+          {/* Tombol Kembali dengan Shape Pill Modern & Jarak Nyaman */}
+          <div>
             <Link
               href="/dashboard/warga/laporan"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-[#0c3b37] dark:hover:text-emerald-400 transition-colors"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              Kembali
+              <span>Kembali</span>
             </Link>
           </div>
 
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
-            {complaint.title}
-          </h1>
-          <p className="text-xs text-slate-400">
-            Dilaporkan pada {formatDateTimeWithHours(complaint.created_at)}
-          </p>
+          <div className="space-y-1">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
+              {complaint.title}
+            </h1>
+            <p className="text-xs text-slate-400">
+              Dilaporkan pada {formatDateTimeWithHours(complaint.created_at)}
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -103,12 +153,27 @@ export default async function WargaLaporanDetailPage({
         </div>
       </div>
 
+      {/* Banner Informasi Jika Laporan Ditolak / Tidak Valid */}
+      {complaint.status === "rejected" && (
+        <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 flex items-start gap-3 animate-in fade-in-50 duration-200">
+          <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <h3 className="text-sm font-bold text-rose-900 dark:text-rose-200">
+              Laporan Tidak Dapat Diproses / Ditolak
+            </h3>
+            <p className="text-xs text-rose-800 dark:text-rose-300 leading-relaxed whitespace-pre-line">
+              {complaint.completion_note || "Laporan tidak memenuhi kriteria penanganan (kondisi jalan normal, foto tidak sesuai lokasi, atau laporan tidak valid)."}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* 2. Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* KOLOM KIRI (7 cols): Dokumentasi Foto, Peta, & Deskripsi */}
         <div className="lg:col-span-7 space-y-6">
           {/* Komparasi Foto Sebelum & Sesudah */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border border-border bg-card space-y-4">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
               Dokumentasi Foto Lapangan
             </h2>
@@ -163,7 +228,7 @@ export default async function WargaLaporanDetailPage({
           </Card>
 
           {/* Lokasi & Peta Nyata */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border border-border bg-card space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
@@ -193,22 +258,22 @@ export default async function WargaLaporanDetailPage({
           </Card>
 
           {/* Deskripsi & Catatan Petugas */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border border-border bg-card space-y-4">
             <div className="space-y-1.5">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
                 Deskripsi Kerusakan dari Warga
               </span>
-              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line bg-slate-50 dark:bg-slate-800/40 p-3.5 rounded-lg border border-slate-100 dark:border-slate-800">
+              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line bg-slate-50 dark:bg-slate-800/40 p-3.5 rounded-lg border border-border">
                 {complaint.description}
               </p>
             </div>
 
             {complaint.completion_note && (
-              <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800">
-                <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider block">
-                  Catatan Pengerjaan Petugas Lapangan
+              <div className="space-y-1.5 pt-2 border-t border-border">
+                <span className={`text-[11px] font-bold uppercase tracking-wider block ${complaint.status === "rejected" ? "text-rose-700 dark:text-rose-400" : "text-emerald-800 dark:text-emerald-400"}`}>
+                  {complaint.status === "rejected" ? "Catatan Penolakan Admin" : "Catatan Pengerjaan Petugas Lapangan"}
                 </span>
-                <p className="text-xs text-emerald-950 dark:text-emerald-200 leading-relaxed whitespace-pre-line bg-emerald-50/70 dark:bg-emerald-950/30 p-3.5 rounded-lg border border-emerald-100 dark:border-emerald-800/50">
+                <p className={`text-xs leading-relaxed whitespace-pre-line p-3.5 rounded-lg border ${complaint.status === "rejected" ? "bg-rose-50/70 text-rose-950 dark:bg-rose-950/30 dark:text-rose-200 border-rose-200 dark:border-rose-800/50" : "bg-emerald-50/70 text-emerald-950 dark:bg-emerald-950/30 dark:text-emerald-200 border-emerald-100 dark:border-emerald-800/50"}`}>
                   {complaint.completion_note}
                 </p>
               </div>
@@ -219,12 +284,12 @@ export default async function WargaLaporanDetailPage({
         {/* KOLOM KANAN (5 cols): Rincian Tiket & Timeline Status Alur */}
         <div className="lg:col-span-5 space-y-6">
           {/* Card Rincian Penanganan */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border border-border bg-card space-y-4">
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
               Rincian Penanganan
             </h2>
 
-            <div className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+            <div className="divide-y divide-border text-xs">
               <div className="py-2.5 flex justify-between items-center">
                 <span className="text-slate-400">Nomor Tiket:</span>
                 <span className="font-mono font-bold text-[#0c3b37] dark:text-emerald-400">
@@ -239,39 +304,29 @@ export default async function WargaLaporanDetailPage({
               </div>
               <div className="py-2.5 flex justify-between items-center">
                 <span className="text-slate-400">Tingkat Kerusakan:</span>
-                <Badge variant="outline" className="font-semibold text-xs">
-                  {complaint.damage_level || "Sedang"}
-                </Badge>
+                <DamageLevelBadge level={complaint.damage_level} />
               </div>
               <div className="py-2.5 flex justify-between items-center">
                 <span className="text-slate-400">Prioritas Penanganan:</span>
-                <Badge
-                  className={
-                    complaint.priority === "Tinggi" || complaint.priority === "Darurat"
-                      ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300"
-                      : "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
-                  }
-                >
-                  {complaint.priority || "Sedang"}
-                </Badge>
+                <PriorityBadge priority={complaint.priority} />
               </div>
               <div className="py-2.5 flex justify-between items-center">
                 <span className="text-slate-400">Petugas Ditugaskan:</span>
                 <span className="font-semibold text-slate-800 dark:text-slate-200">
-                  {complaint.assigned_officer?.full_name || "Menunggu Penugasan"}
+                  {complaint.assigned_officer?.full_name || (complaint.status === "rejected" ? "Tidak Ditugaskan (Ditolak)" : "Menunggu Penugasan")}
                 </span>
               </div>
               <div className="py-2.5 flex justify-between items-center">
                 <span className="text-slate-400">Target Penyelesaian:</span>
                 <span className="font-semibold text-slate-800 dark:text-slate-200">
-                  {complaint.target_date ? formatDateTime(complaint.target_date) : "2-3 Hari"}
+                  {complaint.status === "rejected" ? "-" : complaint.target_date ? formatDateTime(complaint.target_date) : "2-3 Hari"}
                 </span>
               </div>
             </div>
           </Card>
 
           {/* Card Alur Timeline Transparan */}
-          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border-slate-200/70 dark:border-slate-800 space-y-4">
+          <Card className="rounded-xl p-5 sm:p-6 shadow-xs border border-border bg-card space-y-4">
             <div>
               <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 Alur Penanganan Transparan
@@ -282,7 +337,7 @@ export default async function WargaLaporanDetailPage({
             </div>
 
             <div className="space-y-5 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800 pl-1">
-              {/* Step 1 */}
+              {/* Step 1: Diterima */}
               <div className="flex items-start gap-3.5 relative">
                 <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900">
                   <CheckCircle2 className="w-3.5 h-3.5" />
@@ -295,48 +350,68 @@ export default async function WargaLaporanDetailPage({
                     {formatDateTimeWithHours(complaint.created_at)}
                   </div>
                   <p className="text-[11px] text-slate-500">
-                    Laporan berhasil dikirim dan masuk ke antrean verifikasi admin dinas.
+                    Laporan berhasil dikirim dan masuk ke antrean verifikasi dinas.
                   </p>
                 </div>
               </div>
 
-              {/* Step 2 */}
+              {/* Step 2: Diverifikasi atau Ditolak */}
               <div className="flex items-start gap-3.5 relative">
                 <div
                   className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900 ${
-                    complaint.status !== "pending"
+                    complaint.status === "rejected"
+                      ? "bg-rose-600 text-white"
+                      : complaint.status !== "pending"
                       ? "bg-emerald-600 text-white"
                       : "bg-slate-100 dark:bg-slate-800 text-slate-400"
                   }`}
                 >
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  {complaint.status === "rejected" ? (
+                    <AlertCircle className="w-3.5 h-3.5" />
+                  ) : (
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  )}
                 </div>
                 <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    Diverifikasi & Ditugaskan
+                  <div
+                    className={`text-xs font-bold ${
+                      complaint.status === "rejected"
+                        ? "text-rose-600 dark:text-rose-400"
+                        : "text-slate-900 dark:text-slate-100"
+                    }`}
+                  >
+                    {complaint.status === "rejected"
+                      ? "Laporan Ditolak Admin"
+                      : "Diverifikasi & Ditugaskan"}
                   </div>
                   <div className="text-[10px] text-slate-400">
                     {complaint.verified_at
                       ? formatDateTimeWithHours(complaint.verified_at)
+                      : complaint.status === "rejected"
+                      ? "Diverifikasi & ditolak oleh admin"
                       : complaint.status !== "pending"
                       ? "Admin memverifikasi bukti foto"
                       : "Menunggu verifikasi admin"}
                   </div>
                   <p className="text-[11px] text-slate-500">
-                    {complaint.assigned_officer?.full_name
+                    {complaint.status === "rejected"
+                      ? complaint.completion_note || "Laporan tidak valid atau tidak ditemukan kerusakan di lapangan."
+                      : complaint.assigned_officer?.full_name
                       ? `Ditugaskan kepada ${complaint.assigned_officer.full_name} (Tim Lapangan)`
                       : "Admin memeriksa keabsahan foto dan koordinat jalan."}
                   </p>
                 </div>
               </div>
 
-              {/* Step 3 */}
+              {/* Step 3: Pengerjaan */}
               <div className="flex items-start gap-3.5 relative">
                 <div
                   className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900 ${
-                    complaint.status === "in_progress" ||
-                    complaint.status === "under_review" ||
-                    complaint.status === "resolved"
+                    complaint.status === "rejected"
+                      ? "bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600"
+                      : complaint.status === "in_progress" ||
+                        complaint.status === "under_review" ||
+                        complaint.status === "resolved"
                       ? "bg-blue-600 text-white"
                       : "bg-slate-100 dark:bg-slate-800 text-slate-400"
                   }`}
@@ -348,19 +423,23 @@ export default async function WargaLaporanDetailPage({
                     Pengerjaan di Lapangan
                   </div>
                   <div className="text-[10px] text-slate-400">
-                    {complaint.status === "in_progress"
+                    {complaint.status === "rejected"
+                      ? "Dibatalkan"
+                      : complaint.status === "in_progress"
                       ? "Sedang dikerjakan sekarang"
                       : complaint.status === "under_review" || complaint.status === "resolved"
                       ? "Pekerjaan lapangan selesai"
                       : "Menunggu penanganan petugas"}
                   </div>
                   <p className="text-[11px] text-slate-500">
-                    Petugas satgas dinas PU melakukan penambalan dan perataan aspal di lokasi.
+                    {complaint.status === "rejected"
+                      ? "Pengerjaan tidak dilakukan karena laporan ditolak."
+                      : "Petugas satgas dinas PU melakukan penambalan dan perataan aspal di lokasi."}
                   </p>
                 </div>
               </div>
 
-              {/* Step 4 */}
+              {/* Step 4: Finalisasi */}
               <div className="flex items-start gap-3.5 relative">
                 <div
                   className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-xs shadow-xs ring-4 ring-white dark:ring-slate-900 ${
@@ -373,15 +452,19 @@ export default async function WargaLaporanDetailPage({
                 </div>
                 <div className="space-y-0.5">
                   <div className="text-xs font-bold text-slate-900 dark:text-slate-100">
-                    Perbaikan Selesai & Ditutup
+                    {complaint.status === "rejected" ? "Selesai Ditolak" : "Perbaikan Selesai & Ditutup"}
                   </div>
                   <div className="text-[10px] text-slate-400">
-                    {complaint.completed_at
+                    {complaint.status === "rejected"
+                      ? "Tiket ditutup"
+                      : complaint.completed_at
                       ? formatDateTimeWithHours(complaint.completed_at)
                       : "Tahap finalisasi"}
                   </div>
                   <p className="text-[11px] text-slate-500">
-                    Dokumentasi perbaikan telah disetujui admin dan jalan kembali aman dilalui.
+                    {complaint.status === "rejected"
+                      ? "Laporan ditutup oleh admin sistem."
+                      : "Dokumentasi perbaikan telah disetujui admin dan jalan kembali aman dilalui."}
                   </p>
                 </div>
               </div>
