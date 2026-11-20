@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -73,6 +73,37 @@ export function AdminIncomingReports({
   const [rejectReason, setRejectReason] = useState("Laporan Tidak Valid / Fiktif");
   const [rejectNote, setRejectNote] = useState("");
   const [isRejecting, setIsRejecting] = useState(false);
+
+  // Ref & State untuk menyelaraskan tinggi card antrean laporan secara presisi dengan card detail di sebelahnya
+  const rightCardRef = useRef<HTMLDivElement>(null);
+  const [rightCardHeight, setRightCardHeight] = useState<number | null>(null);
+
+  // Pantau perubahan ukuran card kanan secara presisi menggunakan ResizeObserver
+  useEffect(() => {
+    const updateHeight = () => {
+      if (rightCardRef.current && typeof window !== "undefined" && window.innerWidth >= 1024) {
+        setRightCardHeight(rightCardRef.current.offsetHeight);
+      } else {
+        setRightCardHeight(null);
+      }
+    };
+
+    updateHeight();
+
+    let observer: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && rightCardRef.current) {
+      observer = new ResizeObserver(() => {
+        updateHeight();
+      });
+      observer.observe(rightCardRef.current);
+    }
+
+    window.addEventListener("resize", updateHeight);
+    return () => {
+      if (observer) observer.disconnect();
+      window.removeEventListener("resize", updateHeight);
+    };
+  }, [selectedId, showReassignForm]);
 
   // Sinkronkan state saat props berubah
   useEffect(() => {
@@ -271,9 +302,12 @@ export function AdminIncomingReports({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-      {/* Kolom Kiri: Antrean Laporan (4 cols / 35%) - Selaras dan sejajar presisi dengan card detail di sebelahnya */}
-      <Card className="lg:col-span-4 rounded-xl p-5 space-y-4 shadow-sm border border-border bg-card flex flex-col h-full">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      {/* Kolom Kiri: Antrean Laporan (4 cols / 35%) - Tingginya secara dinamis menyesuaikan Card Hasil/Detail di sebelah kanannya */}
+      <Card
+        style={rightCardHeight ? { height: `${rightCardHeight}px` } : undefined}
+        className="lg:col-span-4 rounded-xl p-5 space-y-4 shadow-sm border border-border bg-card flex flex-col overflow-hidden"
+      >
         <div className="flex items-center justify-between gap-2 shrink-0">
           <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
             Antrean Laporan
@@ -319,8 +353,8 @@ export function AdminIncomingReports({
           />
         </div>
 
-        {/* Daftar Item Antrean: Tinggi dinamis flex-1 menyesuaikan card sebelah persis, bisa discroll jika ada lebih dari 2 card */}
-        <div className="space-y-2 flex-1 overflow-y-auto pr-1 min-h-[192px]">
+        {/* Daftar Item Antrean: Mengisi sisa ruang vertikal card kiri sampai dasar card kanan, scrollable jika banyak tiket */}
+        <div className="space-y-2 flex-1 overflow-y-auto pr-1 min-h-0">
           {filtered.length === 0 ? (
             <div className="text-center py-10 text-xs text-slate-400">
               Tidak ada laporan dalam filter ini.
@@ -371,9 +405,13 @@ export function AdminIncomingReports({
         </div>
       </Card>
 
-      {/* Kolom Kanan: Detail & Form Verifikasi & Penugasan (8 cols / 65%) */}
+      {/* Kolom Kanan: Detail Laporan / Hasil Laporan (8 cols / 65%) - Tinggi natural h-fit, tidak ditarik memanjang ke bawah */}
       {current ? (
-        <Card id="report-detail" className="lg:col-span-8 rounded-xl p-5 sm:p-6 space-y-5 shadow-sm border border-border bg-card flex flex-col h-full">
+        <Card
+          ref={rightCardRef}
+          id="report-detail"
+          className="lg:col-span-8 rounded-xl p-5 sm:p-6 space-y-5 shadow-sm border border-border bg-card h-fit"
+        >
           {/* Header Tiket Detail */}
           <div className="flex items-start justify-between gap-4 border-b border-border pb-4 shrink-0">
             <div className="space-y-1">
@@ -393,7 +431,7 @@ export function AdminIncomingReports({
           </div>
 
           {/* Main Grid: Photo & Info vs Assignment / Status Panel (Compact & Tidak Memanjang) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start flex-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
             {/* Sisi Kiri: Foto, Lokasi, Deskripsi */}
             <div className="space-y-4 flex flex-col">
               {/* Foto Pelapor */}
