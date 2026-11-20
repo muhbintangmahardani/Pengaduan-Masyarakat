@@ -127,11 +127,13 @@ export function AppHeader({
       return [{ label: "Penugasan" }];
     }
     if (pathname.startsWith("/dashboard/admin/review")) {
-      const detailLabel = ticketQuery ? `Detail Laporan (${ticketQuery})` : "Detail Laporan";
-      return [
-        { label: "Hasil Perbaikan", href: "/dashboard/admin/review" },
-        { label: detailLabel },
-      ];
+      if (ticketQuery) {
+        return [
+          { label: "Hasil Perbaikan", href: "/dashboard/admin/review" },
+          { label: `Detail Laporan (${ticketQuery})` },
+        ];
+      }
+      return [{ label: "Hasil Perbaikan" }];
     }
 
     // 4. Ruang Petugas Lapangan (Officer)

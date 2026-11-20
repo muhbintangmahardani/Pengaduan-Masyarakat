@@ -271,10 +271,10 @@ export function AdminIncomingReports({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      {/* Kolom Kiri: Antrean Laporan (4 cols / 35%) */}
-      <Card className="lg:col-span-4 rounded-xl p-5 space-y-4 shadow-sm border border-border bg-card">
-        <div className="flex items-center justify-between gap-2">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      {/* Kolom Kiri: Antrean Laporan (4 cols / 35%) - Selaras dan sejajar presisi dengan card detail di sebelahnya */}
+      <Card className="lg:col-span-4 rounded-xl p-5 space-y-4 shadow-sm border border-border bg-card flex flex-col h-full">
+        <div className="flex items-center justify-between gap-2 shrink-0">
           <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
             Antrean Laporan
           </h2>
@@ -284,7 +284,7 @@ export function AdminIncomingReports({
         </div>
 
         {/* Tab Filter Status (Horizontal Scroll & Single-Line per Tab) */}
-        <div className="flex flex-nowrap overflow-x-auto scrollbar-none gap-1.5 bg-slate-100/80 dark:bg-slate-800/80 p-1 rounded-xl border border-border">
+        <div className="flex flex-nowrap overflow-x-auto scrollbar-none gap-1.5 bg-slate-100/80 dark:bg-slate-800/80 p-1 rounded-xl border border-border shrink-0">
           {[
             { id: "all", label: "Semua" },
             { id: "pending", label: "Perlu Verifikasi" },
@@ -308,7 +308,7 @@ export function AdminIncomingReports({
         </div>
 
         {/* Search Bar */}
-        <div className="relative">
+        <div className="relative shrink-0">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <Input
             type="text"
@@ -319,8 +319,8 @@ export function AdminIncomingReports({
           />
         </div>
 
-        {/* Daftar Item Antrean: Ketinggian pas persis 2 card, bisa discroll ke bawah */}
-        <div className="space-y-2 h-[192px] max-h-[192px] overflow-y-auto pr-1">
+        {/* Daftar Item Antrean: Tinggi dinamis flex-1 menyesuaikan card sebelah persis, bisa discroll jika ada lebih dari 2 card */}
+        <div className="space-y-2 flex-1 overflow-y-auto pr-1 min-h-[192px]">
           {filtered.length === 0 ? (
             <div className="text-center py-10 text-xs text-slate-400">
               Tidak ada laporan dalam filter ini.
@@ -373,9 +373,9 @@ export function AdminIncomingReports({
 
       {/* Kolom Kanan: Detail & Form Verifikasi & Penugasan (8 cols / 65%) */}
       {current ? (
-        <Card id="report-detail" className="lg:col-span-8 rounded-xl p-5 sm:p-6 space-y-5 shadow-sm border border-border bg-card">
+        <Card id="report-detail" className="lg:col-span-8 rounded-xl p-5 sm:p-6 space-y-5 shadow-sm border border-border bg-card flex flex-col h-full">
           {/* Header Tiket Detail */}
-          <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
+          <div className="flex items-start justify-between gap-4 border-b border-border pb-4 shrink-0">
             <div className="space-y-1">
               <span className="text-xs font-mono font-bold text-[#0c3b37] dark:text-emerald-400">
                 {current.ticket_number}
@@ -393,7 +393,7 @@ export function AdminIncomingReports({
           </div>
 
           {/* Main Grid: Photo & Info vs Assignment / Status Panel (Compact & Tidak Memanjang) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start flex-1">
             {/* Sisi Kiri: Foto, Lokasi, Deskripsi */}
             <div className="space-y-4 flex flex-col">
               {/* Foto Pelapor */}

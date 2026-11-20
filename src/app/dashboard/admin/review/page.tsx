@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { ExportButton } from "@/components/common/ExportButton";
 import { AdminReviewDecision } from "@/components/admin/AdminReviewDecision";
+import { AdminReviewList } from "@/components/admin/AdminReviewList";
 import { ImageLightboxModal } from "@/components/common/ImageLightboxModal";
 import { formatDateTime, formatDateTimeWithHours } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -16,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import type { Complaint } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Tinjau Hasil Perbaikan",
+  title: "Hasil Perbaikan Lapangan",
 };
 
 export default async function AdminReviewPage({
@@ -27,8 +28,57 @@ export default async function AdminReviewPage({
   const { ticket } = await searchParams;
   const supabase = await createClient();
 
-  // Ambil laporan yang berstatus 'under_review' atau 'resolved' atau yang pertama
-  let query = supabase
+  // Mode 1: Jika TIDAK ada query param ticket, tampilkan Halaman Rekapitulasi / Daftar Hasil Perbaikan
+  if (!ticket) {
+    // Ambil laporan yang berada di tahap tinjauan atau sudah selesai
+    const { data: reviewComplaints } = await supabase
+      .from("complaints")
+      .select(
+        `
+        *,
+        profiles:user_id(full_name, email),
+        assigned_officer:assigned_officer_id(full_name),
+        complaint_timelines(
+          id,
+          status,
+          note,
+          created_at,
+          actor:actor_id(full_name, role)
+        )
+      `
+      )
+      .in("status", ["under_review", "resolved"])
+      .order("created_at", { ascending: false });
+
+    // Fallback: Jika belum ada status under_review / resolved sama sekali, ambil laporan terbaru untuk demo/pengujian
+    let listData = (reviewComplaints as any[]) || [];
+    if (listData.length === 0) {
+      const { data: fallbackData } = await supabase
+        .from("complaints")
+        .select(
+          `
+          *,
+          profiles:user_id(full_name, email),
+          assigned_officer:assigned_officer_id(full_name),
+          complaint_timelines(
+            id,
+            status,
+            note,
+            created_at,
+            actor:actor_id(full_name, role)
+          )
+        `
+        )
+        .order("created_at", { ascending: false })
+        .limit(10);
+      listData = (fallbackData as any[]) || [];
+    }
+
+    return <AdminReviewList complaints={listData} />;
+  }
+
+  // Mode 2: Jika ADA query param ticket, tampilkan Halaman Detail Tinjauan Hasil Perbaikan
+  const { data: ticketData } = await supabase
     .from("complaints")
     .select(
       `
@@ -44,45 +94,39 @@ export default async function AdminReviewPage({
       )
     `
     )
-    .order("created_at", { ascending: false });
+    .eq("ticket_number", ticket)
+    .single();
 
-  if (ticket) {
-    query = query.eq("ticket_number", ticket);
-  }
-
-  const { data: complaintsData } = await query;
-  const complaints = (complaintsData as any[]) || [];
-
-  // Cari yang under_review terlebih dahulu jika ada
-  const current =
-    complaints.find((c) => c.status === "under_review") || complaints[0];
-
-  const pendingReviewCount = complaints.filter(
-    (c) => c.status === "under_review"
-  ).length;
+  const current = ticketData as any;
 
   if (!current) {
     return (
       <div className="space-y-6">
-        <Card className="text-center py-16 p-8 space-y-3 rounded-xl border-slate-200/70 shadow-xs">
+        <Card className="text-center py-16 p-8 space-y-3 rounded-xl border border-border bg-card shadow-xs">
           <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">
-            Belum ada hasil perbaikan yang menunggu tinjauan.
+            Laporan dengan tiket {ticket} tidak ditemukan.
           </h2>
           <p className="text-xs text-slate-400">
-            Ketika petugas lapangan menyelesaikan perbaikan dan mengunggah foto bukti, laporan akan muncul di sini.
+            Pastikan nomor tiket yang Anda masukkan sudah benar atau kembali ke daftar hasil perbaikan.
           </p>
           <div className="pt-2">
             <Link
-              href="/dashboard/admin"
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-[#0c3b37] text-white text-xs font-semibold"
+              href="/dashboard/admin/review"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#0c3b37] text-white text-xs font-semibold hover:bg-[#0c3b37]/90 transition-all cursor-pointer"
             >
-              Kembali ke Laporan Masuk
+              Kembali ke Daftar Hasil Perbaikan
             </Link>
           </div>
         </Card>
       </div>
     );
   }
+
+  // Hitung jumlah laporan under_review untuk banner info
+  const { count: pendingReviewCount } = await supabase
+    .from("complaints")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "under_review");
 
   // Safe parsing untuk menghindari runtime error pada Server Component
   const officerName = (
@@ -111,14 +155,14 @@ export default async function AdminReviewPage({
       {/* Header Info */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
         <div className="space-y-2">
-          {/* Tombol Kembali Ber-shape Seragam */}
+          {/* Tombol Kembali Ber-shape Seragam Menuju Daftar Hasil Perbaikan */}
           <div>
             <Link
-              href="/dashboard/admin"
+              href="/dashboard/admin/review"
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Kembali</span>
+              <span>Kembali ke Daftar Hasil</span>
             </Link>
           </div>
 
