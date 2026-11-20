@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -6,9 +8,10 @@ import { Card } from "@/components/ui/card";
 
 interface DetailReviewSkeletonProps {
   ticketNumber?: string;
+  onBack?: () => void;
 }
 
-export function DetailReviewSkeleton({ ticketNumber }: DetailReviewSkeletonProps) {
+export function DetailReviewSkeleton({ ticketNumber, onBack }: DetailReviewSkeletonProps) {
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-200">
       {/* 1. Header Info & Tombol Kembali */}
@@ -16,13 +19,24 @@ export function DetailReviewSkeleton({ ticketNumber }: DetailReviewSkeletonProps
         <div className="space-y-2">
           {/* Tombol Kembali Ber-shape Seragam */}
           <div>
-            <Link
-              href="/dashboard/admin/review"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Kembali ke Daftar Hasil</span>
-            </Link>
+            {onBack ? (
+              <button
+                type="button"
+                onClick={onBack}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Kembali ke Daftar Hasil</span>
+              </button>
+            ) : (
+              <Link
+                href="/dashboard/admin/review"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-muted/80 hover:text-[#0c3b37] dark:hover:text-emerald-400 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Kembali ke Daftar Hasil</span>
+              </Link>
+            )}
           </div>
 
           <div className="space-y-1">

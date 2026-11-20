@@ -26,9 +26,10 @@ import type { Complaint } from "@/types";
 
 interface AdminReviewListProps {
   complaints: Complaint[];
+  onSelectTicket?: (ticket: string) => void;
 }
 
-export function AdminReviewList({ complaints }: AdminReviewListProps) {
+export function AdminReviewList({ complaints, onSelectTicket }: AdminReviewListProps) {
   const [activeTab, setActiveTab] = useState<"all" | "under_review" | "resolved">("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -343,10 +344,16 @@ export function AdminReviewList({ complaints }: AdminReviewListProps) {
 
                   <Link
                     href={`/dashboard/admin/review?ticket=${item.ticket_number}`}
+                    onClick={(e) => {
+                      if (onSelectTicket) {
+                        e.preventDefault();
+                        onSelectTicket(item.ticket_number);
+                      }
+                    }}
                     className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                       isPendingReview
-                        ? "bg-[#0c3b37] text-white hover:bg-[#0c3b37]/90 shadow-2xs hover:shadow-xs"
-                        : "border border-border bg-card text-slate-700 dark:text-slate-200 hover:bg-muted/80 shadow-2xs"
+                        ? "bg-[#0c3b37] text-white hover:bg-[#0c3b37]/90 shadow-2xs hover:shadow-xs active:scale-[0.98]"
+                        : "border border-border bg-card text-slate-700 dark:text-slate-200 hover:bg-muted/80 shadow-2xs active:scale-[0.98]"
                     }`}
                   >
                     <span>{isPendingReview ? "Tinjau Hasil" : "Lihat Bukti"}</span>
