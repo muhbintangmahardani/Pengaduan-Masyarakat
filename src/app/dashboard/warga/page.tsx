@@ -102,7 +102,7 @@ export default async function WargaDashboardPage() {
         </div>
 
         <div className="lg:col-span-4 flex flex-col">
-          <RecentActivityTimeline complaints={complaints} role="citizen" className="h-full" />
+          <RecentActivityTimeline complaints={complaints} role="citizen" className="h-full" limit={4} />
         </div>
       </div>
 

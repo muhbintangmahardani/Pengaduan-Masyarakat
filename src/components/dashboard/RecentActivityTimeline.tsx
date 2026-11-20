@@ -18,10 +18,12 @@ export function RecentActivityTimeline({
   role = "citizen",
   className,
   externalHeader = false,
-  limit = 2,
+  limit,
 }: RecentActivityTimelineProps) {
-  // Ambil laporan sesuai limit agar tinggi card proporsional dan sejajar persis dengan komponen di sampingnya
-  const activities = (complaints || []).slice(0, limit);
+  // Ambil laporan sesuai limit: default 4 untuk role citizen (warga) agar card terisi penuh sejajar grafik,
+  // dan default 2 untuk role admin/officer agar sejajar 1 baris antrean
+  const effectiveLimit = limit ?? (role === "citizen" ? 4 : 2);
+  const activities = (complaints || []).slice(0, effectiveLimit);
 
   const getActivityDetails = (item: Complaint) => {
     switch (item.status) {

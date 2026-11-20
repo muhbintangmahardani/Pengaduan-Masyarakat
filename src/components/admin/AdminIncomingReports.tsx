@@ -271,9 +271,9 @@ export function AdminIncomingReports({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       {/* Kolom Kiri: Antrean Laporan (4 cols / 35%) */}
-      <Card className="lg:col-span-4 rounded-xl p-5 space-y-4 shadow-sm border border-border bg-card flex flex-col h-full">
+      <Card className="lg:col-span-4 rounded-xl p-5 space-y-4 shadow-sm border border-border bg-card">
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
             Antrean Laporan
@@ -319,8 +319,8 @@ export function AdminIncomingReports({
           />
         </div>
 
-        {/* Daftar Item Antrean */}
-        <div className="space-y-2 flex-1 max-h-[620px] overflow-y-auto pr-1">
+        {/* Daftar Item Antrean: Tinggi pas 2 card agar rapi dan tidak memanjangkan hasil laporan */}
+        <div className="space-y-2 max-h-[195px] overflow-y-auto pr-1">
           {filtered.length === 0 ? (
             <div className="text-center py-10 text-xs text-slate-400">
               Tidak ada laporan dalam filter ini.
@@ -373,7 +373,7 @@ export function AdminIncomingReports({
 
       {/* Kolom Kanan: Detail & Form Verifikasi & Penugasan (8 cols / 65%) */}
       {current ? (
-        <Card id="report-detail" className="lg:col-span-8 rounded-xl p-5 sm:p-7 space-y-6 shadow-sm border border-border bg-card flex flex-col h-full">
+        <Card id="report-detail" className="lg:col-span-8 rounded-xl p-5 sm:p-6 space-y-5 shadow-sm border border-border bg-card">
           {/* Header Tiket Detail */}
           <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
             <div className="space-y-1">
@@ -392,12 +392,12 @@ export function AdminIncomingReports({
             <StatusBadge status={current.status} />
           </div>
 
-          {/* Main Grid: Photo & Info vs Assignment / Status Panel (Sejajar & Stretch Penuh) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch flex-1">
+          {/* Main Grid: Photo & Info vs Assignment / Status Panel (Compact & Tidak Memanjang) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
             {/* Sisi Kiri: Foto, Lokasi, Deskripsi */}
             <div className="space-y-4 flex flex-col">
               {/* Foto Pelapor */}
-              <div className="relative w-full h-52 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-border group shrink-0">
+              <div className="relative w-full h-44 sm:h-48 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-border group shrink-0">
                 <Image
                   src={current.photo_url}
                   alt={current.title}
@@ -455,7 +455,7 @@ export function AdminIncomingReports({
               /* FORM VERIFIKASI & PENUGASAN (HANYA UNTUK LAPORAN PENDING ATAU REASSIGN) */
               <form
                 onSubmit={handleAssign}
-                className="bg-[#f8faf9] dark:bg-slate-800/40 border border-[#e8ecea] dark:border-slate-700/60 rounded-xl p-5 space-y-4 h-full flex flex-col justify-between"
+                className="bg-[#f8faf9] dark:bg-slate-800/40 border border-[#e8ecea] dark:border-slate-700/60 rounded-xl p-4 sm:p-5 space-y-4"
               >
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
@@ -589,7 +589,8 @@ export function AdminIncomingReports({
               </form>
             ) : current.status === "in_progress" || current.status === "verified" ? (
               /* KONDISI 2: LAPORAN SEDANG DIKERJAKAN OLEH PETUGAS */
-              <div className="bg-[#f0f9f8] dark:bg-slate-800/60 border border-[#c2e4dd] dark:border-slate-700 rounded-xl p-5 space-y-4 h-full flex flex-col justify-between">                <div className="flex items-center gap-2">
+              <div className="bg-[#f0f9f8] dark:bg-slate-800/60 border border-[#c2e4dd] dark:border-slate-700 rounded-xl p-4 sm:p-5 space-y-4">
+                <div className="flex items-center gap-2">
                   <span className="p-2 rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
                     <Clock className="w-4 h-4" />
                   </span>
@@ -702,7 +703,7 @@ export function AdminIncomingReports({
               </div>
             ) : current.status === "resolved" ? (
               /* KONDISI 4: LAPORAN TELAH SELESAI & DITUTUP */
-              <div className="bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 rounded-xl p-5 space-y-4 h-full flex flex-col justify-between">
+              <div className="bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 rounded-xl p-4 sm:p-5 space-y-4">
                 <div className="flex items-center gap-2">
                   <span className="p-2 rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300">
                     <CheckCircle2 className="w-5 h-5" />
@@ -736,7 +737,7 @@ export function AdminIncomingReports({
               </div>
             ) : current.status === "rejected" ? (
               /* KONDISI 5: LAPORAN TELAH DITOLAK */
-              <div className="bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/40 rounded-xl p-5 space-y-4 h-full flex flex-col justify-between">
+              <div className="bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/40 rounded-xl p-4 sm:p-5 space-y-4">
                 <div className="flex items-center gap-2">
                   <span className="p-2 rounded-xl bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-300">
                     <AlertCircle className="w-5 h-5" />
