@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { ArrowRight, Loader2, CheckCircle2, ShieldCheck, ArrowLeft } from "lucide-react";
+import { ArrowRight, Loader2, CheckCircle2, ShieldCheck, ArrowLeft, AlertCircle } from "lucide-react";
 import { reviewWorkResultAction } from "@/actions/complaints";
 import { emitLocalCrossTab } from "@/lib/realtimeBroadcast";
 import { Button } from "@/components/ui/button";
@@ -86,6 +86,36 @@ export function AdminReviewDecision({ complaintId, status }: AdminReviewDecision
       setIsLoading(false);
     }
   };
+
+  // JIKA LAPORAN DITOLAK: Tampilkan status penolakan resmi tanpa tombol tindakan
+  if (status === "rejected") {
+    return (
+      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+        <Alert variant="destructive" className="rounded-xl">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle className="text-xs sm:text-sm font-bold">
+            Laporan Ditolak / Tidak Diproses
+          </AlertTitle>
+          <AlertDescription className="text-xs">
+            Laporan ini telah ditandai tidak valid oleh admin. Alur penanganan di lapangan dan verifikasi akhir telah ditutup.
+          </AlertDescription>
+        </Alert>
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
+          <span className="text-[11px] text-slate-400 font-medium">
+            Status alur penanganan: <strong className="text-rose-600 dark:text-rose-400">Ditolak & Ditutup</strong>
+          </span>
+          <Link
+            href="/dashboard/admin/review"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0c3b37] dark:text-emerald-400 hover:underline whitespace-nowrap shrink-0"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
+            Kembali ke Daftar Hasil
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   // JIKA SUDAH DISETUJUI / SELESAI: Kunci tombol & tampilkan status tuntas resmi
   if (isApproved || status === "resolved") {

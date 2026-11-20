@@ -40,6 +40,12 @@ export function ImageLightboxModal({
   const [isOpen, setIsOpen] = useState(false);
   const [scale, setScale] = useState(1);
 
+  // Fallback pengaman agar Next.js <Image /> tidak crash bila src null/undefined/empty
+  const safeSrc =
+    src && typeof src === "string" && src.trim() !== ""
+      ? src
+      : "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7";
+
   const handleOpen = () => {
     setScale(1);
     setIsOpen(true);
@@ -90,7 +96,7 @@ export function ImageLightboxModal({
         title="Klik untuk melihat foto ukuran penuh"
       >
         <Image
-          src={src}
+          src={safeSrc}
           alt={alt}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
@@ -167,7 +173,7 @@ export function ImageLightboxModal({
                 </button>
               )}
               <a
-                href={src}
+                href={safeSrc}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
@@ -200,7 +206,7 @@ export function ImageLightboxModal({
               style={{ transform: `scale(${scale})` }}
             >
               <img
-                src={src}
+                src={safeSrc}
                 alt={alt}
                 className="max-h-[68vh] max-w-full rounded-lg object-contain shadow-2xl mx-auto select-none"
               />

@@ -14,6 +14,7 @@ import {
   Filter,
   Eye,
   FileCheck2,
+  Loader2,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -32,11 +33,6 @@ export function AdminReviewList({ complaints }: AdminReviewListProps) {
   const [activeTab, setActiveTab] = useState<"all" | "under_review" | "resolved">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [navigatingTicket, setNavigatingTicket] = useState<string | null>(null);
-
-  // Jika admin mengklik "Lihat Bukti" / "Tinjau Hasil", langsung tampilkan Skeleton Animasi yang presisi sesuai Layout UI Detail
-  if (navigatingTicket) {
-    return <DetailReviewSkeleton ticketNumber={navigatingTicket} />;
-  }
 
   // Metrik Ringkasan
   const pendingCount = useMemo(
@@ -356,8 +352,17 @@ export function AdminReviewList({ complaints }: AdminReviewListProps) {
                         : "border border-border bg-card text-slate-700 dark:text-slate-200 hover:bg-muted/80 shadow-2xs"
                     }`}
                   >
-                    <span>{isPendingReview ? "Tinjau Hasil" : "Lihat Bukti"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    {navigatingTicket === item.ticket_number ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Memuat...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>{isPendingReview ? "Tinjau Hasil" : "Lihat Bukti"}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    )}
                   </Link>
                 </div>
               </Card>
